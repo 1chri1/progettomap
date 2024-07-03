@@ -1,0 +1,68 @@
+package com.mycompany.implComandi;
+
+import com.mycompany.adventure.GestioneGioco;
+import com.mycompany.parser.ParserOutput;
+import com.mycompany.type.Oggetto;
+import com.mycompany.type.TipoComandi;
+import java.io.Serializable;
+
+/**
+ * Classe che gestisce il comando di disattivazione degli oggetti nel gioco.
+ */
+public class GestoreDisattiva implements Modifica, Serializable {
+    private static final long serialVersionUID = 1L;
+    /**
+     * Aggiorna lo stato del gioco in base al comando di disattivazione.
+     * 
+     * @param descrizione la descrizione del gioco
+     * @param parserOutput l'output del parser che contiene il comando e l'oggetto
+     * @return messaggio di risposta al giocatore
+     */
+    @Override
+    public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
+        StringBuilder msg = new StringBuilder();
+
+        // Verifica se il comando è di tipo "DISATTIVA"
+        if (parserOutput.getComando().getTipo() == TipoComandi.DISATTIVA) {
+            Oggetto oggettoDaDisattivare = parserOutput.getOggetto();
+
+            // Verifica se ci sono oggetti nella stanza corrente o nell'inventario
+            if (descrizione.getStanzaCorrente().getOggetti().isEmpty() && descrizione.getInventario().isEmpty()) {
+                return "Non ci sono oggetti in questa stanza o nel tuo inventario.";
+            }
+
+            // Verifica se l'oggetto specificato non è null
+            if (oggettoDaDisattivare == null) {
+                return "Non capisco cosa vuoi disattivare.";
+            }
+
+            // Controlla se l'oggetto è nella stanza corrente o nell'inventario
+            boolean oggettoTrovato = descrizione.getStanzaCorrente().getOggetti().contains(oggettoDaDisattivare) ||
+                                     descrizione.getInventario().contains(oggettoDaDisattivare);
+
+            if (oggettoTrovato) {
+                if (oggettoDaDisattivare.isDisattivabile()) {
+                    // Verifica se l'oggetto è già stato disattivato
+                    if ((oggettoDaDisattivare.getNome().equalsIgnoreCase("quadro elettrico") && descrizione.isQuadroElettricoDisattivato()) ||
+                        (oggettoDaDisattivare.getNome().equalsIgnoreCase("torcia") && !descrizione.isTorciaAccesa())) {
+                        msg.append("L'oggetto è già disattivato.");
+                    } else {
+                        // Verifica il tipo di oggetto e aggiorna lo stato di conseguenza
+                        if (oggettoDaDisattivare.getNome().equalsIgnoreCase("quadro elettrico")) {
+                            descrizione.setQuadroElettricoDisattivato(true);
+                        } else if (oggettoDaDisattivare.getNome().equalsIgnoreCase("torcia")) {
+                            descrizione.setTorciaAccesa(false);
+                        }
+                        msg.append("Hai disattivato: ").append(oggettoDaDisattivare.getDescrizione());
+                    }
+                } else {
+                    msg.append("Non puoi disattivare questo oggetto.");
+                }
+            } else {
+                msg.append("Non trovi l'oggetto da disattivare.");
+            }
+        }
+
+        return msg.toString();
+    }
+}
