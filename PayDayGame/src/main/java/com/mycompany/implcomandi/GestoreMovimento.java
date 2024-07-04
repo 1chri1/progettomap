@@ -31,6 +31,10 @@ public class GestoreMovimento implements Modifica, Serializable {
                 if(stanzaCorrente.getNome().equalsIgnoreCase("Esterno dell'ingresso principale")){
                  return "Non puoi andare in quella direzione, ci sono due guardie che sorvegliano l'ingresso, potresti essere arrestato...";
                 }
+                if ((stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 1")) ||
+                    (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2"))) {
+                    System.out.println("Sei andato avanti nel corridoio, ora vedi nuove porte");
+                }
                 nextRoom = stanzaCorrente.getNord();
                 messaggio = "A nord c'è ";
                 break;
@@ -39,14 +43,26 @@ public class GestoreMovimento implements Modifica, Serializable {
                     descrizione.setGiocoTerminato(true);
                     return "Sei andato in strada e sei stato investito. Il gioco è finito.";
                 }
+                if ((stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 3")) ||
+                    (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2"))) {
+                    System.out.println("Sei andato avanti nel corridoio, ora vedi nuove porte");
+                }
                 nextRoom = stanzaCorrente.getSud();
                 messaggio = "A sud c'è ";
                 break;
             case EST:
+                if ((stanzaCorrente.getNome().equalsIgnoreCase("Bagno"))) {
+                    System.out.println("Sei entrato nel corridoio, ora vedi nuove porte");
+                }
                 nextRoom = stanzaCorrente.getEst();
                 messaggio = "A est c'è ";
                 break;
             case OVEST:
+                 if ((stanzaCorrente.getNome().equalsIgnoreCase("Scale Piano di Sopra")) || 
+                    (stanzaCorrente.getNome().equalsIgnoreCase("Magazzino"))||
+                    (stanzaCorrente.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1"))) {
+                    System.out.println("Sei entrato avanti nel corridoio, ora vedi nuove porte");
+                }
                 nextRoom = stanzaCorrente.getOvest();
                 messaggio = "A ovest c'è ";
                 break;
@@ -59,8 +75,13 @@ public class GestoreMovimento implements Modifica, Serializable {
                 return messaggio + nextRoom.getNome() + ". " + MSG_USA_COMANDO_ENTRA;
             } else {
                 descrizione.setStanzaCorrente(nextRoom);
-                // Verifica se sei entrato nella Hall
-                if ("Hall".equalsIgnoreCase(descrizione.getStanzaCorrente().getNome()) && !descrizione.isQuadroElettricoDisattivato()) {
+                // Verifica se sei entrato nella Hall o Sala Controllo
+                if ("Hall".equalsIgnoreCase(nextRoom.getNome()) && !descrizione.isQuadroElettricoDisattivato()) {
+                    System.out.println("Sei stato arrestato perché le telecamere sono attive. Il gioco è terminato.");
+                    descrizione.setGiocoTerminato(true);
+                }
+                if ("Sala Controllo".equalsIgnoreCase(nextRoom.getNome())) {
+                    System.out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco è terminato.");
                     descrizione.setGiocoTerminato(true);
                 }
                 return "";

@@ -76,7 +76,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         this.assegna(esciGestore);
         Modifica attivaGestore = new GestoreAttiva();
         this.assegna(attivaGestore);
-        Modifica ricattoGestore = new GestoreRicatto();
+        Modifica ricattoGestore = new GestoreRicatta();
         this.assegna(ricattoGestore);
 
         // Stampa informazioni meteo
@@ -87,36 +87,36 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     private void stampaMeteo() {
-    System.out.println("Informazioni meteo per la città:");
-    Meteo.getWeather("Rome");
+        System.out.println("Informazioni meteo per la città:");
+        Meteo.getWeather("Rome");
 
-    // Ottenere le informazioni meteo
-    String condizioni = Meteo.getCondizioni();
-    StringBuilder messaggio = new StringBuilder("È sera e ");
+        // Ottenere le informazioni meteo
+        String condizioni = Meteo.getCondizioni();
+        StringBuilder messaggio = new StringBuilder("È sera e ");
 
-    switch (condizioni.toLowerCase()) {
-        case "rain":
-            messaggio.append("sta piovendo. Le strade sono bagnate e scivolose.");
-            break;
-        case "clear":
-            messaggio.append("il cielo è sereno. La luna illumina la città.");
-            break;
-        case "hail":
-            messaggio.append("sta grandinando. Fai attenzione ai pezzi di ghiaccio che cadono.");
-            break;
-        case "snow":
-            messaggio.append("sta nevicando. Le strade sono coperte di neve.");
-            break;
-        case "clouds":
-            messaggio.append("è nuvoloso. La visibilità è ridotta.");
-            break;
-        default:
-            messaggio.append("il tempo è incerto. Sii prudente.");
-            break;
+        switch (condizioni.toLowerCase()) {
+            case "rain":
+                messaggio.append("sta piovendo. Le strade sono bagnate e scivolose.");
+                break;
+            case "clear":
+                messaggio.append("il cielo è sereno. La luna illumina la città.");
+                break;
+            case "hail":
+                messaggio.append("sta grandinando. Fai attenzione ai pezzi di ghiaccio che cadono.");
+                break;
+            case "snow":
+                messaggio.append("sta nevicando. Le strade sono coperte di neve.");
+                break;
+            case "clouds":
+                messaggio.append("è nuvoloso. La visibilità è ridotta.");
+                break;
+            default:
+                messaggio.append("il tempo è incerto. Sii prudente.");
+                break;
+        }
+
+        System.out.println(messaggio.toString());
     }
-
-    System.out.println(messaggio.toString());
-}
 
     @Override
     public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
@@ -161,9 +161,16 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                             out.println("Ti trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
                             out.println(getStanzaCorrente().getDescrizione());
                         } else {
+                        if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
+                            "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
+                            "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) 
+                        { 
+                          
                             out.println("Ti trovi qui: " + getStanzaCorrente().getNome());
                             out.println("================================================");
-                            out.println(getStanzaCorrente().getDescrizione());
+                            out.println(getStanzaCorrente().getDescrizione());  
+                            
+                            }
                         }
                     }
                 } else {
@@ -248,8 +255,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     @Override
     public void setGiocoTerminato(boolean giocoTerminato) {
         this.giocoTerminato = giocoTerminato;
-        if(giocoTerminato)
-        {
+        if(giocoTerminato) {
             System.exit(0);
         }
     }

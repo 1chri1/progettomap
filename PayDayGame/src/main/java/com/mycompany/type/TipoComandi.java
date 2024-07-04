@@ -45,64 +45,45 @@ public enum TipoComandi implements Serializable {
     /**
      *
      */
-    CHIUDI,
-
-    /**
-     *
-     */
-    SPINGI,
-
-    /**
-     *
-     */
-    TIRA,
-
-    /**
-     *
-     */
     ENTRA,
 
     /**
      *
      */
     PRENDI,
-
-    /**
-     *
-     */
-    USA,
-
+    
     /**
      *
      */
     GUARDA,
-
-    /**
-     *
-     */
-    ACCENDI,
+    
     /**
      *
      */
     SALI,
+    
     /**
      *
      */
     SCENDI,
+    
     /**
      *
      */
     DISATTIVA,
+    
     /**
      *
      */
     ATTIVA,
+    
     /**
      *
      */
     ASCOLTA,
+    
     /**
      *
      */
-    RICATTO
+    RICATTA
 }

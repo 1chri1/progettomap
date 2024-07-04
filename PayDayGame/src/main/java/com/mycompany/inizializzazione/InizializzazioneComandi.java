@@ -28,7 +28,7 @@ public class InizializzazioneComandi {
         game.getComandi().add(ovest);
 
         Comandi esci = new Comandi(TipoComandi.ESCI, "esci");
-        esci.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati", "exit", "basta"});
+        esci.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati", "exit", "basta","ricchione"});
         game.getComandi().add(esci);
 
         Comandi guarda = new Comandi(TipoComandi.GUARDA, "guarda");
@@ -42,23 +42,7 @@ public class InizializzazioneComandi {
         Comandi apri = new Comandi(TipoComandi.APRI, "apri");
         apri.setAlias(new String[]{"aprire"});
         game.getComandi().add(apri);
-
-        Comandi spingi = new Comandi(TipoComandi.SPINGI, "spingi");
-        spingi.setAlias(new String[]{"premi"});
-        game.getComandi().add(spingi);
-
-        Comandi usa = new Comandi(TipoComandi.USA, "usa");
-        usa.setAlias(new String[]{"utilizza", "combina"});
-        game.getComandi().add(usa);
-
-        Comandi chiudi = new Comandi(TipoComandi.CHIUDI, "chiudi");
-        chiudi.setAlias(new String[]{"chiudere"});
-        game.getComandi().add(chiudi);
-
-        Comandi tira = new Comandi(TipoComandi.TIRA, "tira");
-        tira.setAlias(new String[]{"estrai"});
-        game.getComandi().add(tira);
-
+        
         Comandi entra = new Comandi(TipoComandi.ENTRA, "entra");
         entra.setAlias(new String[]{"entrare","scavalca"});
         game.getComandi().add(entra);
@@ -71,24 +55,20 @@ public class InizializzazioneComandi {
         sali.setAlias(new String[]{"salire","vai sù"});
         game.getComandi().add(sali);
 
-        Comandi accendi = new Comandi(TipoComandi.ACCENDI, "accendi");
-        accendi.setAlias(new String[]{"illumina"});
-        game.getComandi().add(accendi);
-
         Comandi disattiva = new Comandi(TipoComandi.DISATTIVA, "disattiva");
-        disattiva.setAlias(new String[]{"spegni"});
+        disattiva.setAlias(new String[]{"spegni","disabilita"});
         game.getComandi().add(disattiva);
         
         Comandi attiva = new Comandi(TipoComandi.ATTIVA, "attiva");
-        attiva.setAlias(new String[]{"abilita"});
+        attiva.setAlias(new String[]{"abilita","usa","accendi"});
         game.getComandi().add(attiva);
        
         Comandi ascolta = new Comandi(TipoComandi.ASCOLTA, "ascolta");
         ascolta.setAlias(new String[]{"senti"});
         game.getComandi().add(ascolta);
         
-        Comandi ricatto = new Comandi(TipoComandi.RICATTO, "ricatto");
-        ricatto.setAlias(new String[]{"ricatta"});
+        Comandi ricatto = new Comandi(TipoComandi.RICATTA, "ricatta");
+        ricatto.setAlias(new String[]{"ricatto"});
         game.getComandi().add(ricatto);
     }
 }

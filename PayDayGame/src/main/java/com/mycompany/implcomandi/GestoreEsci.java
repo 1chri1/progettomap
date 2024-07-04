@@ -20,8 +20,8 @@ public class GestoreEsci implements Modifica, Serializable {
             String risposta = scanner.nextLine().trim().toLowerCase();
             
             if (risposta.equals("sì") || risposta.equals("si")) {
+                System.out.println("Hai deciso di uscire dal gioco. Arrivederci!");
                 descrizione.setGiocoTerminato(true);
-                return "Hai deciso di uscire dal gioco. Arrivederci!";
             } else {
                 return "Hai deciso di rimanere nel gioco.";
             }

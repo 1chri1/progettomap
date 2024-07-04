@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author Alessandro
+ * Classe astratta che rappresenta la gestione del gioco.
+ * Fornisce i metodi e gli attributi comuni necessari per gestire lo stato del gioco,
+ * le stanze, i comandi e l'inventario.
  */
 public abstract class GestioneGioco implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -18,68 +19,75 @@ public abstract class GestioneGioco implements Serializable {
     private final List<Stanza> stanze = new ArrayList<>();
     private final List<Comandi> comandi = new ArrayList<>();
     private final List<Oggetto> inventario = new ArrayList<>();
-    private Stanza stanzaCorrente; //visibile solo nel package a cui appartiene
+    private Stanza stanzaCorrente; // visibile solo nel package a cui appartiene
 
     /**
+     * Restituisce la lista delle stanze del gioco.
      *
-     * @return
+     * @return lista delle stanze
      */
     public List<Stanza> getStanze() {
         return stanze;
     }
 
     /**
+     * Restituisce la lista dei comandi del gioco.
      *
-     * @return
+     * @return lista dei comandi
      */
     public List<Comandi> getComandi() {
         return comandi;
     }
 
     /**
+     * Restituisce la stanza corrente in cui si trova il giocatore.
      *
-     * @return
+     * @return stanza corrente
      */
     public Stanza getStanzaCorrente() {
         return stanzaCorrente;
     }
 
     /**
+     * Imposta la stanza corrente in cui si trova il giocatore.
      *
-     * @return
+     * @param stanzaCorrente la nuova stanza corrente
+     */
+    public void setStanzaCorrente(Stanza stanzaCorrente) {
+        this.stanzaCorrente = stanzaCorrente;
+    }
+
+    /**
+     * Restituisce l'inventario del giocatore.
+     *
+     * @return inventario del giocatore
      */
     public List<Oggetto> getInventario() {
         return inventario;
     }
 
     /**
+     * Metodo astratto per inizializzare il gioco.
      *
-     * @param stanzaCorrente
-     */
-    public void setStanzaCorrente(Stanza stanzaCorrente) {
-        this.stanzaCorrente = stanzaCorrente;
-    }
-    
-    /**
-     *
-     * @throws Exception
+     * @throws Exception in caso di errore durante l'inizializzazione
      */
     public abstract void inizializzazione() throws Exception;
-    
+
     /**
+     * Metodo astratto per gestire il prossimo spostamento nel gioco.
      *
-     * @param p
-     * @param out
+     * @param p   output del parser
+     * @param out stream di output
      */
     public abstract void ProssimoSpostamento(ParserOutput p, PrintStream out);
-    
+
     /**
+     * Restituisce il messaggio iniziale del gioco.
      *
-     * @return
+     * @return messaggio iniziale
      */
     public abstract String MessaggioIniziale();
 
-    // Metodi astratti da implementare in PayDayGame
     public abstract boolean isQuadroElettricoDisattivato();
 
     public abstract void setQuadroElettricoDisattivato(boolean quadroElettricoDisattivato);
@@ -87,7 +95,7 @@ public abstract class GestioneGioco implements Serializable {
     public abstract boolean isGiocoTerminato();
 
     public abstract void setGiocoTerminato(boolean giocoTerminato);
-    
+
     public abstract boolean isTorciaAccesa();
 
     public abstract void setTorciaAccesa(boolean torciaAccesa);

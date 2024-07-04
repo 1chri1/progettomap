@@ -10,11 +10,11 @@ import com.mycompany.type.Oggetto;
 import com.mycompany.type.TipoComandi;
 import java.io.Serializable;
 
-public class GestoreRicatto implements Modifica, Serializable {
+public class GestoreRicatta implements Modifica, Serializable {
     private static final long serialVersionUID = 1L;
     @Override
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
-        if (parserOutput.getComando().getTipo() == TipoComandi.RICATTO) {
+        if (parserOutput.getComando().getTipo() == TipoComandi.RICATTA) {
             Oggetto documentiRicatto = descrizione.getInventario().stream()
                     .filter(o -> "documenti ricatto".equalsIgnoreCase(o.getNome()))
                     .findFirst()

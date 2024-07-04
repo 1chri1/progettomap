@@ -389,17 +389,17 @@ public class InizializzazioneStanze {
 
         Stanza corridoio1 = stanzeMap.get("Corridoio 1");
         if (corridoio1 != null) {
-            corridoio1.setAlias(new String[]{"primo corridoio", "corridoio uno"});
+            corridoio1.setAlias(new String[]{"primo corridoio", "corridoio uno","corridoio"});
         }
 
         Stanza corridoio2 = stanzeMap.get("Corridoio 2");
         if (corridoio2 != null) {
-            corridoio2.setAlias(new String[]{"secondo corridoio", "corridoio due"});
+            corridoio2.setAlias(new String[]{"secondo corridoio", "corridoio due","corridoio"});
         }
 
         Stanza corridoio3 = stanzeMap.get("Corridoio 3");
         if (corridoio3 != null) {
-            corridoio3.setAlias(new String[]{"terzo corridoio", "corridoio tre"});
+            corridoio3.setAlias(new String[]{"terzo corridoio", "corridoio tre","corridoio"});
         }
 
         Stanza ufficioDirettore = stanzeMap.get("Ufficio Direttore");

@@ -20,7 +20,7 @@ public class GestoreApri implements Modifica, Serializable {
         if (parserOutput.getComando().getTipo() == TipoComandi.APRI) {
               // Verifica se ci sono oggetti nella stanza corrente
             if (descrizione.getStanzaCorrente().getOggetti().isEmpty()) {
-                return "Non ci sono oggetti in questa stanza.";
+                return "Non ci sono oggetti da aprire in questa stanza.";
             }
 
             Oggetto oggetto = parserOutput.getOggetto();
