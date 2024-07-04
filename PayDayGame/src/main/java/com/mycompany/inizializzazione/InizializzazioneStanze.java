@@ -49,118 +49,118 @@ public class InizializzazioneStanze {
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Angolo destro della banca");
-            pstmt.setString(3, "Puoi andare avanti, il palazzo continua.");
+            pstmt.setString(3, "Sei sul lato destro del palazzo, puoi andare avanti.");
             pstmt.setString(4, "Il lato destro del palazzo, lontano dalle guardie.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Angolo sinistro della banca");
-            pstmt.setString(3, "Puoi andare avanti, il palazzo continua.");
+            pstmt.setString(3, "Sei sul lato sinistro del palazzo, puoi andare avanti");
             pstmt.setString(4, "Il lato sinistro del palazzo, lontano dalle guardie.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Lato destro");
-            pstmt.setString(3, "C'è la finestra delle scale, potresti provare ad entrare.");
-            pstmt.setString(4, "La finestra delle scale è aperta, un ingresso alternativo.");
+            pstmt.setString(3, "Stai costeggiando la parete destra, c'è una finestra che affaccia su delle scale.");
+            pstmt.setString(4, "La finestra delle scale sembra aperta potresti provare ad entrare.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Lato sinistro");
-            pstmt.setString(3, "C'è la finestra del bagno, potresti provare ad entrare.");
-            pstmt.setString(4, "La finestra del bagno è aperta, un ingresso alternativo.");
+            pstmt.setString(3, "Stai costeggiando la parete sinistra, c'è una finestra che affaccia sul bagno.");
+            pstmt.setString(4, "La finestra del bagno sembra aperta potresti provare ad entrare.");
             pstmt.executeUpdate();
 
             // Piano terra
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Hall");
-            pstmt.setString(3, "Punto di ingresso principale, sorvegliato da due guardie.");
-            pstmt.setString(4, "Per fortuna le telecamere sono disattivate, ora puoi andare nelle altre stanze.");
+            pstmt.setString(3, "Punto di ingresso principale, sorvegliato da due guardie all'esterno.");
+            pstmt.setString(4, "Per fortuna le telecamere sono disattivate, c'è una porta alla tua sinistra.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Portineria");
-            pstmt.setString(3, "");
-            pstmt.setString(4, "Contiene le chiavi della stanza del direttore e degli uffici.");
+            pstmt.setString(3, "Una classica portineria");
+            pstmt.setString(4, "Contiene le chiavi dei diversi uffici tra cui quello del direttore.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Bagno");
             pstmt.setString(3, "Un normalissimo bagno");
-            pstmt.setString(4, "Un bagno pulito con tre cessi.");
+            pstmt.setString(4, "Un bagno pulito con tre gabinetti.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Sala Controllo");
-            pstmt.setString(3, "");
-            pstmt.setString(4, "La sala controllo con le telecamere di sicurezza, sorvegliata da una guardia.");
+            pstmt.setString(3, "Ci sono schermi per controllare tutte le videocamere di sorveglianza.");
+            pstmt.setString(4, "");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Ufficio Vicino Scale");
             pstmt.setString(3, "Un semplice ufficio.");
-            pstmt.setString(4, "Un ufficio ordinato vicino alle scale.");
+            pstmt.setString(4, "Un ufficio ordinato senza niente di interessante.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Ufficio Vicino Corridoio 1");
             pstmt.setString(3, "Un semplice ufficio");
-            pstmt.setString(4, "Un ufficio con un registratore contenente una conversazione importante.");
+            pstmt.setString(4, "Sulla scrivania è presente quello che sembra essere un registratore vocale.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Magazzino");
             pstmt.setString(3, "E' pieno di materiali");
-            pstmt.setString(4, "Contiene una torcia e altre forniture.");
+            pstmt.setString(4, "Su uno scaffale è presente una torcia elettrica.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Scale Piano di Sopra");
-            pstmt.setString(3, "");
-            pstmt.setString(4, "Le scale che portano al piano superiore.");
+            pstmt.setString(3, "Le scale che portano al piano inferiore.");
+            pstmt.setString(4, "C'è una porta davanti a te.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Corridoio 1");
             pstmt.setString(3, "");
-            pstmt.setString(4, "Un corridoio che collega diverse stanze.");
+            pstmt.setString(4, "Ci sono delle porte alla tua destra e dietro di te.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Corridoio 2");
             pstmt.setString(3, "");
-            pstmt.setString(4, "Un corridoio che collega il bagno e il magazzino.");
+            pstmt.setString(4, "Ci sono delle porte alla tua destra e alla tua sinistra.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Corridoio 3");
             pstmt.setString(3, "Cruciale per la storia del gioco");
-            pstmt.setString(4, "Contiene il quadro elettrico per disattivare le telecamere.");
+            pstmt.setString(4, "Ci sono delle porte alla tua destra e alla tua sinistra, sulla parete di fronte c'è il quadro elettrico della banca.");
             pstmt.executeUpdate();
 
             // Seminterrato
             pstmt.setInt(1, -1);
             pstmt.setString(2, "Caveau");
             pstmt.setString(3, "Il caveau, un luogo sicuro dove vengono custoditi oggetti di valore.");
-            pstmt.setString(4, "Contiene una cassetta con documenti per ricattare il direttore, soldi e gioielli.");
+            pstmt.setString(4, "Contiene soldi, gioielli e una cassetta con documenti con cui si potrebbe ricattare il direttore.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, -1);
             pstmt.setString(2, "Ufficio Direttore");
             pstmt.setString(3, "L'ufficio del direttore, arredato con mobili eleganti.");
-            pstmt.setString(4, "Contiene un tesserino per entrare nel caveau, nascosto nell'armadio.");
+            pstmt.setString(4, "C'è un grande armadio.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, -1);
             pstmt.setString(2, "Scale Piano di Sotto");
-            pstmt.setString(3, "");
-            pstmt.setString(4, "Le scale che portano al piano inferiore.");
+            pstmt.setString(3, "Le scale che portano al piano superiore.");
+            pstmt.setString(4, "Ci sono delle porte davanti e dietro di te, alla tua sinistra c'è quello che sembrerebbe un caveau.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, -1);
             pstmt.setString(2, "Garage/Uscita");
-            pstmt.setString(3, "Il garage, che funge anche da uscita dall'edificio.");
-            pstmt.setString(4, "Un garage vuoto con una macchina abbandonata.");
+            pstmt.setString(3, "Il garage della banca da cui è possibile anche uscire.");
+            pstmt.setString(4, "Al momento è completamente vuoto.");
             pstmt.executeUpdate();
 
             pstmt.close();
