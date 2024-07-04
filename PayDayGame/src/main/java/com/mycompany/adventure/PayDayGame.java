@@ -1,5 +1,6 @@
 package com.mycompany.adventure;
 
+import com.my.company.meteo.Meteo;
 import com.mycompany.implComandi.*;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.inizializzazione.InizializzazioneComandi;
@@ -77,8 +78,16 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         Modifica ricattoGestore = new GestoreRicatto();
         this.assegna(ricattoGestore);
 
+        // Stampa informazioni meteo
+        stampaMeteo();
+
         Stanza hall = Stanza.trovaStanza(0, "Esterno dell'ingresso principale");
         setStanzaCorrente(hall);
+    }
+
+    private void stampaMeteo() {
+        System.out.println("Informazioni meteo per la città:");
+        Meteo.getWeather("Bari"); // Sostituisci con la città desiderata
     }
 
     @Override
