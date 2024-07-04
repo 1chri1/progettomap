@@ -115,7 +115,7 @@ public class InizializzazioneStanze {
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
-            pstmt.setString(2, "Scale Piano di Sopra");
+            pstmt.setString(2, "Scale");
             pstmt.setString(3, "Le scale che portano al piano inferiore.");
             pstmt.setString(4, "C'è una porta davanti a te.");
             pstmt.executeUpdate();
@@ -212,7 +212,7 @@ public class InizializzazioneStanze {
         Stanza ufficioVicinaScale = stanzeMap.get("Ufficio Vicino Scale");
         Stanza ufficioVicinaCorridoio1 = stanzeMap.get("Ufficio Vicino Corridoio 1");
         Stanza magazzino = stanzeMap.get("Magazzino");
-        Stanza scalePT = stanzeMap.get("Scale Piano di Sopra");
+        Stanza scalePT = stanzeMap.get("Scale");
         Stanza corridoio1 = stanzeMap.get("Corridoio 1");
         Stanza corridoio2 = stanzeMap.get("Corridoio 2");
         Stanza corridoio3 = stanzeMap.get("Corridoio 3");
@@ -382,7 +382,7 @@ public class InizializzazioneStanze {
             magazzino.setAlias(new String[]{"deposito", "ripostiglio"});
         }
 
-        Stanza scalePT = stanzeMap.get("Scale Piano di Sopra");
+        Stanza scalePT = stanzeMap.get("Scale");
         if (scalePT != null) {
             scalePT.setAlias(new String[]{"scale superiori", "scale per il piano di sopra"});
         }

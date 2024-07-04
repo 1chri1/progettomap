@@ -29,7 +29,7 @@ public class GestoreEntra implements Modifica, Serializable {
         if ((nomeStanzaCorrente.equalsIgnoreCase("Lato destro") || nomeStanzaCorrente.equalsIgnoreCase("Lato sinistro"))
                 && (nomeStanzaDestinazione == null || nomeStanzaDestinazione.isEmpty())) {
             if (nomeStanzaCorrente.equalsIgnoreCase("Lato destro")) {
-                nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Scale Piano di Sopra");
+                nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Scale");
             } else if (nomeStanzaCorrente.equalsIgnoreCase("Lato sinistro")) {
                 nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Bagno");
             }
@@ -62,8 +62,8 @@ public class GestoreEntra implements Modifica, Serializable {
         } else {
             switch (nomeStanzaCorrente.toLowerCase()) {
                 case "lato destro":
-                    if (matchesDestination(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Scale Piano di Sopra")) {
-                        nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Scale Piano di Sopra");
+                    if (matchesDestination(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Scale")) {
+                        nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Scale");
                     } else {
                         msg.append("Non capisco dove vuoi andare.");
                     }
@@ -103,7 +103,7 @@ public class GestoreEntra implements Modifica, Serializable {
                         msg.append("Non capisco dove vuoi andare.");
                     }
                     break;
-                case "scale piano di sopra":
+                case "Scale":
                     if (matchesDestination(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Ufficio Vicino Scale")) {
                         if (hasRequiredItem(descrizione, CHIAVE_UFFICI)) {
                             nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Ufficio Vicino Scale");

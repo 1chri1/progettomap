@@ -20,7 +20,7 @@ public class GestoreSali implements Modifica, Serializable {
             Stanza stanzaCorrente = descrizione.getStanzaCorrente();
             String nomeStanzaCorrente = stanzaCorrente.getNome();
                 if ("Scale Piano di Sotto".equalsIgnoreCase(nomeStanzaCorrente)) {
-                    Stanza nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano() + 1, "Scale Piano di Sopra");
+                    Stanza nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano() + 1, "Scale");
                     if (nuovaStanza != null) {
                         descrizione.setStanzaCorrente(nuovaStanza);
                         msg.append("Sei salito nelle scale del piano di sopra.");

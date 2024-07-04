@@ -19,7 +19,7 @@ public class GestoreScendi implements Modifica, Serializable {
         if (parserOutput.getComando().getTipo() == TipoComandi.SCENDI) {
             Stanza stanzaCorrente = descrizione.getStanzaCorrente();
             String nomeStanzaCorrente = stanzaCorrente.getNome();
-                if ("Scale Piano Di Sopra".equalsIgnoreCase(nomeStanzaCorrente)) {
+                if ("Scale".equalsIgnoreCase(nomeStanzaCorrente)) {
                     Stanza nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano() - 1, "Scale Piano di Sotto");
                     if (nuovaStanza != null) {
                         descrizione.setStanzaCorrente(nuovaStanza);

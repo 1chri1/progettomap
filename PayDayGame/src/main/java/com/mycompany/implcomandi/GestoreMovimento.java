@@ -54,17 +54,25 @@ public class GestoreMovimento implements Modifica, Serializable {
                 if ((stanzaCorrente.getNome().equalsIgnoreCase("Bagno"))) {
                     System.out.println("Sei entrato nel corridoio, ora vedi nuove porte");
                 }
+                if (stanzaCorrente.getNome().equalsIgnoreCase("Lato sinistro")) {
+                    messaggio = "A ovest c'è l'ingresso per il ";
+                } else {
+                    messaggio = "A ovest c'è ";
+                }
                 nextRoom = stanzaCorrente.getEst();
-                messaggio = "A est c'è ";
                 break;
             case OVEST:
-                 if ((stanzaCorrente.getNome().equalsIgnoreCase("Scale Piano di Sopra")) || 
+                 if ((stanzaCorrente.getNome().equalsIgnoreCase("Scale")) || 
                     (stanzaCorrente.getNome().equalsIgnoreCase("Magazzino"))||
                     (stanzaCorrente.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1"))) {
                     System.out.println("Sei entrato avanti nel corridoio, ora vedi nuove porte");
                 }
+                if (stanzaCorrente.getNome().equalsIgnoreCase("Lato destro")) {
+                    messaggio = "A ovest c'è l'ingresso per le ";
+                } else {
+                    messaggio = "A ovest c'è ";
+                }
                 nextRoom = stanzaCorrente.getOvest();
-                messaggio = "A ovest c'è ";
                 break;
             default:
                 return "";
@@ -99,12 +107,12 @@ public class GestoreMovimento implements Modifica, Serializable {
         String nomeStanzaCorrente = stanzaCorrente.getNome();
         String nomeStanzaDestinazione = stanzaDestinazione.getNome();
 
-        return (nomeStanzaCorrente.equalsIgnoreCase("Lato Destro") && nomeStanzaDestinazione.equalsIgnoreCase("Scale Piano di Sopra")) ||
+        return (nomeStanzaCorrente.equalsIgnoreCase("Lato Destro") && nomeStanzaDestinazione.equalsIgnoreCase("Scale")) ||
                (nomeStanzaCorrente.equalsIgnoreCase("Lato Sinistro") && nomeStanzaDestinazione.equalsIgnoreCase("Bagno")) ||
                (nomeStanzaCorrente.equalsIgnoreCase("Scale Piano di Sotto") && 
                 ((nomeStanzaDestinazione.equalsIgnoreCase("Ufficio Direttore")) || nomeStanzaDestinazione.equalsIgnoreCase("Caveau"))) ||
                (nomeStanzaCorrente.equalsIgnoreCase("Corridoio 1") && nomeStanzaDestinazione.equalsIgnoreCase("Ufficio Vicino Corridoio 1")) ||
-               (nomeStanzaCorrente.equalsIgnoreCase("Scale Piano Di Sopra") && nomeStanzaDestinazione.equalsIgnoreCase("Ufficio Vicino Scale"));
+               (nomeStanzaCorrente.equalsIgnoreCase("Scale") && nomeStanzaDestinazione.equalsIgnoreCase("Ufficio Vicino Scale"));
     }
     
     private boolean isEsterno(Stanza stanza) {
