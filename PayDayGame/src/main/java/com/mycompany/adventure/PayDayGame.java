@@ -80,42 +80,10 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         this.assegna(ricattoGestore);
 
         // Stampa informazioni meteo
-        stampaMeteo();
+        Meteo.stampaMeteo("Rome");
 
         Stanza hall = Stanza.trovaStanza(0, "Esterno dell'ingresso principale");
         setStanzaCorrente(hall);
-    }
-
-    private void stampaMeteo() {
-        System.out.println("Informazioni meteo per la città:");
-        Meteo.getWeather("Rome");
-
-        // Ottenere le informazioni meteo
-        String condizioni = Meteo.getCondizioni();
-        StringBuilder messaggio = new StringBuilder("È sera e ");
-
-        switch (condizioni.toLowerCase()) {
-            case "rain":
-                messaggio.append("sta piovendo. Le strade sono bagnate e scivolose.");
-                break;
-            case "clear":
-                messaggio.append("il cielo è sereno. La luna illumina la città.");
-                break;
-            case "hail":
-                messaggio.append("sta grandinando. Fai attenzione ai pezzi di ghiaccio che cadono.");
-                break;
-            case "snow":
-                messaggio.append("sta nevicando. Le strade sono coperte di neve.");
-                break;
-            case "clouds":
-                messaggio.append("è nuvoloso. La visibilità è ridotta.");
-                break;
-            default:
-                messaggio.append("il tempo è incerto. Sii prudente.");
-                break;
-        }
-
-        System.out.println(messaggio.toString());
     }
 
     @Override

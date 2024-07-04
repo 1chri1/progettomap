@@ -44,4 +44,36 @@ public class Meteo {
     public static String getCondizioni() {
         return condizioni;
     }
+
+    public static void stampaMeteo(String city) {
+        System.out.println("Informazioni meteo per la città:");
+        getWeather(city);
+
+        // Ottenere le informazioni meteo
+        String condizioni = getCondizioni();
+        StringBuilder messaggio = new StringBuilder("È sera e ");
+
+        switch (condizioni.toLowerCase()) {
+            case "rain":
+                messaggio.append("sta piovendo. Le strade sono bagnate e scivolose.");
+                break;
+            case "clear":
+                messaggio.append("il cielo è sereno. La luna illumina la città.");
+                break;
+            case "hail":
+                messaggio.append("sta grandinando. Fai attenzione ai pezzi di ghiaccio che cadono.");
+                break;
+            case "snow":
+                messaggio.append("sta nevicando. Le strade sono coperte di neve.");
+                break;
+            case "clouds":
+                messaggio.append("è nuvoloso. La visibilità è ridotta.");
+                break;
+            default:
+                messaggio.append("il tempo è incerto. Sii prudente.");
+                break;
+        }
+
+        System.out.println(messaggio.toString());
+    }
 }
