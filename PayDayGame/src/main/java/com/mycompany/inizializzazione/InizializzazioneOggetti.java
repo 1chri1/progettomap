@@ -58,7 +58,7 @@ public class InizializzazioneOggetti {
 
         if (portineria != null) {
             Oggetto chiaviDirettore = new Oggetto(6, "chiavi direttore", "Chiavi della stanza del direttore.");
-            chiaviDirettore.setAlias(new String[]{"chiavi direttore", "direttore"});
+            chiaviDirettore.setAlias(new String[]{"chiavi direttore", "chiavi"});
             chiaviDirettore.setPrendibile(true);
             portineria.getOggetti().add(chiaviDirettore);
             insertOggetto(chiaviDirettore, portineria);
@@ -89,11 +89,17 @@ public class InizializzazioneOggetti {
             insertOggetto(cassetta, caveau);
             insertOggetto(documentiRicatto, caveau);
 
-            Oggetto soldiGioielli = new Oggetto(10, "soldi e gioielli", "Soldi e gioielli (al centro della stanza).");
-            soldiGioielli.setAlias(new String[]{"tutto"});
-            soldiGioielli.setPrendibile(true);
-            caveau.getOggetti().add(soldiGioielli);
-            insertOggetto(soldiGioielli, caveau);
+            Oggetto soldi = new Oggetto(10, "soldi ", "Soldi(al centro della stanza).");
+            soldi.setAlias(new String[]{"soldi"});
+            soldi.setPrendibile(true);
+            caveau.getOggetti().add(soldi);
+            insertOggetto(soldi, caveau);
+            
+            Oggetto gioielli = new Oggetto(10, "gioielli", "Gioielli (al centro della stanza).");
+            gioielli.setAlias(new String[]{"gioielli"});
+            gioielli.setPrendibile(true);
+            caveau.getOggetti().add(gioielli);
+            insertOggetto(gioielli, caveau);
         }
 
         if (ufficioDirettore != null) {

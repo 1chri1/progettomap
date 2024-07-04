@@ -31,7 +31,7 @@ public class GestorePrendi implements Modifica, Serializable {
                     descrizione.getStanzaCorrente().getOggetti().remove(parserOutput.getOggetto());
                     msg.append("Hai appena raccolto: ").append(parserOutput.getOggetto().getDescrizione());
                     
-                    if (haTuttiGliOggetti(descrizione)) {
+                    if (haDocumentiRicatto(descrizione)) {
                         mostraDialogoDirettore(descrizione);
                     }
                 } else {
@@ -44,11 +44,10 @@ public class GestorePrendi implements Modifica, Serializable {
         return msg.toString();
     }
     
-    private boolean haTuttiGliOggetti(GestioneGioco descrizione) {
-        boolean haDocumentiRicatto = descrizione.getInventario().stream().anyMatch(o -> "documenti ricatto".equalsIgnoreCase(o.getNome()));
-        boolean haSoldiGioielli = descrizione.getInventario().stream().anyMatch(o -> "soldi e gioielli".equalsIgnoreCase(o.getNome()));
-        return haDocumentiRicatto && haSoldiGioielli;
-    }
+    private boolean haDocumentiRicatto(GestioneGioco descrizione) {
+    boolean haDocumentiRicatto = descrizione.getInventario().stream().anyMatch(o -> "documenti ricatto".equalsIgnoreCase(o.getNome()));
+    return haDocumentiRicatto;
+}
 
     private void mostraDialogoDirettore(GestioneGioco descrizione) {
         System.out.println("Direttore: Che cosa stai facendo qui? Come hai ottenuto quei documenti?");

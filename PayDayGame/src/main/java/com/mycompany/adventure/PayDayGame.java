@@ -136,11 +136,12 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
                 if (hasSoldiGioielli()) {
                     int bottinoFinale = bottinoBase + (isRicattoDirettore() ? bottinoExtra : 0);
-                    setGiocoTerminato(true);
                     if (isRicattoDirettore()) {
-                        out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse. Il tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                        out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                        setGiocoTerminato(true);
                     } else {
-                        out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau. Il tuo futuro è incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                        out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro è incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                        setGiocoTerminato(true);
                     }
                 } else {
                     out.println("Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante? (sì/no)");
@@ -151,8 +152,8 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                         if (isRicattoDirettore()) {
                             bottinoFinale += bottinoExtra;
                         }
-                        setGiocoTerminato(true);
                         out.println("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
+                        setGiocoTerminato(true);
                     } else {
                         out.println("Hai deciso di rimanere e completare la missione.");
                         setStanzaCorrente(cr);
@@ -163,9 +164,11 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     private boolean hasSoldiGioielli() {
-        boolean haSoldiGioielli = getInventario().stream().anyMatch(o -> "soldi e gioielli".equalsIgnoreCase(o.getNome()));
-        return haSoldiGioielli;
-    }
+    boolean haSoldi = getInventario().stream().anyMatch(o -> "soldi".equalsIgnoreCase(o.getNome()));
+    boolean haGioielli = getInventario().stream().anyMatch(o -> "gioielli".equalsIgnoreCase(o.getNome()));
+    return haSoldi && haGioielli;
+}
+
 
     @Override
     public void assegna(Modifica o) {
@@ -209,6 +212,10 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     @Override
     public void setGiocoTerminato(boolean giocoTerminato) {
         this.giocoTerminato = giocoTerminato;
+        if(giocoTerminato)
+        {
+            System.exit(0);
+        }
     }
 
     @Override
