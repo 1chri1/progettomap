@@ -1,12 +1,13 @@
 package com.mycompany.adventure;
 
-import com.my.company.meteo.Meteo;
+import com.google.gson.JsonObject;
 import com.mycompany.implComandi.*;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.inizializzazione.InizializzazioneComandi;
 import com.mycompany.inizializzazione.InizializzazioneStanze;
 import com.mycompany.inizializzazione.InizializzazioneOggetti;
 import com.mycompany.db.DatabaseManager;
+import com.mycompany.meteo.Meteo;
 import com.mycompany.type.Stanza;
 import com.mycompany.type.TipoComandi;
 
@@ -86,9 +87,36 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     private void stampaMeteo() {
-        System.out.println("Informazioni meteo per la città:");
-        Meteo.getWeather("Bari"); // Sostituisci con la città desiderata
+    System.out.println("Informazioni meteo per la città:");
+    Meteo.getWeather("Rome");
+
+    // Ottenere le informazioni meteo
+    String condizioni = Meteo.getCondizioni();
+    StringBuilder messaggio = new StringBuilder("È sera e ");
+
+    switch (condizioni.toLowerCase()) {
+        case "rain":
+            messaggio.append("sta piovendo. Le strade sono bagnate e scivolose.");
+            break;
+        case "clear":
+            messaggio.append("il cielo è sereno. La luna illumina la città.");
+            break;
+        case "hail":
+            messaggio.append("sta grandinando. Fai attenzione ai pezzi di ghiaccio che cadono.");
+            break;
+        case "snow":
+            messaggio.append("sta nevicando. Le strade sono coperte di neve.");
+            break;
+        case "clouds":
+            messaggio.append("è nuvoloso. La visibilità è ridotta.");
+            break;
+        default:
+            messaggio.append("il tempo è incerto. Sii prudente.");
+            break;
     }
+
+    System.out.println(messaggio.toString());
+}
 
     @Override
     public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
@@ -173,11 +201,10 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     private boolean hasSoldiGioielli() {
-    boolean haSoldi = getInventario().stream().anyMatch(o -> "soldi".equalsIgnoreCase(o.getNome()));
-    boolean haGioielli = getInventario().stream().anyMatch(o -> "gioielli".equalsIgnoreCase(o.getNome()));
-    return haSoldi && haGioielli;
-}
-
+        boolean haSoldi = getInventario().stream().anyMatch(o -> "soldi".equalsIgnoreCase(o.getNome()));
+        boolean haGioielli = getInventario().stream().anyMatch(o -> "gioielli".equalsIgnoreCase(o.getNome()));
+        return haSoldi && haGioielli;
+    }
 
     @Override
     public void assegna(Modifica o) {

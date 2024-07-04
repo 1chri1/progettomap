@@ -1,4 +1,4 @@
-package com.my.company.meteo;
+package com.mycompany.meteo;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,7 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class Meteo {
-    private static final String API_KEY = "6311b8668feec546fd040a35118d1c11"; 
+    private static final String API_KEY = "6311b8668feec546fd040a35118d1c11";
+    private static String condizioni;
 
     public static void getWeather(String city) {
         try {
@@ -29,13 +30,18 @@ public class Meteo {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
 
-            // Stampa le informazioni principali
+            // Ottenere le informazioni principali
             System.out.println("Città: " + jsonObject.get("name").getAsString());
             System.out.println("Temperatura: " + jsonObject.getAsJsonObject("main").get("temp").getAsDouble() + "°C");
-            System.out.println("Condizioni: " + jsonObject.getAsJsonArray("weather").get(0).getAsJsonObject().get("description").getAsString());
+            condizioni = jsonObject.getAsJsonArray("weather").get(0).getAsJsonObject().get("main").getAsString();
+            System.out.println("Condizioni: " + condizioni);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getCondizioni() {
+        return condizioni;
     }
 }
