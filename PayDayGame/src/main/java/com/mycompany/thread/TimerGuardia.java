@@ -1,18 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.thread;
 
 import com.mycompany.adventure.GestioneGioco;
+import java.io.Serializable;
 
-public class TimerGuardia implements Runnable {
+public class TimerGuardia implements Runnable, Serializable {
+    private static final long serialVersionUID = 1L;
     private int tempoRimasto; // in secondi
     private boolean running;
-    private GestioneGioco gioco;
+    private transient GestioneGioco gioco;
 
-    public TimerGuardia(int tempoRimasto, GestioneGioco gioco) {
-        this.tempoRimasto = tempoRimasto * 60; // Converti minuti in secondi
+    public TimerGuardia(int minuti, GestioneGioco gioco) {
+        this.tempoRimasto = minuti * 60; // Converti minuti in secondi
         this.gioco = gioco;
         this.running = true;
     }
@@ -21,9 +19,11 @@ public class TimerGuardia implements Runnable {
     public void run() {
         while (tempoRimasto > 0 && running) {
             try {
-                Thread.sleep(60000); // Attende per un minuto (60,000 millisecondi)
-                tempoRimasto -= 60; // Decrementa il tempo rimanente di un minuto
-                System.out.println("La guardia sta cercando di risolvere il problema. Tempo rimanente: " + (tempoRimasto / 60) + " minuti.");
+                Thread.sleep(1000); // Attende per un secondo (1,000 millisecondi)
+                tempoRimasto -= 1; // Decrementa il tempo rimanente di un secondo
+                if (tempoRimasto % 60 == 0) {
+                    System.out.println("La guardia sta cercando di risolvere il problema. Tempo rimanente: " + (tempoRimasto / 60) + " minuti.");
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
@@ -31,6 +31,10 @@ public class TimerGuardia implements Runnable {
         }
 
         synchronized (gioco) {
+            if (!running) {
+                return; // Esci immediatamente se il timer è stato fermato
+            }
+
             if (!gioco.isGiocoTerminato()) {
                 if (tempoRimasto <= 0) {
                     System.out.println("La guardia ti ha trovato! Hai perso.");
@@ -44,5 +48,14 @@ public class TimerGuardia implements Runnable {
 
     public void stop() {
         running = false;
+        Thread.currentThread().interrupt(); // Interrompe il thread per fermare immediatamente l'esecuzione
+    }
+
+    public int getTempoRimasto() {
+        return tempoRimasto;
+    }
+
+    public void setGioco(GestioneGioco gioco) {
+        this.gioco = gioco;
     }
 }

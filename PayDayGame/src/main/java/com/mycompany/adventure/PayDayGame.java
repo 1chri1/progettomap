@@ -8,6 +8,7 @@ import com.mycompany.inizializzazione.InizializzazioneStanze;
 import com.mycompany.inizializzazione.InizializzazioneOggetti;
 import com.mycompany.db.DatabaseManager;
 import com.mycompany.meteo.Meteo;
+import com.mycompany.thread.TimerGuardia;
 import com.mycompany.type.Stanza;
 import com.mycompany.type.TipoComandi;
 
@@ -34,6 +35,10 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     private boolean torciaAccesa;
     private boolean ricattoDirettore = false;
     private transient DatabaseManager dbManager;
+    private transient TimerGuardia timerGuardia;
+    private transient Thread timerThread;
+    private boolean timerAttivo;
+    private int tempoRimastoTimer; // in secondi
 
     public PayDayGame(DatabaseManager dbManager) {
         this.dbManager = dbManager;
@@ -247,21 +252,82 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     public void setRicattoDirettore(boolean ricattoDirettore) {
         this.ricattoDirettore = ricattoDirettore;
     }
-
+    
     @Override
-    public void salvaPartita(String baseFileName) throws IOException {
-        gestisciSalvataggi(baseFileName, ".");
+    public boolean isTimerAttivo() {
+        return timerAttivo;
     }
 
     @Override
-    public GestioneGioco caricaPartita(String filePath) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
-            return (GestioneGioco) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
-            throw e;
+    public void setTimerAttivo(boolean timerAttivo) {
+        this.timerAttivo = timerAttivo;
+    }
+
+    @Override
+    public TimerGuardia getTimerGuardia() {
+        return timerGuardia;
+    }
+
+    @Override
+    public void setTimerGuardia(TimerGuardia timerGuardia) {
+        this.timerGuardia = timerGuardia;
+    }
+
+    @Override
+    public Thread getTimerThread() {
+        return timerThread;
+    }
+
+    @Override
+    public void setTimerThread(Thread timerThread) {
+        this.timerThread = timerThread;
+    }
+    
+   @Override
+public void salvaPartita(String baseFileName) throws IOException {
+    if (timerGuardia != null) {
+        timerAttivo = true;
+        tempoRimastoTimer = timerGuardia.getTempoRimasto(); // Ottieni il tempo rimanente in secondi
+        timerGuardia.stop(); // Ferma il timer
+    } else {
+        timerAttivo = false;
+    }
+    gestisciSalvataggi(baseFileName, ".");
+}
+
+
+    @Override
+public GestioneGioco caricaPartita(String filePath) throws IOException, ClassNotFoundException {
+    try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
+        PayDayGame giocoCaricato = (PayDayGame) in.readObject();
+        // Reimposta il dbManager dopo il caricamento
+        giocoCaricato.dbManager = DatabaseManager.getInstance();
+        System.out.println("Timer attivo: " + giocoCaricato.timerAttivo); // Debug per verificare lo stato del timer
+        if (giocoCaricato.timerAttivo) {
+            int minutiRimasti = giocoCaricato.tempoRimastoTimer / 60;
+            System.out.println("Tempo rimasto per il timer caricato: " + minutiRimasti + " minuti (" + giocoCaricato.tempoRimastoTimer + " secondi).");
+            giocoCaricato.startTimer(minutiRimasti); // Riavvia il timer con il tempo rimanente in minuti
+            System.out.println("Timer riavviato con successo.");
         }
+        return giocoCaricato;
+    } catch (IOException | ClassNotFoundException e) {
+        System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
+        throw e;
     }
+}
+
+
+
+    @Override
+   public void startTimer(int minuti) {
+    if (timerGuardia == null) {
+        timerGuardia = new TimerGuardia(minuti, this);
+        timerThread = new Thread(timerGuardia);
+        timerThread.start();
+    }
+}
+
+
 
     @Override
     public List<String> elencoSalvataggi(String directory) {

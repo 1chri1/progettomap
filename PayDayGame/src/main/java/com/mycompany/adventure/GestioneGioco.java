@@ -1,6 +1,7 @@
 package com.mycompany.adventure;
 
 import com.mycompany.parser.ParserOutput;
+import com.mycompany.thread.TimerGuardia;
 import com.mycompany.type.Comandi;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.Stanza;
@@ -104,6 +105,21 @@ public abstract class GestioneGioco implements Serializable {
 
     public abstract void setRicattoDirettore(boolean ricattoDirettore);
 
+    public abstract boolean isTimerAttivo();
+
+    public abstract void setTimerAttivo(boolean timerAttivo);
+
+    public abstract TimerGuardia getTimerGuardia();
+
+    public abstract void setTimerGuardia(TimerGuardia timerGuardia);
+
+    public abstract Thread getTimerThread();
+
+    public abstract void setTimerThread(Thread timerThread);
+   
+    public abstract void startTimer(int minuti);
+
+    
     // Metodi per la serializzazione
     public abstract void salvaPartita(String filePath) throws IOException;
 

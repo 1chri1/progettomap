@@ -9,8 +9,6 @@ import java.io.Serializable;
 
 public class GestoreDisattiva implements Modifica, Serializable {
     private static final long serialVersionUID = 1L;
-    private TimerGuardia timerGuardia;
-    private Thread timerThread;
 
     @Override
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
@@ -40,10 +38,10 @@ public class GestoreDisattiva implements Modifica, Serializable {
                             descrizione.setQuadroElettricoDisattivato(true);
                             msg.append("Hai disattivato: ").append(oggettoDaDisattivare.getDescrizione());
                             System.out.println("Attenzione: è scattato l'allarme.\nHai 5 minuti per completare la rapina.");
-                            // Avvia il timer della guardia
-                            timerGuardia = new TimerGuardia(5, descrizione); // Timer di 5 minuti
-                            timerThread = new Thread(timerGuardia);
-                            timerThread.start();
+                            // Avvia il timer della guardia solo se non è già attivo
+                            if (!descrizione.isTimerAttivo()) {
+                                descrizione.startTimer(5); // Timer di 5 minuti
+                            }
                         } else if (oggettoDaDisattivare.getNome().equalsIgnoreCase("torcia")) {
                             descrizione.setTorciaAccesa(false);
                             msg.append("Hai disattivato: ").append(oggettoDaDisattivare.getDescrizione());
@@ -58,11 +56,5 @@ public class GestoreDisattiva implements Modifica, Serializable {
         }
 
         return msg.toString();
-    }
-
-    public void stopTimer() {
-        if (timerGuardia != null) {
-            timerGuardia.stop();
-        }
     }
 }
