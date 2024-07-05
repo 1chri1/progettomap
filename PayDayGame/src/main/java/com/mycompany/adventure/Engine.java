@@ -18,12 +18,8 @@ public class Engine {
 
     private GestioneGioco game;
     private Parser parser;
+    private boolean partitaSalvata;
 
-    /**
-     * Costruttore della classe Engine.
-     * 
-     * @param game l'istanza di GestioneGioco da utilizzare
-     */
     public Engine(GestioneGioco game) {
         this.game = game;
         try {
@@ -39,42 +35,67 @@ public class Engine {
         }
     }
 
-    /**
-     * Metodo principale per l'esecuzione del gioco.
-     */
     public void execute() {
-        mostraMessaggioIniziale();
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextLine() && !game.isGiocoTerminato()) {
-            String command = scanner.nextLine();
-            if (command.equalsIgnoreCase("salva")) {
-                salvaPartita(scanner);
-                continue;
-            } else if (command.equalsIgnoreCase("carica")) {
-                caricaPartita(scanner);
-                continue;
+        boolean running = true;
+        boolean primoAvvio = true;
+
+        while (running) {
+            if (primoAvvio) {
+                mostraMessaggioIniziale();
+                primoAvvio = false;
+            } else if (partitaSalvata) {
+                System.out.println("Vuoi rimanere nella partita corrente, caricare una partita salvata o uscire? (rimani/carica/esci)");
+                String scelta = scanner.nextLine().trim().toLowerCase();
+                if (scelta.equals("carica")) {
+                    caricaPartita(scanner);
+                    partitaSalvata = false; // Reset the flag to allow continuing the game
+                    continue; // Skip to the next iteration to avoid printing the initial message
+                } else if (scelta.equals("esci")) {
+                    running = false;
+                    continue;
+                } else if (scelta.equals("rimani")) {
+                    partitaSalvata = false; // Reset the flag to continue in the current game
+                } else {
+                    System.out.println("Scelta non valida. Operazione annullata.");
+                    continue;
+                }
             }
-            ParserOutput p = parser.parse(command, game.getComandi(), game.getStanzaCorrente().getOggetti(), game.getInventario(), game.getStanze());
-            if (p == null || p.getComando() == null) {
-                System.out.println("Non capisco quello che mi vuoi dire.");
-            } else {
-                game.ProssimoSpostamento(p, System.out);
-                if (game.isGiocoTerminato()) {
+
+            while (scanner.hasNextLine() && !game.isGiocoTerminato() && !partitaSalvata) {
+                String command = scanner.nextLine();
+                if (command.equalsIgnoreCase("salva")) {
+                    salvaPartita(scanner);
                     break;
+                } else if (command.equalsIgnoreCase("carica")) {
+                    caricaPartita(scanner);
+                    partitaSalvata = false; // Reset the flag to allow continuing the game
+                    break; // Break to re-enter the main loop and show the appropriate message
                 }
-                if (game.getStanzaCorrente() == null) {
-                    System.out.println("La tua avventura termina qui! Complimenti!");
-                    System.exit(0);
+                ParserOutput p = parser.parse(command, game.getComandi(), game.getStanzaCorrente().getOggetti(), game.getInventario(), game.getStanze());
+                if (p == null || p.getComando() == null) {
+                    System.out.println("Non capisco quello che mi vuoi dire.");
+                } else {
+                    game.ProssimoSpostamento(p, System.out);
+                    if (game.isGiocoTerminato()) {
+                        break;
+                    }
+                    if (game.getStanzaCorrente() == null) {
+                        System.out.println("La tua avventura termina qui! Complimenti!");
+                        System.exit(0);
+                    }
                 }
+                System.out.print("?> ");
             }
-            System.out.print("?> ");
+
+            if (game.isGiocoTerminato()) {
+                break;
+            }
         }
+
         scanner.close();
     }
 
-    /**
-     * Metodo per mostrare il messaggio iniziale del gioco.
-     */
     private void mostraMessaggioIniziale() {
         System.out.println("====================================================");
         System.out.println("*                  PayDayGame 2024                 *");
@@ -84,6 +105,8 @@ public class Engine {
         System.out.println("*                   Christian Vurchio              *");
         System.out.println("====================================================");
         System.out.println();
+        System.out.println("È iniziata una nuova partita. Se hai partite salvate, puoi caricarle utilizzando il comando 'carica'.");
+        System.out.println();
         System.out.println(game.MessaggioIniziale());
         System.out.println();
         System.out.println("Sei nascosto all'" + game.getStanzaCorrente().getNome());
@@ -92,56 +115,53 @@ public class Engine {
         System.out.print("?> ");
     }
 
-    /**
-     * Metodo per salvare la partita.
-     * 
-     * @param scanner l'istanza di Scanner per leggere l'input dell'utente
-     */
     private void salvaPartita(Scanner scanner) {
         System.out.print("Inserisci il nome del salvataggio: ");
         String nomeSalvataggio = scanner.nextLine().trim();
         try {
             game.salvaPartita(nomeSalvataggio);
+            System.out.println("Partita salvata con successo.");
+            partitaSalvata = true; // Indica che la partita è stata salvata
         } catch (IOException e) {
             System.err.println("Errore durante il salvataggio della partita: " + e.getMessage());
         }
     }
 
-    /**
-     * Metodo per caricare una partita salvata.
-     * 
-     * @param scanner l'istanza di Scanner per leggere l'input dell'utente
-     */
     private void caricaPartita(Scanner scanner) {
         List<String> salvataggi = game.elencoSalvataggi(".");
         if (salvataggi.isEmpty()) {
             System.out.println("Non ci sono salvataggi disponibili.");
         } else {
-            System.out.println("Scegli un file da caricare:");
-            for (int i = 0; i < salvataggi.size(); i++) {
-                System.out.println((i + 1) + ". " + salvataggi.get(i));
-            }
-            int scelta = scanner.nextInt();
-            scanner.nextLine(); // consume newline
-            if (scelta < 1 || scelta > salvataggi.size()) {
-                System.out.println("Scelta non valida. Operazione annullata.");
-            } else {
-                String fileDaCaricare = salvataggi.get(scelta - 1);
+            boolean sceltaValida = false;
+            while (!sceltaValida) {
+                System.out.println("Scegli un file da caricare:");
+                for (int i = 0; i < salvataggi.size(); i++) {
+                    System.out.println((i + 1) + ". " + salvataggi.get(i));
+                }
+
+                String sceltaInput = scanner.nextLine();
+                int scelta;
                 try {
-                    game = (GestioneGioco) game.caricaPartita(fileDaCaricare);
-                    System.out.println("Partita caricata con successo.");
-                } catch (IOException | ClassNotFoundException e) {
-                    System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
+                    scelta = Integer.parseInt(sceltaInput);
+                    if (scelta < 1 || scelta > salvataggi.size()) {
+                        System.out.println("Scelta non valida. Inserisci un numero dall'elenco.");
+                    } else {
+                        String fileDaCaricare = salvataggi.get(scelta - 1);
+                        try {
+                            game = (GestioneGioco) game.caricaPartita(fileDaCaricare);
+                            System.out.println("Partita caricata con successo.");
+                            sceltaValida = true;
+                        } catch (IOException | ClassNotFoundException e) {
+                            System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Scelta non valida. Inserisci un numero dall'elenco.");
                 }
             }
         }
     }
 
-    /**
-     * Metodo principale per l'avvio del programma.
-     * 
-     * @param args argomenti della riga di comando
-     */
     public static void main(String[] args) {
         String dbUrl = "jdbc:h2:mem:testdb"; // Configurazione per il database in memoria
         String user = "user";

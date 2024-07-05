@@ -16,7 +16,8 @@ public class GestoreEsci implements Modifica, Serializable {
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
         if (parserOutput.getComando().getTipo() == TipoComandi.ESCI) {
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Sei sicuro di voler uscire dal gioco? (sì/no): ");
+            System.out.print("Sei sicuro di voler uscire dal gioco senza salvare? (sì/no) ");
+            System.out.print("\nPer salvare digita il comando 'salva'\n");
             String risposta = scanner.nextLine().trim().toLowerCase();
             
             if (risposta.equals("sì") || risposta.equals("si")) {

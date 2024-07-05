@@ -2,6 +2,7 @@ package com.mycompany.type;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -94,7 +95,7 @@ public class Oggetto implements Serializable {
      * @return gli alias dell'oggetto
      */
     public Set<String> getAlias() {
-        return alias;
+        return alias != null ? alias : Collections.emptySet();
     }
 
     /**
