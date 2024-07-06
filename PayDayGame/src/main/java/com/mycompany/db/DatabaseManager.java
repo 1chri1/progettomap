@@ -6,16 +6,26 @@ import java.sql.*;
 import java.util.List;
 import org.h2.tools.Server;
 
+/**
+ * Gestore del database che utilizza H2 come motore di database.
+ * Fornisce metodi per connettersi, inizializzare e chiudere il database, 
+ * nonché per inserire dati nelle tabelle.
+ */
 public class DatabaseManager {
 
     private static DatabaseManager instance;
     private Connection connection;
     private Server h2Server;
 
-    public DatabaseManager() {
+    private DatabaseManager() {
         // Costruttore privato per evitare l'instanziazione diretta
     }
 
+    /**
+     * Restituisce l'istanza singleton del DatabaseManager.
+     *
+     * @return istanza del DatabaseManager
+     */
     public static synchronized DatabaseManager getInstance() {
         if (instance == null) {
             instance = new DatabaseManager();
@@ -23,6 +33,14 @@ public class DatabaseManager {
         return instance;
     }
 
+    /**
+     * Inizializza e connette al database H2.
+     *
+     * @param dbUrl l'URL del database
+     * @param user l'utente del database
+     * @param password la password del database
+     * @throws SQLException in caso di errore durante la connessione o l'inizializzazione
+     */
     public void initializeAndConnect(String dbUrl, String user, String password) throws SQLException {
         try {
             // Trova una porta libera per il server H2
@@ -47,10 +65,18 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Restituisce la connessione al database.
+     *
+     * @return la connessione al database
+     */
     public Connection getConnection() {
         return connection;
     }
 
+    /**
+     * Chiude la connessione al database e ferma il server H2.
+     */
     public void close() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -64,6 +90,11 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Inizializza il database creando le tabelle necessarie.
+     *
+     * @throws SQLException in caso di errore durante la creazione delle tabelle
+     */
     private void initializeDatabase() throws SQLException {
         try (Statement stmt = connection.createStatement()) {
             // Creazione delle tabelle
@@ -72,6 +103,12 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Inserisce le stanze nel database.
+     *
+     * @param stanze la lista delle stanze da inserire
+     * @throws SQLException in caso di errore durante l'inserimento delle stanze
+     */
     public void insertRooms(List<Stanza> stanze) throws SQLException {
         String insertRoomSQL = "INSERT INTO rooms (piano, nome, descrizione, guarda) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(insertRoomSQL)) {
@@ -85,12 +122,17 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Trova una porta libera sul sistema.
+     *
+     * @return una porta libera
+     */
     private static int findFreePort() {
         try (java.net.ServerSocket socket = new java.net.ServerSocket(0)) {
             socket.setReuseAddress(true);
             return socket.getLocalPort();
         } catch (java.io.IOException e) {
-            throw new RuntimeException("No available ports found.", e);
+            throw new RuntimeException("Nessuna porta disponibile trovata.", e);
         }
     }
 }

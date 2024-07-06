@@ -6,16 +6,17 @@ import com.mycompany.type.TipoComandi;
 import java.io.Serializable;
 
 /**
- *
- * @author Alessandro
+ * Classe che gestisce il comando di guardare nel gioco.
  */
 public class GestoreGuarda implements Modifica, Serializable {
     private static final long serialVersionUID = 1L;
+
     /**
-     *
-     * @param descrizione
-     * @param parserOutput
-     * @return 
+     * Aggiorna lo stato del gioco in base al comando di guardare.
+     * 
+     * @param descrizione la descrizione del gioco
+     * @param parserOutput l'output del parser che contiene il comando
+     * @return messaggio di risposta al giocatore
      */
     @Override
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
@@ -25,7 +26,13 @@ public class GestoreGuarda implements Modifica, Serializable {
             return "";
         }
     }
-    
+
+    /**
+     * Costruisce il messaggio di risposta per il comando guarda.
+     * 
+     * @param descrizione la descrizione del gioco
+     * @return messaggio di risposta al giocatore
+     */
     private String messaggioGuarda(GestioneGioco descrizione) {
         StringBuilder msg = new StringBuilder();
 

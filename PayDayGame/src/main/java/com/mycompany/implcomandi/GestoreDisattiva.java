@@ -7,9 +7,19 @@ import com.mycompany.type.Oggetto;
 import com.mycompany.type.TipoComandi;
 import java.io.Serializable;
 
+/**
+ * Classe che gestisce il comando di disattivazione nel gioco.
+ */
 public class GestoreDisattiva implements Modifica, Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Aggiorna lo stato del gioco in base al comando di disattivazione.
+     * 
+     * @param descrizione la descrizione del gioco
+     * @param parserOutput l'output del parser che contiene il comando e l'oggetto
+     * @return messaggio di risposta al giocatore
+     */
     @Override
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
         StringBuilder msg = new StringBuilder();
@@ -17,6 +27,7 @@ public class GestoreDisattiva implements Modifica, Serializable {
         if (parserOutput.getComando().getTipo() == TipoComandi.DISATTIVA) {
             Oggetto oggettoDaDisattivare = parserOutput.getOggetto();
 
+            // Verifica se ci sono oggetti nella stanza corrente o nell'inventario
             if (descrizione.getStanzaCorrente().getOggetti().isEmpty() && descrizione.getInventario().isEmpty()) {
                 return "Non ci sono oggetti in questa stanza o nel tuo inventario.";
             }

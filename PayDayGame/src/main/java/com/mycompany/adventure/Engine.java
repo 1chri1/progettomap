@@ -35,6 +35,9 @@ public class Engine {
         }
     }
 
+    /**
+     * Esegue il ciclo principale del gioco.
+     */
     public void execute() {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
@@ -49,13 +52,13 @@ public class Engine {
                 String scelta = scanner.nextLine().trim().toLowerCase();
                 if (scelta.equals("carica")) {
                     caricaPartita(scanner);
-                    partitaSalvata = false; // Reset the flag to allow continuing the game
-                    continue; // Skip to the next iteration to avoid printing the initial message
+                    partitaSalvata = false; // Resetta il flag per consentire di continuare il gioco
+                    continue; // Salta alla prossima iterazione per evitare di stampare il messaggio iniziale
                 } else if (scelta.equals("esci")) {
                     running = false;
                     continue;
                 } else if (scelta.equals("rimani")) {
-                    partitaSalvata = false; // Reset the flag to continue in the current game
+                    partitaSalvata = false; // Resetta il flag per continuare nella partita corrente
                 } else {
                     System.out.println("Scelta non valida. Operazione annullata.");
                     continue;
@@ -69,8 +72,8 @@ public class Engine {
                     break;
                 } else if (command.equalsIgnoreCase("carica")) {
                     caricaPartita(scanner);
-                    partitaSalvata = false; // Reset the flag to allow continuing the game
-                    break; // Break to re-enter the main loop and show the appropriate message
+                    partitaSalvata = false; // Resetta il flag per consentire di continuare il gioco
+                    break; // Interrompe per rientrare nel ciclo principale e mostrare il messaggio appropriato
                 }
                 ParserOutput p = parser.parse(command, game.getComandi(), game.getStanzaCorrente().getOggetti(), game.getInventario(), game.getStanze());
                 if (p == null || p.getComando() == null) {
@@ -96,6 +99,9 @@ public class Engine {
         scanner.close();
     }
 
+    /**
+     * Mostra il messaggio iniziale del gioco.
+     */
     private void mostraMessaggioIniziale() {
         System.out.println("====================================================");
         System.out.println("*                  PayDayGame 2024                 *");
@@ -115,6 +121,10 @@ public class Engine {
         System.out.print("?> ");
     }
 
+    /**
+     * Salva la partita corrente.
+     * @param scanner Scanner per leggere l'input dell'utente.
+     */
     private void salvaPartita(Scanner scanner) {
         System.out.print("Inserisci il nome del salvataggio: ");
         String nomeSalvataggio = scanner.nextLine().trim();
@@ -127,6 +137,10 @@ public class Engine {
         }
     }
 
+    /**
+     * Carica una partita salvata.
+     * @param scanner Scanner per leggere l'input dell'utente.
+     */
     private void caricaPartita(Scanner scanner) {
         List<String> salvataggi = game.elencoSalvataggi(".");
         if (salvataggi.isEmpty()) {

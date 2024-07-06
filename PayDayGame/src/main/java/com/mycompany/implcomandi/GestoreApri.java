@@ -6,9 +6,11 @@ import com.mycompany.type.Oggetto;
 import com.mycompany.type.OggettoContenitore;
 import com.mycompany.type.TipoComandi;
 import java.io.Serializable;
-
 import java.util.Scanner;
 
+/**
+ * Gestore del comando "apri". Implementa l'interfaccia Modifica.
+ */
 public class GestoreApri implements Modifica, Serializable {
     private static final long serialVersionUID = 1L;
     private static final String CODICE_CORRETTO = "9872"; // Il codice corretto della cassetta
@@ -18,7 +20,7 @@ public class GestoreApri implements Modifica, Serializable {
         StringBuilder messaggio = new StringBuilder();
 
         if (parserOutput.getComando().getTipo() == TipoComandi.APRI) {
-              // Verifica se ci sono oggetti nella stanza corrente
+            // Verifica se ci sono oggetti nella stanza corrente
             if (descrizione.getStanzaCorrente().getOggetti().isEmpty()) {
                 return "Non ci sono oggetti da aprire in questa stanza.";
             }

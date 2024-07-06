@@ -8,9 +8,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class Meteo {
+
     private static final String API_KEY = "6311b8668feec546fd040a35118d1c11";
     private static String condizioni;
 
+    /**
+     * Metodo per ottenere le informazioni meteo da un'API per una specifica città.
+     *
+     * @param city la città per la quale ottenere le informazioni meteo
+     */
     public static void getWeather(String city) {
         try {
             URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + API_KEY + "&units=metric");
@@ -41,10 +47,20 @@ public class Meteo {
         }
     }
 
+    /**
+     * Metodo per ottenere le condizioni meteo.
+     *
+     * @return le condizioni meteo come stringa
+     */
     public static String getCondizioni() {
         return condizioni;
     }
 
+    /**
+     * Metodo per stampare le informazioni meteo per una specifica città.
+     *
+     * @param city la città per la quale stampare le informazioni meteo
+     */
     public static void stampaMeteo(String city) {
         System.out.println("Informazioni meteo per la città:");
         getWeather(city);
@@ -53,6 +69,7 @@ public class Meteo {
         String condizioni = getCondizioni();
         StringBuilder messaggio = new StringBuilder("È sera e ");
 
+        // Costruisce un messaggio basato sulle condizioni meteo
         switch (condizioni.toLowerCase()) {
             case "rain":
                 messaggio.append("sta piovendo. Le strade sono bagnate e scivolose.");

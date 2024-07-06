@@ -9,14 +9,27 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Set;
 
+/**
+ * Classe che gestisce l'inizializzazione degli oggetti nel gioco.
+ */
 public class InizializzazioneOggetti {
 
     private final DatabaseManager dbManager;
 
+    /**
+     * Costruttore per InizializzazioneOggetti.
+     * 
+     * @param dbManager il gestore del database
+     */
     public InizializzazioneOggetti(DatabaseManager dbManager) {
         this.dbManager = dbManager;
     }
 
+    /**
+     * Inizializza gli oggetti di gioco nelle stanze appropriate.
+     * 
+     * @param gioco l'istanza del gioco da inizializzare con gli oggetti
+     */
     public void initOggetti(GestioneGioco gioco) {
         Stanza bagno = Stanza.trovaStanza(0, "Bagno");
         Stanza ufficioVicinoCorridoio1 = Stanza.trovaStanza(0, "Ufficio Vicino Corridoio 1");
@@ -26,6 +39,7 @@ public class InizializzazioneOggetti {
         Stanza caveau = Stanza.trovaStanza(-1, "Caveau");
         Stanza ufficioDirettore = Stanza.trovaStanza(-1, "Ufficio Direttore");
 
+        // Inizializzazione oggetti per il bagno
         if (bagno != null) {
             Oggetto cesso1 = new Oggetto(1, "cesso1", "Un cesso pulito.");
             Oggetto cesso2 = new Oggetto(2, "cesso2", "Un cesso sporco.");
@@ -38,6 +52,7 @@ public class InizializzazioneOggetti {
             insertOggetto(cesso3, bagno);
         }
 
+        // Inizializzazione oggetti per l'ufficio vicino al corridoio 1
         if (ufficioVicinoCorridoio1 != null) {
             Oggetto registratore = new Oggetto(4, "registratore", "Registratore con conversazione (per scoprire il codice della cassetta nel caveau).");
             registratore.setAlias(new String[]{"registratore", "conversazione"});
@@ -47,6 +62,7 @@ public class InizializzazioneOggetti {
             insertOggetto(registratore, ufficioVicinoCorridoio1);
         }
 
+        // Inizializzazione oggetti per il magazzino
         if (magazzino != null) {
             Oggetto torcia = new Oggetto(5, "torcia", "Una torcia elettrica.");
             torcia.setAlias(new String[]{"torcia", "luce"});
@@ -56,6 +72,7 @@ public class InizializzazioneOggetti {
             insertOggetto(torcia, magazzino);
         }
 
+        // Inizializzazione oggetti per la portineria
         if (portineria != null) {
             Oggetto chiaviDirettore = new Oggetto(6, "chiavi direttore", "Chiavi della stanza del direttore.");
             chiaviDirettore.setAlias(new String[]{"chiavi direttore", "chiavi"});
@@ -70,6 +87,7 @@ public class InizializzazioneOggetti {
             insertOggetto(chiaviUffici, portineria);
         }
 
+        // Inizializzazione oggetti per il corridoio 3
         if (corridoio3 != null) {
             Oggetto quadroElettrico = new Oggetto(8, "quadro elettrico", "Quadro elettrico.");
             quadroElettrico.setDisattivabile(true);
@@ -78,6 +96,7 @@ public class InizializzazioneOggetti {
             insertOggetto(quadroElettrico, corridoio3);
         }
 
+        // Inizializzazione oggetti per il caveau
         if (caveau != null) {
             OggettoContenitore cassetta = new OggettoContenitore("cassetta", "Cassetta contenente i documenti del direttore.", Set.of("cassetta"));
             cassetta.setApribile(true);
@@ -89,19 +108,20 @@ public class InizializzazioneOggetti {
             insertOggetto(cassetta, caveau);
             insertOggetto(documentiRicatto, caveau);
 
-            Oggetto soldi = new Oggetto(10, "soldi ", "Soldi(al centro della stanza).");
+            Oggetto soldi = new Oggetto(10, "soldi", "Soldi (al centro della stanza).");
             soldi.setAlias(new String[]{"soldi"});
             soldi.setPrendibile(true);
             caveau.getOggetti().add(soldi);
             insertOggetto(soldi, caveau);
             
-            Oggetto gioielli = new Oggetto(10, "gioielli", "Gioielli (al centro della stanza).");
+            Oggetto gioielli = new Oggetto(11, "gioielli", "Gioielli (al centro della stanza).");
             gioielli.setAlias(new String[]{"gioielli"});
             gioielli.setPrendibile(true);
             caveau.getOggetti().add(gioielli);
             insertOggetto(gioielli, caveau);
         }
 
+        // Inizializzazione oggetti per l'ufficio del direttore
         if (ufficioDirettore != null) {
             OggettoContenitore armadio = new OggettoContenitore("armadio", "Un armadio grande e robusto.", Set.of("armadio"));
             armadio.setApribile(true);
@@ -116,6 +136,12 @@ public class InizializzazioneOggetti {
         }
     }
 
+    /**
+     * Inserisce un oggetto nel database.
+     * 
+     * @param oggetto l'oggetto da inserire
+     * @param stanza la stanza in cui si trova l'oggetto
+     */
     private void insertOggetto(Oggetto oggetto, Stanza stanza) {
         String insertOggettoSQL = "INSERT INTO objects (name, description, room_id) VALUES (?, ?, (SELECT id FROM rooms WHERE nome = ?))";
         try (PreparedStatement pstmt = dbManager.getConnection().prepareStatement(insertOggettoSQL)) {

@@ -7,12 +7,22 @@ import com.mycompany.type.Stanza;
 import com.mycompany.type.TipoComandi;
 import java.io.Serializable;
 
+/**
+ * Classe che gestisce il comando di entrata nel gioco.
+ */
 public class GestoreEntra implements Modifica, Serializable {
     private static final long serialVersionUID = 1L;
     private static final String CHIAVE_DIRETTORE = "chiavi direttore";
     private static final String TESSERINO_CAVEAU = "tesserino caveau";
     private static final String CHIAVE_UFFICI = "chiavi uffici";
 
+    /**
+     * Aggiorna lo stato del gioco in base al comando di entrata.
+     * 
+     * @param descrizione la descrizione del gioco
+     * @param parserOutput l'output del parser che contiene il comando e l'oggetto
+     * @return messaggio di risposta al giocatore
+     */
     @Override
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
         if (parserOutput.getComando().getTipo() != TipoComandi.ENTRA) {
@@ -39,7 +49,7 @@ public class GestoreEntra implements Modifica, Serializable {
             } else {
                 return "Non riesci ad entrare in nessuna stanza da qui.";
             }
-        } 
+        }
 
         // Controllo se siamo nel corridoio 1 e il comando entra è senza destinazione
         if (nomeStanzaCorrente.equalsIgnoreCase("Corridoio 1") && (nomeStanzaDestinazione == null || nomeStanzaDestinazione.isEmpty())) {
@@ -129,6 +139,14 @@ public class GestoreEntra implements Modifica, Serializable {
         return msg.toString();
     }
 
+    /**
+     * Verifica se la destinazione corrisponde alla stanza attuale.
+     * 
+     * @param piano il piano corrente
+     * @param destinazione la destinazione
+     * @param nomeStanza il nome della stanza
+     * @return true se la destinazione corrisponde, false altrimenti
+     */
     private boolean matchesDestination(int piano, String destinazione, String nomeStanza) {
         Stanza stanza = Stanza.trovaStanza(piano, nomeStanza);
         if (stanza != null && (stanza.getNome().equalsIgnoreCase(destinazione) || stanza.getAlias().contains(destinazione))) {
@@ -137,6 +155,13 @@ public class GestoreEntra implements Modifica, Serializable {
         return false;
     }
 
+    /**
+     * Verifica se l'inventario contiene l'oggetto richiesto.
+     * 
+     * @param descrizione la descrizione del gioco
+     * @param itemName il nome dell'oggetto richiesto
+     * @return true se l'oggetto è presente, false altrimenti
+     */
     private boolean hasRequiredItem(GestioneGioco descrizione, String itemName) {
         for (Oggetto oggetto : descrizione.getInventario()) {
             if (oggetto.getNome().equalsIgnoreCase(itemName)) {

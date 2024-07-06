@@ -1,35 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.adventure;
-
-/**
- *
- * @author Tommaso
- */
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 
 import com.mycompany.type.Oggetto;
 import java.util.List;
 
-import java.util.List;
-
 /**
- *
- * @author Tommaso
+ * Classe di utilità per operazioni comuni del gioco.
  */
 public class GameUtils {
 
     /**
+     * Ottiene un oggetto dall'inventario dato il suo ID.
      *
-     * @param inventory
-     * @param id
-     * @return
+     * @param inventory la lista degli oggetti nell'inventario
+     * @param id l'ID dell'oggetto da cercare
+     * @return l'oggetto con l'ID specificato, oppure null se non trovato
      */
     public static Oggetto getObjectFromInventory(List<Oggetto> inventory, int id) {
         for (Oggetto o : inventory) {
@@ -39,5 +23,4 @@ public class GameUtils {
         }
         return null;
     }
-
 }

@@ -4,8 +4,16 @@ import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.type.Comandi;
 import com.mycompany.type.TipoComandi;
 
+/**
+ * Classe che gestisce l'inizializzazione dei comandi nel gioco.
+ */
 public class InizializzazioneComandi {
 
+    /**
+     * Inizializza i comandi di gioco.
+     * 
+     * @param game l'istanza del gioco da inizializzare con i comandi
+     */
     public void initCommandi(GestioneGioco game) {
         Comandi nord = new Comandi(TipoComandi.NORD, "nord");
         nord.setAlias(new String[]{"Nord", "NORD", "avanti"});
@@ -44,23 +52,23 @@ public class InizializzazioneComandi {
         game.getComandi().add(apri);
         
         Comandi entra = new Comandi(TipoComandi.ENTRA, "entra");
-        entra.setAlias(new String[]{"entrare","scavalca"});
+        entra.setAlias(new String[]{"entrare", "scavalca"});
         game.getComandi().add(entra);
         
         Comandi scendi = new Comandi(TipoComandi.SCENDI, "scendi");
-        scendi.setAlias(new String[]{"scendere","vai giù"});
+        scendi.setAlias(new String[]{"scendere", "vai giù"});
         game.getComandi().add(scendi);
         
         Comandi sali = new Comandi(TipoComandi.SALI, "sali");
-        sali.setAlias(new String[]{"salire","vai sù"});
+        sali.setAlias(new String[]{"salire", "vai sù"});
         game.getComandi().add(sali);
 
         Comandi disattiva = new Comandi(TipoComandi.DISATTIVA, "disattiva");
-        disattiva.setAlias(new String[]{"spegni","disabilita"});
+        disattiva.setAlias(new String[]{"spegni", "disabilita"});
         game.getComandi().add(disattiva);
         
         Comandi attiva = new Comandi(TipoComandi.ATTIVA, "attiva");
-        attiva.setAlias(new String[]{"abilita","usa","accendi"});
+        attiva.setAlias(new String[]{"abilita", "usa", "accendi"});
         game.getComandi().add(attiva);
        
         Comandi ascolta = new Comandi(TipoComandi.ASCOLTA, "ascolta");

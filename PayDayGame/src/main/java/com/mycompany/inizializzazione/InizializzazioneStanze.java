@@ -21,10 +21,20 @@ public class InizializzazioneStanze {
     private DatabaseManager dbManager;
     private Map<String, Stanza> stanzeMap = new HashMap<>();
 
+    /**
+     * Costruttore per InizializzazioneStanze.
+     * 
+     * @param dbManager il gestore del database
+     */
     public InizializzazioneStanze(DatabaseManager dbManager) {
         this.dbManager = dbManager;
     }
 
+    /**
+     * Inizializza le stanze di gioco.
+     * 
+     * @param gioco l'istanza del gioco da inizializzare con le stanze
+     */
     public void initStanze(GestioneGioco gioco) {
         inserisciStanzeNelDatabase();
         recuperaStanzeDalDatabase();
@@ -32,6 +42,9 @@ public class InizializzazioneStanze {
         aggiungiAlias();
     }
 
+    /**
+     * Inserisce le stanze nel database.
+     */
     private void inserisciStanzeNelDatabase() {
         // Crea le stanze e le inserisce nel database
         Connection connection = dbManager.getConnection();
@@ -170,8 +183,10 @@ public class InizializzazioneStanze {
         }
     }
 
+    /**
+     * Recupera le stanze dal database e le mette nella mappa stanzeMap.
+     */
     private void recuperaStanzeDalDatabase() {
-        // Recupera le stanze dal database e le mette nella mappa stanzeMap
         Connection connection = dbManager.getConnection();
 
         try {
@@ -197,8 +212,10 @@ public class InizializzazioneStanze {
         }
     }
 
+    /**
+     * Crea i collegamenti tra le stanze dopo averle recuperate dal database.
+     */
     private void creaCollegamentiStanze() {
-        // Crea i collegamenti tra le stanze dopo averle recuperate dal database
         Stanza esternoIngressoPrincipale = stanzeMap.get("Esterno dell'ingresso principale");
         Stanza esternoAngoloDestro = stanzeMap.get("Angolo destro della banca");
         Stanza esternoAngoloSinistro = stanzeMap.get("Angolo sinistro della banca");
@@ -316,6 +333,9 @@ public class InizializzazioneStanze {
         }
     }
 
+    /**
+     * Aggiunge alias per le stanze nel gioco.
+     */
     private void aggiungiAlias() {
         Stanza hall = stanzeMap.get("Hall");
         if (hall != null) {
@@ -389,17 +409,17 @@ public class InizializzazioneStanze {
 
         Stanza corridoio1 = stanzeMap.get("Corridoio 1");
         if (corridoio1 != null) {
-            corridoio1.setAlias(new String[]{"primo corridoio", "corridoio uno","corridoio"});
+            corridoio1.setAlias(new String[]{"primo corridoio", "corridoio uno", "corridoio"});
         }
 
         Stanza corridoio2 = stanzeMap.get("Corridoio 2");
         if (corridoio2 != null) {
-            corridoio2.setAlias(new String[]{"secondo corridoio", "corridoio due","corridoio"});
+            corridoio2.setAlias(new String[]{"secondo corridoio", "corridoio due", "corridoio"});
         }
 
         Stanza corridoio3 = stanzeMap.get("Corridoio 3");
         if (corridoio3 != null) {
-            corridoio3.setAlias(new String[]{"terzo corridoio", "corridoio tre","corridoio"});
+            corridoio3.setAlias(new String[]{"terzo corridoio", "corridoio tre", "corridoio"});
         }
 
         Stanza ufficioDirettore = stanzeMap.get("Ufficio Direttore");
@@ -417,5 +437,4 @@ public class InizializzazioneStanze {
             garageUscita.setAlias(new String[]{"uscita", "parcheggio"});
         }
     }
-
 }

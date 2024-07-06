@@ -116,16 +116,47 @@ public abstract class GestioneGioco implements Serializable {
     public abstract Thread getTimerThread();
 
     public abstract void setTimerThread(Thread timerThread);
-   
+
+    /**
+     * Avvia il timer della guardia.
+     *
+     * @param minuti la durata del timer in minuti
+     */
     public abstract void startTimer(int minuti);
 
-    
     // Metodi per la serializzazione
+    /**
+     * Salva lo stato attuale del gioco in un file.
+     *
+     * @param filePath il percorso del file dove salvare il gioco
+     * @throws IOException in caso di errore durante il salvataggio
+     */
     public abstract void salvaPartita(String filePath) throws IOException;
 
+    /**
+     * Carica lo stato del gioco da un file.
+     *
+     * @param filePath il percorso del file da cui caricare il gioco
+     * @return l'istanza di GestioneGioco caricata
+     * @throws IOException in caso di errore durante il caricamento
+     * @throws ClassNotFoundException se la classe salvata non viene trovata
+     */
     public abstract GestioneGioco caricaPartita(String filePath) throws IOException, ClassNotFoundException;
 
+    /**
+     * Restituisce l'elenco dei salvataggi disponibili in una directory.
+     *
+     * @param directory la directory in cui cercare i file di salvataggio
+     * @return lista dei nomi dei file di salvataggio
+     */
     public abstract List<String> elencoSalvataggi(String directory);
 
+    /**
+     * Gestisce i salvataggi, mantenendo solo gli ultimi n salvataggi.
+     *
+     * @param baseFileName il nome base dei file di salvataggio
+     * @param directory la directory in cui sono salvati i file
+     * @throws IOException in caso di errore durante la gestione dei file
+     */
     public abstract void gestisciSalvataggi(String baseFileName, String directory) throws IOException;
 }

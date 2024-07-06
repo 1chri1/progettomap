@@ -22,8 +22,11 @@ import java.util.stream.Stream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
+/**
+ * Classe che gestisce il gioco PayDay.
+ */
 public class PayDayGame extends GestioneGioco implements GestoreComandi, Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     private final List<Modifica> osservatori = new ArrayList<>();
     private ParserOutput parserOutput;
@@ -57,32 +60,20 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         InizializzazioneOggetti inizializzazioneOggetti = new InizializzazioneOggetti(dbManager);
         inizializzazioneOggetti.initOggetti(this);
 
-        Modifica apriGestore = new GestoreApri();
-        this.assegna(apriGestore);
-        Modifica ascoltaGestore = new GestoreAscolta();
-        this.assegna(ascoltaGestore);
-        Modifica disattivaGestore = new GestoreDisattiva();
-        this.assegna(disattivaGestore);
-        Modifica guardaGestore = new GestoreGuarda();
-        this.assegna(guardaGestore);
-        Modifica inventarioGestore = new GestoreInventario();
-        this.assegna(inventarioGestore);
-        Modifica movimentoGestore = new GestoreMovimento();
-        this.assegna(movimentoGestore);
-        Modifica prendiGestore = new GestorePrendi();
-        this.assegna(prendiGestore);
-        Modifica entraGestore = new GestoreEntra();
-        this.assegna(entraGestore);
-        Modifica scendiGestore = new GestoreScendi();
-        this.assegna(scendiGestore);
-        Modifica saliGestore = new GestoreSali();
-        this.assegna(saliGestore);
-        Modifica esciGestore = new GestoreEsci();
-        this.assegna(esciGestore);
-        Modifica attivaGestore = new GestoreAttiva();
-        this.assegna(attivaGestore);
-        Modifica ricattoGestore = new GestoreRicatta();
-        this.assegna(ricattoGestore);
+        // Assegna i gestori dei comandi
+        this.assegna(new GestoreApri());
+        this.assegna(new GestoreAscolta());
+        this.assegna(new GestoreDisattiva());
+        this.assegna(new GestoreGuarda());
+        this.assegna(new GestoreInventario());
+        this.assegna(new GestoreMovimento());
+        this.assegna(new GestorePrendi());
+        this.assegna(new GestoreEntra());
+        this.assegna(new GestoreScendi());
+        this.assegna(new GestoreSali());
+        this.assegna(new GestoreEsci());
+        this.assegna(new GestoreAttiva());
+        this.assegna(new GestoreRicatta());
 
         // Stampa informazioni meteo
         Meteo.stampaMeteo("Rome");
@@ -134,15 +125,12 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                             out.println("Ti trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
                             out.println(getStanzaCorrente().getDescrizione());
                         } else {
-                        if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
-                            "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
-                            "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) 
-                        { 
-                          
-                            out.println("Ti trovi qui: " + getStanzaCorrente().getNome());
-                            out.println("================================================");
-                            out.println(getStanzaCorrente().getDescrizione());  
-                            
+                            if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
+                                "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
+                                "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) { 
+                                out.println("Ti trovi qui: " + getStanzaCorrente().getNome());
+                                out.println("================================================");
+                                out.println(getStanzaCorrente().getDescrizione());  
                             }
                         }
                     }
@@ -228,7 +216,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     @Override
     public void setGiocoTerminato(boolean giocoTerminato) {
         this.giocoTerminato = giocoTerminato;
-        if(giocoTerminato) {
+        if (giocoTerminato) {
             System.exit(0);
         }
     }
@@ -252,7 +240,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     public void setRicattoDirettore(boolean ricattoDirettore) {
         this.ricattoDirettore = ricattoDirettore;
     }
-    
+
     @Override
     public boolean isTimerAttivo() {
         return timerAttivo;
@@ -282,52 +270,47 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     public void setTimerThread(Thread timerThread) {
         this.timerThread = timerThread;
     }
-    
-   @Override
-public void salvaPartita(String baseFileName) throws IOException {
-    if (timerGuardia != null) {
-        timerAttivo = true;
-        tempoRimastoTimer = timerGuardia.getTempoRimasto(); // Ottieni il tempo rimanente in secondi
-        timerGuardia.stop(); // Ferma il timer
-    } else {
-        timerAttivo = false;
-    }
-    gestisciSalvataggi(baseFileName, ".");
-}
-
 
     @Override
-public GestioneGioco caricaPartita(String filePath) throws IOException, ClassNotFoundException {
-    try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
-        PayDayGame giocoCaricato = (PayDayGame) in.readObject();
-        // Reimposta il dbManager dopo il caricamento
-        giocoCaricato.dbManager = DatabaseManager.getInstance();
-        System.out.println("Timer attivo: " + giocoCaricato.timerAttivo); // Debug per verificare lo stato del timer
-        if (giocoCaricato.timerAttivo) {
-            int minutiRimasti = giocoCaricato.tempoRimastoTimer / 60;
-            System.out.println("Tempo rimasto per il timer caricato: " + minutiRimasti + " minuti (" + giocoCaricato.tempoRimastoTimer + " secondi).");
-            giocoCaricato.startTimer(minutiRimasti); // Riavvia il timer con il tempo rimanente in minuti
-            System.out.println("Timer riavviato con successo.");
+    public void salvaPartita(String baseFileName) throws IOException {
+        if (timerGuardia != null) {
+            timerAttivo = true;
+            tempoRimastoTimer = timerGuardia.getTempoRimasto(); // Ottieni il tempo rimanente in secondi
+            timerGuardia.stop(); // Ferma il timer
+        } else {
+            timerAttivo = false;
         }
-        return giocoCaricato;
-    } catch (IOException | ClassNotFoundException e) {
-        System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
-        throw e;
+        gestisciSalvataggi(baseFileName, ".");
     }
-}
-
-
 
     @Override
-   public void startTimer(int minuti) {
-    if (timerGuardia == null) {
-        timerGuardia = new TimerGuardia(minuti, this);
-        timerThread = new Thread(timerGuardia);
-        timerThread.start();
+    public GestioneGioco caricaPartita(String filePath) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
+            PayDayGame giocoCaricato = (PayDayGame) in.readObject();
+            // Reimposta il dbManager dopo il caricamento
+            giocoCaricato.dbManager = DatabaseManager.getInstance();
+            System.out.println("Timer attivo: " + giocoCaricato.timerAttivo); // Debug per verificare lo stato del timer
+            if (giocoCaricato.timerAttivo) {
+                int minutiRimasti = giocoCaricato.tempoRimastoTimer / 60;
+                System.out.println("Tempo rimasto per il timer caricato: " + minutiRimasti + " minuti (" + giocoCaricato.tempoRimastoTimer + " secondi).");
+                giocoCaricato.startTimer(minutiRimasti); // Riavvia il timer con il tempo rimanente in minuti
+                System.out.println("Timer riavviato con successo.");
+            }
+            return giocoCaricato;
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
+            throw e;
+        }
     }
-}
 
-
+    @Override
+    public void startTimer(int minuti) {
+        if (timerGuardia == null) {
+            timerGuardia = new TimerGuardia(minuti, this);
+            timerThread = new Thread(timerGuardia);
+            timerThread.start();
+        }
+    }
 
     @Override
     public List<String> elencoSalvataggi(String directory) {

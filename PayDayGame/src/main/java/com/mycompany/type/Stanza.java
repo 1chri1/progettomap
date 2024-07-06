@@ -1,13 +1,7 @@
 package com.mycompany.type;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Classe che rappresenta una stanza all'interno del gioco.
@@ -15,7 +9,6 @@ import java.util.Set;
  * È possibile spostarsi da una stanza all'altra tramite i punti cardinali nord, sud, est e ovest.
  * La visibilità della stanza può essere modificata.
  * La classe implementa i metodi hashCode e equals per garantire la corretta gestione delle stanze in una struttura dati.
- * 
  * Inoltre, utilizza una mappa per gestire le stanze in base al piano e al nome.
  * 
  * @autore Tommaso
@@ -60,10 +53,8 @@ public class Stanza implements Serializable {
      * @param descrizione Descrizione della stanza
      */
     public Stanza(int piano, String nome, String descrizione) {
-        this.piano = piano;
-        this.nome = nome;
+        this(piano, nome);
         this.descrizione = descrizione;
-        mappaStanze.put(generaChiave(piano, nome), this);
     }
     
     /**
@@ -75,11 +66,8 @@ public class Stanza implements Serializable {
      * @param guarda Per la descrizione degli ambienti nella stanza
      */
     public Stanza(int piano, String nome, String descrizione, String guarda) {
-        this.piano = piano;
-        this.nome = nome;
-        this.descrizione = descrizione;
+        this(piano, nome, descrizione);
         this.guarda = guarda;
-        mappaStanze.put(generaChiave(piano, nome), this);
     }
 
     /**
@@ -240,31 +228,6 @@ public class Stanza implements Serializable {
     }
 
     /**
-     * Calcola e restituisce il codice hash per la stanza.
-     * 
-     * @return Codice hash della stanza
-     */
-    @Override
-    public int hashCode() {
-        return generaChiave(piano, nome).hashCode();
-    }
-    
-    /**
-     * Verifica se un oggetto con un determinato identificatore è presente nella stanza.
-     * 
-     * @param id Identificatore dell'oggetto da cercare
-     * @return Oggetto con l'identificatore specificato, null se non trovato
-     */
-    public Oggetto getOggetto(int id) {
-        for (Oggetto o : oggetti) {
-            if (o.getId() == id) {
-                return o;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Restituisce le informazioni aggiuntive visualizzabili quando si osserva la stanza.
      * 
      * @return Informazioni aggiuntive visualizzabili quando si osserva la stanza
@@ -275,9 +238,9 @@ public class Stanza implements Serializable {
 
     /**
      * Imposta le informazioni aggiuntive visualizzabili quando si osserva la stanza.
-    *
-    * @param guarda Informazioni aggiuntive visualizzabili quando si osserva la stanza
-    */
+     * 
+     * @param guarda Informazioni aggiuntive visualizzabili quando si osserva la stanza
+     */
     public void setGuarda(String guarda) {
         this.guarda = guarda;
     }
@@ -330,5 +293,30 @@ public class Stanza implements Serializable {
         }
         final Stanza other = (Stanza) obj;
         return this.piano == other.piano && this.nome.equals(other.nome);
+    }
+
+    /**
+     * Calcola e restituisce il codice hash per la stanza.
+     * 
+     * @return Codice hash della stanza
+     */
+    @Override
+    public int hashCode() {
+        return generaChiave(piano, nome).hashCode();
+    }
+
+    /**
+     * Verifica se un oggetto con un determinato identificatore è presente nella stanza.
+     * 
+     * @param id Identificatore dell'oggetto da cercare
+     * @return Oggetto con l'identificatore specificato, null se non trovato
+     */
+    public Oggetto getOggetto(int id) {
+        for (Oggetto o : oggetti) {
+            if (o.getId() == id) {
+                return o;
+            }
+        }
+        return null;
     }
 }

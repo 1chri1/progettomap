@@ -14,10 +14,24 @@ public class Parser {
 
     private final Set<String> stopwords;
 
+    /**
+     * Costruttore per la classe Parser.
+     *
+     * @param stopwords insieme delle parole da ignorare durante il parsing
+     */
     public Parser(Set<String> stopwords) {
         this.stopwords = stopwords;
     }
 
+    /**
+     * Metodo per cercare l'indice di un elemento in una lista.
+     *
+     * @param <T> il tipo degli elementi nella lista
+     * @param token la stringa da cercare
+     * @param elementi la lista degli elementi
+     * @param matcher il predicato per confrontare gli elementi con il token
+     * @return l'indice dell'elemento trovato, -1 se non trovato
+     */
     private <T> int ricercaIndice(String token, List<T> elementi, BiPredicate<T, String> matcher) {
         return IntStream.range(0, elementi.size())
                 .filter(i -> matcher.test(elementi.get(i), token))
@@ -25,6 +39,16 @@ public class Parser {
                 .orElse(-1);
     }
 
+    /**
+     * Metodo per analizzare un comando e determinare il suo output.
+     *
+     * @param comando il comando da analizzare
+     * @param comandi la lista dei comandi disponibili
+     * @param oggetti la lista degli oggetti presenti nella stanza
+     * @param inventario la lista degli oggetti presenti nell'inventario
+     * @param stanze la lista delle stanze del gioco
+     * @return un oggetto ParserOutput contenente i risultati del parsing
+     */
     public ParserOutput parse(String comando, List<Comandi> comandi, List<Oggetto> oggetti, List<Oggetto> inventario, List<Stanza> stanze) {
         List<String> tokens = UtilityParser.parseString(comando, stopwords);
 
@@ -88,6 +112,13 @@ public class Parser {
         return new ParserOutput(comandi.get(indiceComando), null, null, null);
     }
 
+    /**
+     * Metodo per trovare una stanza in base al suo nome o ai suoi alias.
+     *
+     * @param nomeOAlias il nome o alias della stanza da trovare
+     * @param stanze la lista delle stanze disponibili
+     * @return la stanza trovata, o null se non trovata
+     */
     private Stanza trovaStanzaPerNomeOAlias(String nomeOAlias, List<Stanza> stanze) {
         for (Stanza stanza : stanze) {
             if (stanza.getNome().equalsIgnoreCase(nomeOAlias) || stanza.getAlias().contains(nomeOAlias.toLowerCase())) {

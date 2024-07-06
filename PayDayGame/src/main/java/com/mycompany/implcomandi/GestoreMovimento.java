@@ -6,33 +6,39 @@ import com.mycompany.type.Stanza;
 import java.io.Serializable;
 
 /**
- *
- * @author Alessandro
+ * Classe che gestisce i comandi di movimento nel gioco.
  */
 public class GestoreMovimento implements Modifica, Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private static final String MSG_DIREZIONE_ERRATA = "Non puoi andare in quella direzione, c'è un muro";
     private static final String MSG_USA_COMANDO_ENTRA = "Per entrare in questa stanza usa il comando 'entra'.";
     private static final String MSG_ALLONTANAMENTO_BANCA = "Ti stai allontanando dalla banca, non puoi andare in quella direzione.";
 
+    /**
+     * Aggiorna lo stato del gioco in base al comando di movimento.
+     * 
+     * @param descrizione la descrizione del gioco
+     * @param parserOutput l'output del parser che contiene il comando
+     * @return messaggio di risposta al giocatore
+     */
     @Override
-    public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput){
+    public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
         Stanza stanzaCorrente = descrizione.getStanzaCorrente();
         Stanza nextRoom = null;
         String messaggio = "";
 
-        switch(parserOutput.getComando().getTipo()){
+        switch (parserOutput.getComando().getTipo()) {
             case NORD:
-                if ((stanzaCorrente.getNome().equalsIgnoreCase("Lato Destro")) ||
-                    (stanzaCorrente.getNome().equalsIgnoreCase("Lato Sinistro"))) {
+                if (stanzaCorrente.getNome().equalsIgnoreCase("Lato Destro") ||
+                    stanzaCorrente.getNome().equalsIgnoreCase("Lato Sinistro")) {
                     return "Non puoi andare in quella direzione, c'è una recinzione che non puoi scavalcare";
                 }
-                if(stanzaCorrente.getNome().equalsIgnoreCase("Esterno dell'ingresso principale")){
-                 return "Non puoi andare in quella direzione, ci sono due guardie che sorvegliano l'ingresso, potresti essere arrestato...";
+                if (stanzaCorrente.getNome().equalsIgnoreCase("Esterno dell'ingresso principale")) {
+                    return "Non puoi andare in quella direzione, ci sono due guardie che sorvegliano l'ingresso, potresti essere arrestato...";
                 }
-                if ((stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 1")) ||
-                    (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2"))) {
+                if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 1") ||
+                    stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
                     System.out.println("Sei andato avanti nel corridoio, ora vedi nuove porte");
                 }
                 nextRoom = stanzaCorrente.getNord();
@@ -43,15 +49,15 @@ public class GestoreMovimento implements Modifica, Serializable {
                     descrizione.setGiocoTerminato(true);
                     return "Sei andato in strada e sei stato investito. Il gioco è finito.";
                 }
-                if ((stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 3")) ||
-                    (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2"))) {
+                if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 3") ||
+                    stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
                     System.out.println("Sei andato avanti nel corridoio, ora vedi nuove porte");
                 }
                 nextRoom = stanzaCorrente.getSud();
                 messaggio = "A sud c'è ";
                 break;
             case EST:
-                if ((stanzaCorrente.getNome().equalsIgnoreCase("Bagno"))) {
+                if (stanzaCorrente.getNome().equalsIgnoreCase("Bagno")) {
                     System.out.println("Sei entrato nel corridoio, ora vedi nuove porte");
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Lato sinistro")) {
@@ -62,9 +68,9 @@ public class GestoreMovimento implements Modifica, Serializable {
                 nextRoom = stanzaCorrente.getEst();
                 break;
             case OVEST:
-                 if ((stanzaCorrente.getNome().equalsIgnoreCase("Scale")) || 
-                    (stanzaCorrente.getNome().equalsIgnoreCase("Magazzino"))||
-                    (stanzaCorrente.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1"))) {
+                if (stanzaCorrente.getNome().equalsIgnoreCase("Scale") || 
+                    stanzaCorrente.getNome().equalsIgnoreCase("Magazzino") ||
+                    stanzaCorrente.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1")) {
                     System.out.println("Sei entrato avanti nel corridoio, ora vedi nuove porte");
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Lato destro")) {
@@ -103,6 +109,13 @@ public class GestoreMovimento implements Modifica, Serializable {
         }
     }
 
+    /**
+     * Verifica se la stanza destinazione è una stanza speciale.
+     * 
+     * @param stanzaCorrente la stanza corrente
+     * @param stanzaDestinazione la stanza destinazione
+     * @return true se la stanza è speciale, false altrimenti
+     */
     private boolean isStanzaSpeciale(Stanza stanzaCorrente, Stanza stanzaDestinazione) {
         String nomeStanzaCorrente = stanzaCorrente.getNome();
         String nomeStanzaDestinazione = stanzaDestinazione.getNome();
@@ -114,7 +127,13 @@ public class GestoreMovimento implements Modifica, Serializable {
                (nomeStanzaCorrente.equalsIgnoreCase("Corridoio 1") && nomeStanzaDestinazione.equalsIgnoreCase("Ufficio Vicino Corridoio 1")) ||
                (nomeStanzaCorrente.equalsIgnoreCase("Scale") && nomeStanzaDestinazione.equalsIgnoreCase("Ufficio Vicino Scale"));
     }
-    
+
+    /**
+     * Verifica se la stanza è una stanza esterna.
+     * 
+     * @param stanza la stanza da verificare
+     * @return true se la stanza è esterna, false altrimenti
+     */
     private boolean isEsterno(Stanza stanza) {
         String nomeStanza = stanza.getNome();
         return nomeStanza.equalsIgnoreCase("Angolo destro della banca") ||

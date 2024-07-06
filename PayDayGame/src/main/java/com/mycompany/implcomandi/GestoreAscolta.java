@@ -11,6 +11,7 @@ import java.io.Serializable;
  */
 public class GestoreAscolta implements Modifica, Serializable {
     private static final long serialVersionUID = 1L;
+
     /**
      * Aggiorna lo stato del gioco in base al comando di ascolto.
      * 
@@ -26,11 +27,11 @@ public class GestoreAscolta implements Modifica, Serializable {
         if (parserOutput.getComando().getTipo() == TipoComandi.ASCOLTA) {
             Oggetto oggetto = parserOutput.getOggetto();
             Oggetto oggettoInventario = parserOutput.getOggettoInventario();
-            
+
             // Verifica se ci sono oggetti nella stanza corrente o nell'inventario
-        if (descrizione.getStanzaCorrente().getOggetti().isEmpty() && descrizione.getInventario().isEmpty()) {
-            return "Non ci sono oggetti da ascoltare in questa stanza o nel tuo inventario.";
-        }
+            if (descrizione.getStanzaCorrente().getOggetti().isEmpty() && descrizione.getInventario().isEmpty()) {
+                return "Non ci sono oggetti da ascoltare in questa stanza o nel tuo inventario.";
+            }
 
             // Caso 1: Nessun oggetto specificato
             if (oggetto == null) {

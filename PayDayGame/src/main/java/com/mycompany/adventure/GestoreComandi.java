@@ -1,31 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package com.mycompany.adventure;
+
 import com.mycompany.implComandi.Modifica;
 
 /**
- *
- * @author Tommaso
+ * Interfaccia per la gestione dei comandi.
+ * Fornisce i metodi necessari per assegnare, rimuovere e notificare i gestori di comandi.
+ * 
  */
 public interface GestoreComandi {
     
     /**
+     * Assegna un nuovo comando.
      *
-     * @param o
+     * @param o il comando da assegnare
      */
     public void assegna(Modifica o);
     
     /**
+     * Rimuove un comando esistente.
      *
-     * @param o
+     * @param o il comando da rimuovere
      */
     public void rimuovi(Modifica o);
     
     /**
-     *
+     * Notifica tutti i gestori dei comandi.
      */
     public void notificaGestori();
-    
 }
