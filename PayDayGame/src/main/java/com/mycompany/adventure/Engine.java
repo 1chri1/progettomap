@@ -41,58 +41,88 @@ public class Engine {
     public void execute() {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-        boolean primoAvvio = true;
 
         while (running) {
-            if (primoAvvio) {
-                mostraMessaggioIniziale();
-                primoAvvio = false;
-            } else if (partitaSalvata) {
-                System.out.println("Vuoi rimanere nella partita corrente, caricare una partita salvata o uscire? (rimani/carica/esci)");
-                String scelta = scanner.nextLine().trim().toLowerCase();
-                if (scelta.equals("carica")) {
-                    caricaPartita(scanner);
-                    partitaSalvata = false; // Resetta il flag per consentire di continuare il gioco
-                    continue; // Salta alla prossima iterazione per evitare di stampare il messaggio iniziale
-                } else if (scelta.equals("esci")) {
-                    running = false;
-                    continue;
-                } else if (scelta.equals("rimani")) {
-                    partitaSalvata = false; // Resetta il flag per continuare nella partita corrente
-                } else {
-                    System.out.println("Scelta non valida. Operazione annullata.");
-                    continue;
-                }
-            }
+            mostraMenuIniziale(scanner);
+            boolean giocoAttivo = true;
 
-            while (scanner.hasNextLine() && !game.isGiocoTerminato() && !partitaSalvata) {
-                String command = scanner.nextLine();
-                if (command.equalsIgnoreCase("salva")) {
-                    salvaPartita(scanner);
-                    break;
-                } else if (command.equalsIgnoreCase("carica")) {
-                    caricaPartita(scanner);
-                    partitaSalvata = false; // Resetta il flag per consentire di continuare il gioco
-                    break; // Interrompe per rientrare nel ciclo principale e mostrare il messaggio appropriato
+            while (giocoAttivo && !game.isUscitoDalGioco()) {
+                if (partitaSalvata) {
+                    System.out.println("Vuoi rimanere nella partita corrente o vuoi tornare al menu principale? (rimani/menu)");
+                    String scelta = scanner.nextLine().trim().toLowerCase();
+                    if (scelta.equals("menu")) {
+                        giocoAttivo = false;
+                        partitaSalvata = false; // Resetta il flag per evitare il messaggio ripetuto
+                        continue;
+                    } else if (scelta.equals("rimani")) {
+                        partitaSalvata = false; // Resetta il flag per continuare nella partita corrente
+                    } else {
+                        System.out.println("Scelta non valida. Operazione annullata.");
+                        continue;
+                    }
                 }
-                ParserOutput p = parser.parse(command, game.getComandi(), game.getStanzaCorrente().getOggetti(), game.getInventario(), game.getStanze());
-                if (p == null || p.getComando() == null) {
-                    System.out.println("Non capisco quello che mi vuoi dire.");
-                } else {
-                    game.ProssimoSpostamento(p, System.out);
-                    if (game.isGiocoTerminato()) {
+
+                while (scanner.hasNextLine() && !game.isGiocoTerminato() && !partitaSalvata) {
+                    String command = scanner.nextLine();
+                    if (command.equalsIgnoreCase("salva")) {
+                        salvaPartita(scanner);
+                        break;
+                    } else if (command.equalsIgnoreCase("carica")) {
+                        System.out.println("Per caricare una partita salvata devi uscire dalla partita in corso e tornare al menu iniziale.");
+                        System.out.println("Vuoi procedere? (sì/no)");
+                        String conferma = scanner.nextLine().trim().toLowerCase();
+                        if (conferma.equals("sì") || conferma.equals("si")) {
+                            System.out.println("Vuoi salvare la partita corrente prima di tornare al menu? (sì/no)");
+                            String risposta = scanner.nextLine().trim().toLowerCase();
+                            if (risposta.equals("sì") || risposta.equals("si")) {
+                                salvaPartita(scanner);
+                            }
+                            giocoAttivo = false;
+                            partitaSalvata = false;
+                        } else {
+                            System.out.println("Operazione di caricamento annullata. Puoi continuare a giocare.");
+                        }
+                        break;
+                    } else if (command.equalsIgnoreCase("esci")) {
+                        System.out.println("Sei sicuro di voler uscire dal gioco? (sì/no)");
+                        String confermaEsci = scanner.nextLine().trim().toLowerCase();
+                        if (confermaEsci.equals("sì") || confermaEsci.equals("si")) {
+                            System.out.println("Vuoi salvare la partita corrente prima di uscire? (sì/no)");
+                            String rispostaSalva = scanner.nextLine().trim().toLowerCase();
+                            if (rispostaSalva.equals("sì") || rispostaSalva.equals("si")) {
+                                salvaPartita(scanner);
+                            }
+                            System.out.println("Hai deciso di uscire dal gioco. Arrivederci!");
+                            giocoAttivo = false;
+                            game.setUscitoDalGioco(true);
+                        } else {
+                            System.out.println("Operazione di uscita annullata. Puoi continuare a giocare.");
+                        }
                         break;
                     }
-                    if (game.getStanzaCorrente() == null) {
-                        System.out.println("La tua avventura termina qui! Complimenti!");
-                        System.exit(0);
+                    ParserOutput p = parser.parse(command, game.getComandi(), game.getStanzaCorrente().getOggetti(), game.getInventario(), game.getStanze());
+                    if (p == null || p.getComando() == null) {
+                        System.out.println("Non capisco quello che mi vuoi dire.");
+                    } else {
+                        game.ProssimoSpostamento(p, System.out);
+                        if (game.isGiocoTerminato()) {
+                            break;
+                        }
+                        if (game.getStanzaCorrente() == null) {
+                            System.out.println("La tua avventura termina qui! Complimenti!");
+                            System.exit(0);
+                        }
                     }
+                    System.out.print("?> ");
                 }
-                System.out.print("?> ");
+
+                if (game.isGiocoTerminato()) {
+                    break;
+                }
             }
 
-            if (game.isGiocoTerminato()) {
-                break;
+            if (game.isUscitoDalGioco()) {
+                game.setUscitoDalGioco(false); // Resetta lo stato per il prossimo ciclo
             }
         }
 
@@ -100,9 +130,9 @@ public class Engine {
     }
 
     /**
-     * Mostra il messaggio iniziale del gioco.
+     * Mostra il menu iniziale del gioco.
      */
-    private void mostraMessaggioIniziale() {
+    private void mostraMenuIniziale(Scanner scanner) {
         System.out.println("====================================================");
         System.out.println("*                  PayDayGame 2024                 *");
         System.out.println("*                   developed by                   *");
@@ -110,6 +140,39 @@ public class Engine {
         System.out.println("*                   Tommaso Palumbo                *");
         System.out.println("*                   Christian Vurchio              *");
         System.out.println("====================================================");
+        System.out.println();
+        System.out.println("1. Inizia una nuova partita");
+        System.out.println("2. Carica partita");
+        System.out.println("3. Esci");
+
+        boolean sceltaValida = false;
+        while (!sceltaValida) {
+            System.out.print("Scegli un'opzione: ");
+            String scelta = scanner.nextLine().trim().toLowerCase();
+            switch (scelta) {
+                case "1":
+                    mostraMessaggioIniziale();
+                    sceltaValida = true;
+                    break;
+                case "2":
+                    caricaPartita(scanner);
+                    sceltaValida = true;
+                    break;
+                case "3":
+                    System.out.println("Grazie per aver giocato! Alla prossima!");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Scelta non valida. Per favore, seleziona 1, 2 o 3.");
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Mostra il messaggio iniziale del gioco.
+     */
+    private void mostraMessaggioIniziale() {
         System.out.println();
         System.out.println("È iniziata una nuova partita. Se hai partite salvate, puoi caricarle utilizzando il comando 'carica'.");
         System.out.println();
@@ -165,6 +228,7 @@ public class Engine {
                             game = (GestioneGioco) game.caricaPartita(fileDaCaricare);
                             System.out.println("Partita caricata con successo.");
                             sceltaValida = true;
+                            partitaSalvata = false; // Resetta il flag per evitare il messaggio ripetuto
                         } catch (IOException | ClassNotFoundException e) {
                             System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
                         }

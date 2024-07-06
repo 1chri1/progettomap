@@ -42,6 +42,8 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     private transient Thread timerThread;
     private boolean timerAttivo;
     private int tempoRimastoTimer; // in secondi
+    private boolean uscitoDalGioco;
+
 
     public PayDayGame(DatabaseManager dbManager) {
         this.dbManager = dbManager;
@@ -214,10 +216,20 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     @Override
+    public boolean isUscitoDalGioco() {
+        return uscitoDalGioco;
+    }
+
+    @Override
+    public void setUscitoDalGioco(boolean uscitoDalGioco) {
+        this.uscitoDalGioco = uscitoDalGioco;
+    }
+
+    @Override
     public void setGiocoTerminato(boolean giocoTerminato) {
         this.giocoTerminato = giocoTerminato;
         if (giocoTerminato) {
-            System.exit(0);
+            uscitoDalGioco = true; // Imposta uscitoDalGioco a true quando il gioco è terminato
         }
     }
 

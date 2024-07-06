@@ -116,6 +116,10 @@ public abstract class GestioneGioco implements Serializable {
     public abstract Thread getTimerThread();
 
     public abstract void setTimerThread(Thread timerThread);
+    
+    public abstract boolean isUscitoDalGioco();
+
+    public abstract void setUscitoDalGioco(boolean uscitoDalGioco);
 
     /**
      * Avvia il timer della guardia.
