@@ -20,6 +20,11 @@ public class Engine {
     private Parser parser;
     private boolean partitaSalvata;
 
+    /**
+     * Costruttore per inizializzare il gioco e il parser.
+     *
+     * @param game L'oggetto GestioneGioco che rappresenta il gioco.
+     */
     public Engine(GestioneGioco game) {
         this.game = game;
         try {
@@ -131,6 +136,8 @@ public class Engine {
 
     /**
      * Mostra il menu iniziale del gioco.
+     *
+     * @param scanner L'oggetto Scanner per leggere l'input dell'utente.
      */
     private void mostraMenuIniziale(Scanner scanner) {
         System.out.println("====================================================");
@@ -186,7 +193,8 @@ public class Engine {
 
     /**
      * Salva la partita corrente.
-     * @param scanner Scanner per leggere l'input dell'utente.
+     *
+     * @param scanner L'oggetto Scanner per leggere l'input dell'utente.
      */
     private void salvaPartita(Scanner scanner) {
         System.out.print("Inserisci il nome del salvataggio: ");
@@ -202,7 +210,8 @@ public class Engine {
 
     /**
      * Carica una partita salvata.
-     * @param scanner Scanner per leggere l'input dell'utente.
+     *
+     * @param scanner L'oggetto Scanner per leggere l'input dell'utente.
      */
     private void caricaPartita(Scanner scanner) {
         List<String> salvataggi = game.elencoSalvataggi(".");
@@ -240,6 +249,11 @@ public class Engine {
         }
     }
 
+    /**
+     * Metodo principale per avviare il gioco.
+     *
+     * @param args Argomenti della riga di comando.
+     */
     public static void main(String[] args) {
         String dbUrl = "jdbc:h2:mem:testdb"; // Configurazione per il database in memoria
         String user = "user";

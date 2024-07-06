@@ -44,7 +44,11 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     private int tempoRimastoTimer; // in secondi
     private boolean uscitoDalGioco;
 
-
+    /**
+     * Costruttore del gioco PayDay.
+     *
+     * @param dbManager L'oggetto DatabaseManager per gestire la connessione al database.
+     */
     public PayDayGame(DatabaseManager dbManager) {
         this.dbManager = dbManager;
     }
@@ -170,6 +174,11 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         }
     }
 
+    /**
+     * Verifica se l'inventario contiene sia soldi che gioielli.
+     *
+     * @return true se l'inventario contiene sia soldi che gioielli, altrimenti false.
+     */
     private boolean hasSoldiGioielli() {
         boolean haSoldi = getInventario().stream().anyMatch(o -> "soldi".equalsIgnoreCase(o.getNome()));
         boolean haGioielli = getInventario().stream().anyMatch(o -> "gioielli".equalsIgnoreCase(o.getNome()));
