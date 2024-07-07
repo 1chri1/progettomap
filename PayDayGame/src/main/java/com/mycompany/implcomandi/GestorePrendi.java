@@ -39,7 +39,7 @@ public class GestorePrendi implements Modifica, Serializable {
                     msg.append("Hai appena raccolto: ").append(parserOutput.getOggetto().getDescrizione());
                     
                     if (haDocumentiRicatto(descrizione)) {
-                        mostraDialogoDirettore(descrizione);
+                        mostraDialogoDirettore();
                     }
                 } else {
                     msg.append("Non puoi prendere questo oggetto");
@@ -66,12 +66,13 @@ public class GestorePrendi implements Modifica, Serializable {
      * 
      * @param descrizione la descrizione del gioco
      */
-    private void mostraDialogoDirettore(GestioneGioco descrizione) {
-        System.out.println("Direttore: Che cosa stai facendo qui? Come hai ottenuto quei documenti?");
-        System.out.println("Giocatore: \"Direttore, ho trovato questi documenti nel caveau. Potrebbero rovinarti la carriera.\"");
-        System.out.println("Direttore: \"Cosa vuoi in cambio del tuo silenzio?\"");
-        System.out.println("Giocatore: \"Una via di fuga sicura e tutte le risorse nascoste.\"");
-        System.out.println("Direttore: \"D'accordo, hai vinto. Ecco il passaggio sicuro e le informazioni sulla cassaforte nascosta.\"");
-        System.out.println("Adesso puoi ricattare il direttore o ignorarlo");
-    }
+    private void mostraDialogoDirettore() {
+        System.out.println("\nDirettore: Cosa stai facendo con quei documenti?");
+        System.out.println("Giocatore: Direttore, ho trovato questi documenti nel caveau. Possono rovinarti.");
+        System.out.println("Direttore: Quanto vuoi per il tuo silenzio?");
+        System.out.println("Giocatore: Voglio una somma di denaro extra.");
+        System.out.println("Direttore: Hai vinto. Prendi i soldi, ma sappi che se scegli di non ricattarmi, potrei aiutarti in futuro.");
+        System.out.println("\nOra puoi decidere se ricattare il direttore per ottenere subito i soldi extra \no ignorarlo e potenzialmente avere un alleato in futuro.\n");
+}
+
 }

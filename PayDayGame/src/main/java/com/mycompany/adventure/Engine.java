@@ -107,6 +107,9 @@ public class Engine {
                             if (rispostaSalva.equals("sì") || rispostaSalva.equals("si")) {
                                 salvaPartita(scanner);
                             }
+                            else {
+                                game.fermaTimer(); // Ferma il timer quando si esce senza salvare
+                            }
                             System.out.println("Hai deciso di uscire dal gioco. Arrivederci!");
                             giocoAttivo = false;
                             game.setUscitoDalGioco(true);
@@ -118,8 +121,6 @@ public class Engine {
                     ParserOutput p = parser.parse(command, game.getComandi(), game.getStanzaCorrente().getOggetti(), game.getInventario(), game.getStanze());
                     if (p == null || p.getComando() == null) {
                         System.out.println("Non capisco quello che mi vuoi dire.");
-                        giocoAttivo = false; // Torna al menu principale
-                        break;
                     } else {
                         game.ProssimoSpostamento(p, System.out);
                         if (game.isGiocoTerminato()) {
@@ -213,8 +214,7 @@ public class Engine {
      */
     private void mostraMessaggioIniziale() {
         System.out.println();
-        System.out.println("È iniziata una nuova partita. Se hai partite salvate, puoi caricarle utilizzando il comando 'carica'.");
-        System.out.println();
+        System.out.println(Incipit());
         System.out.println(game.MessaggioIniziale());
         System.out.println();
         System.out.println("Sei nascosto all'" + game.getStanzaCorrente().getNome());
@@ -223,6 +223,25 @@ public class Engine {
         System.out.print("?> ");
     }
 
+    /**
+     * Restituisce l'incipit del gioco, inclusi l'obiettivo e il piano della rapina.
+     *
+     * @return l'incipit del gioco
+     */
+    public String Incipit() {
+        return "Benvenuto in PayDay!\n\n"
+               + "In una citta' corrotta, dove la legge e' solo un lontano ricordo, tu e la tua banda di ladri\n"
+               + "avete un obiettivo ambizioso: rapinare la banca piu' sorvegliata della citta'.\n\n"
+               + "L'obiettivo e' semplice, ma pericoloso: infiltrati nella banca, evita le guardie e le telecamere,\n"
+               + "disattiva il quadro elettrico per oscurare le telecamere di sicurezza, e raggiungi il caveau.\n\n"
+               + "All'interno del caveau, troverai una fortuna in soldi e gioielli. Ma attenzione,\n"
+               + "il direttore della banca nasconde un segreto: delle prove compromettenti che possono\n"
+               + "essere usate per ricattarlo e ottenere un bottino piu' alto.\n\n"
+               + "Il tempo e' contro di te. Le guardie sono sempre all'erta e ogni passo falso puo' costarti caro.\n"
+               + "Pianifica i tuoi movimenti con attenzione, raccogli tutto il bottino possibile e scappa dal garage.\n\n"
+               + "Buona fortuna, e che la tua avventura abbia inizio!";
+    }
+    
     /**
      * Salva la partita corrente.
      *

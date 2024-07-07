@@ -28,35 +28,40 @@ public class TimerGuardia implements Runnable, Serializable {
      * Metodo eseguito quando il thread viene avviato.
      */
     @Override
-    public void run() {
-        while (tempoRimasto > 0 && running) {
-            try {
-                Thread.sleep(1000); // Attende per un secondo (1.000 millisecondi)
-                tempoRimasto -= 1; // Decrementa il tempo rimanente di un secondo
-                if (tempoRimasto % 60 == 0) {
-                    System.out.println("La guardia sta cercando di risolvere il problema. Tempo rimanente: " + (tempoRimasto / 60) + " minuti.");
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return;
+public void run() {
+    while (tempoRimasto > 0 && running) {
+        try {
+            Thread.sleep(1000); // Attende per un secondo (1.000 millisecondi)
+            tempoRimasto -= 1; // Decrementa il tempo rimanente di un secondo
+            if (tempoRimasto % 60 == 0) {
+                System.out.println("La guardia sta cercando di risolvere il problema. Tempo rimanente: " + (tempoRimasto / 60) + " minuti.");
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return;
+        }
+        if (gioco.isGiocoTerminato()) {
+            stop(); // Ferma il timer se il gioco è terminato
+            return;
+        }
+    }
+
+    synchronized (gioco) {
+        if (!running) {
+            return; // Esci immediatamente se il timer è stato fermato
         }
 
-        synchronized (gioco) {
-            if (!running) {
-                return; // Esci immediatamente se il timer è stato fermato
-            }
-
-            if (!gioco.isGiocoTerminato()) {
-                if (tempoRimasto <= 0) {
-                    System.out.println("La guardia ti ha trovato! Hai perso.");
-                    gioco.setGiocoTerminato(true);
-                } else {
-                    System.out.println("Sei riuscito a scappare in tempo!");
-                }
+        if (!gioco.isGiocoTerminato()) {
+            if (tempoRimasto <= 0) {
+                System.out.println("La guardia ti ha trovato! Hai perso.");
+                gioco.setGiocoTerminato(true);
+            } else {
+                System.out.println("Sei riuscito a scappare in tempo!");
             }
         }
     }
+}
+
 
     /**
      * Metodo per fermare il timer.

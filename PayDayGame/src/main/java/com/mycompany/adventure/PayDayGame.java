@@ -90,90 +90,109 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     @Override
-    public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
-        parserOutput = p;
-        messaggi.clear();
-        if (p.getComando() == null) {
-            out.println("Non ho capito cosa devo fare! Prova con un altro comando.");
-        } else {
-            Stanza cr = getStanzaCorrente();
-            notificaGestori();
-            boolean move = !cr.equals(getStanzaCorrente()) && getStanzaCorrente() != null;
-            if (!messaggi.isEmpty()) {
-                for (String m : messaggi) {
-                    if (m.length() > 0) {
-                        out.println(m);
-                    }
+public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
+    parserOutput = p;
+    messaggi.clear();
+    if (p.getComando() == null) {
+        out.println("Non ho capito cosa devo fare! Prova con un altro comando.");
+    } else {
+        Stanza cr = getStanzaCorrente();
+        notificaGestori();
+        boolean move = !cr.equals(getStanzaCorrente()) && getStanzaCorrente() != null;
+        if (!messaggi.isEmpty()) {
+            for (String m : messaggi) {
+                if (m.length() > 0) {
+                    out.println(m);
                 }
             }
-            if (isGiocoTerminato()) {
-                if (p.getComando().getTipo() == TipoComandi.ESCI) {
-                    return;
-                }
-                if ("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato()) {
-                    System.out.println("Sei stato arrestato perché le telecamere sono attive. Il gioco è terminato.");
-                }
+        }
+        if (isGiocoTerminato()) {
+            if (p.getComando().getTipo() == TipoComandi.ESCI) {
                 return;
             }
-            if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-                setGiocoTerminato(true);
-                System.out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco è terminato.");
-                return;
+            if ("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato()) {
+                System.out.println("Sei stato arrestato perché le telecamere sono attive. Il gioco è terminato.");
             }
-            if (move) {
-                if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
-                    if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
-                        ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-                        out.println("Ti trovi all'" + getStanzaCorrente().getNome());
+            return;
+        }
+        if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
+            setGiocoTerminato(true);
+            System.out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco è terminato.");
+            fermaTimer();  // Ferma il timer
+            return;
+        }
+        if (move) {
+            if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
+                if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
+                    ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                    out.println("Ti trovi all'" + getStanzaCorrente().getNome());
+                    out.println(getStanzaCorrente().getDescrizione());
+                } else {
+                    if (("Lato destro".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
+                        ("Lato sinistro".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                        out.println("Ti trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
                         out.println(getStanzaCorrente().getDescrizione());
                     } else {
-                        if (("Lato destro".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
-                            ("Lato sinistro".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-                            out.println("Ti trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
-                            out.println(getStanzaCorrente().getDescrizione());
-                        } else {
-                            if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
-                                "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
-                                "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) { 
-                                out.println("Ti trovi qui: " + getStanzaCorrente().getNome());
-                                out.println("================================================");
-                                out.println(getStanzaCorrente().getDescrizione());  
-                            }
+                        if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
+                            "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
+                            "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) { 
+                            out.println("Ti trovi qui: " + getStanzaCorrente().getNome());
+                            out.println("================================================");
+                            out.println(getStanzaCorrente().getDescrizione());  
                         }
                     }
-                } else {
-                    out.println("Non sai dove sei entrato perché è tutto buio.");
                 }
+            } else {
+                out.println("Non sai dove sei entrato perché è tutto buio.");
             }
-            if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-                if (hasSoldiGioielli()) {
-                    int bottinoFinale = bottinoBase + (isRicattoDirettore() ? bottinoExtra : 0);
-                    if (isRicattoDirettore()) {
-                        out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
-                        setGiocoTerminato(true);
-                    } else {
-                        out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro è incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
-                        setGiocoTerminato(true);
-                    }
+        }
+        if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
+            if (hasSoldiGioielli()) {
+                int bottinoFinale = bottinoBase + (isRicattoDirettore() ? bottinoExtra : 0);
+                if (isRicattoDirettore()) {
+                    out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                    setGiocoTerminato(true);
+                    fermaTimer(); // Ferma il timer
                 } else {
-                    out.println("Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante? (sì/no)");
-                    Scanner scanner = new Scanner(System.in);
-                    String risposta = scanner.nextLine().trim().toLowerCase();
-                    if ("sì".equals(risposta) || "si".equals(risposta)) {
-                        int bottinoFinale = bottinoBase;
-                        if (isRicattoDirettore()) {
-                            bottinoFinale += bottinoExtra;
-                        }
-                        out.println("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
-                        setGiocoTerminato(true);
-                    } else {
-                        out.println("Hai deciso di rimanere e completare la missione.");
-                        setStanzaCorrente(cr);
+                    out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro è incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                    setGiocoTerminato(true);
+                    fermaTimer(); // Ferma il timer
+                }
+                System.out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
+            } else {
+                out.println("Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante? (sì/no)");
+                Scanner scanner = new Scanner(System.in);
+                String risposta = scanner.nextLine().trim().toLowerCase();
+                if ("sì".equals(risposta) || "si".equals(risposta)) {
+                    int bottinoFinale = bottinoBase;
+                    if (isRicattoDirettore()) {
+                        bottinoFinale += bottinoExtra;
                     }
+                    out.println("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
+                    setGiocoTerminato(true);
+                    fermaTimer(); // Ferma il timer
+                } else {
+                    out.println("Hai deciso di rimanere e completare la missione.");
+                    setStanzaCorrente(cr);
                 }
             }
         }
     }
+}
+
+    /**
+     * Ferma il timer della guardia se è attivo.
+     */
+    @Override
+    public void fermaTimer() {
+        if (timerGuardia != null) {
+            timerGuardia.stop();
+            timerGuardia = null;
+            timerThread = null;
+        }
+        timerAttivo = false;
+    }
+
 
     /**
      * Verifica se l'inventario contiene sia soldi che gioielli.
@@ -333,6 +352,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             timerThread.start();
         }
     }
+    
 
     @Override
     public List<String> elencoSalvataggi(String directory) {

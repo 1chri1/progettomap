@@ -120,6 +120,9 @@ public abstract class GestioneGioco implements Serializable {
     public abstract boolean isUscitoDalGioco();
 
     public abstract void setUscitoDalGioco(boolean uscitoDalGioco);
+    
+    public abstract void fermaTimer();
+
 
     /**
      * Avvia il timer della guardia.
