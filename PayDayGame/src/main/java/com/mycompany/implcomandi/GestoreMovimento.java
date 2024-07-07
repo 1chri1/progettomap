@@ -91,7 +91,6 @@ public class GestoreMovimento implements Modifica, Serializable {
                 descrizione.setStanzaCorrente(nextRoom);
                 // Verifica se sei entrato nella Hall o Sala Controllo
                 if ("Hall".equalsIgnoreCase(nextRoom.getNome()) && !descrizione.isQuadroElettricoDisattivato()) {
-                    System.out.println("Sei stato arrestato perché le telecamere sono attive. Il gioco è terminato.");
                     descrizione.setGiocoTerminato(true);
                 }
                 if ("Sala Controllo".equalsIgnoreCase(nextRoom.getNome())) {

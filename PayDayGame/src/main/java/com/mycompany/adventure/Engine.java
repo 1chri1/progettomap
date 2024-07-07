@@ -3,7 +3,6 @@ package com.mycompany.adventure;
 import com.mycompany.parser.Parser;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.db.DatabaseManager;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,9 +10,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-/**
- * Classe principale per l'esecuzione del motore di gioco.
- */
 public class Engine {
 
     private GestioneGioco game;
@@ -27,11 +23,25 @@ public class Engine {
      */
     public Engine(GestioneGioco game) {
         this.game = game;
+        inizializzaGioco();
+        inizializzaParser();
+    }
+
+    /**
+     * Metodo per inizializzare il gioco.
+     */
+    private void inizializzaGioco() {
         try {
             this.game.inizializzazione();
         } catch (Exception ex) {
             System.err.println(ex);
         }
+    }
+
+    /**
+     * Metodo per inizializzare il parser.
+     */
+    private void inizializzaParser() {
         try {
             Set<String> stopwords = Utility.caricaFile(new File("./resources/stopwords"));
             parser = new Parser(stopwords);
@@ -58,7 +68,7 @@ public class Engine {
                     if (scelta.equals("menu")) {
                         giocoAttivo = false;
                         partitaSalvata = false; // Resetta il flag per evitare il messaggio ripetuto
-                        continue;
+                        break;
                     } else if (scelta.equals("rimani")) {
                         partitaSalvata = false; // Resetta il flag per continuare nella partita corrente
                     } else {
@@ -108,6 +118,8 @@ public class Engine {
                     ParserOutput p = parser.parse(command, game.getComandi(), game.getStanzaCorrente().getOggetti(), game.getInventario(), game.getStanze());
                     if (p == null || p.getComando() == null) {
                         System.out.println("Non capisco quello che mi vuoi dire.");
+                        giocoAttivo = false; // Torna al menu principale
+                        break;
                     } else {
                         game.ProssimoSpostamento(p, System.out);
                         if (game.isGiocoTerminato()) {
@@ -158,6 +170,7 @@ public class Engine {
             String scelta = scanner.nextLine().trim().toLowerCase();
             switch (scelta) {
                 case "1":
+                    nuovaPartita();
                     mostraMessaggioIniziale();
                     sceltaValida = true;
                     break;
@@ -173,6 +186,25 @@ public class Engine {
                     System.out.println("Scelta non valida. Per favore, seleziona 1, 2 o 3.");
                     break;
             }
+        }
+    }
+
+    /**
+     * Inizia una nuova partita.
+     */
+    private void nuovaPartita() {
+        String dbUrl = "jdbc:h2:mem:testdb"; // Configurazione per il database in memoria
+        String user = "user";
+        String password = "password";
+
+        DatabaseManager dbManager = DatabaseManager.getInstance();
+        try {
+            dbManager.close(); // Chiudi la connessione al database corrente se esiste
+            dbManager.initializeAndConnect(dbUrl, user, password); // Reimposta il database
+            game = new PayDayGame(dbManager); // Crea un nuovo oggetto GestioneGioco
+            inizializzaGioco(); // Inizializza il gioco
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -217,6 +249,7 @@ public class Engine {
         List<String> salvataggi = game.elencoSalvataggi(".");
         if (salvataggi.isEmpty()) {
             System.out.println("Non ci sono salvataggi disponibili.");
+            mostraMenuIniziale(scanner); // Torna al menu iniziale
         } else {
             boolean sceltaValida = false;
             while (!sceltaValida) {

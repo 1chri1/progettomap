@@ -1,3 +1,4 @@
+
 package com.mycompany.adventure;
 
 import com.google.gson.JsonObject;
