@@ -1,4 +1,3 @@
-
 package com.mycompany.adventure;
 
 import com.google.gson.JsonObject;
@@ -54,6 +53,11 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         this.dbManager = dbManager;
     }
 
+    /**
+     * Inizializza il gioco, i comandi, le stanze e gli oggetti.
+     *
+     * @throws Exception se si verifica un errore durante l'inizializzazione.
+     */
     @Override
     public void inizializzazione() throws Exception {
         messaggi.clear();
@@ -89,99 +93,105 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         setStanzaCorrente(hall);
     }
 
+    /**
+     * Gestisce il prossimo spostamento del giocatore.
+     *
+     * @param p   L'output del parser contenente il comando e altri dettagli.
+     * @param out Il PrintStream per l'output dei messaggi.
+     */
     @Override
-public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
-    parserOutput = p;
-    messaggi.clear();
-    if (p.getComando() == null) {
-        out.println("Non ho capito cosa devo fare! Prova con un altro comando.");
-    } else {
-        Stanza cr = getStanzaCorrente();
-        notificaGestori();
-        boolean move = !cr.equals(getStanzaCorrente()) && getStanzaCorrente() != null;
-        if (!messaggi.isEmpty()) {
-            for (String m : messaggi) {
-                if (m.length() > 0) {
-                    out.println(m);
+    public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
+        parserOutput = p;
+        messaggi.clear();
+        if (p.getComando() == null) {
+            out.println("Non ho capito cosa devo fare! Prova con un altro comando.");
+        } else {
+            Stanza cr = getStanzaCorrente();
+            notificaGestori();
+            boolean move = !cr.equals(getStanzaCorrente()) && getStanzaCorrente() != null;
+            if (!messaggi.isEmpty()) {
+                for (String m : messaggi) {
+                    if (m.length() > 0) {
+                        out.println(m);
+                    }
                 }
             }
-        }
-        if (isGiocoTerminato()) {
-            if (p.getComando().getTipo() == TipoComandi.ESCI) {
+            if (isGiocoTerminato()) {
+                if (p.getComando().getTipo() == TipoComandi.ESCI) {
+                    return;
+                }
+                if ("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato()) {
+                    System.out.println("Sei stato arrestato perche' le telecamere sono attive. Il gioco e' terminato.");
+                }
                 return;
             }
-            if ("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato()) {
-                System.out.println("Sei stato arrestato perché le telecamere sono attive. Il gioco è terminato.");
+            if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
+                setGiocoTerminato(true);
+                System.out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
+                fermaTimer();  // Ferma il timer
+                return;
             }
-            return;
-        }
-        if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-            setGiocoTerminato(true);
-            System.out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco è terminato.");
-            fermaTimer();  // Ferma il timer
-            return;
-        }
-        if (move) {
-            if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
-                if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
-                    ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-                    out.println("Ti trovi all'" + getStanzaCorrente().getNome());
-                    out.println(getStanzaCorrente().getDescrizione());
-                } else {
-                    if (("Lato destro".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
-                        ("Lato sinistro".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-                        out.println("Ti trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
+            if (move) {
+                if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
+                    if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
+                        ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                        out.println("Ti trovi all'" + getStanzaCorrente().getNome());
                         out.println(getStanzaCorrente().getDescrizione());
                     } else {
-                        if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
-                            "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
-                            "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) { 
-                            out.println("Ti trovi qui: " + getStanzaCorrente().getNome());
-                            out.println("================================================");
-                            out.println(getStanzaCorrente().getDescrizione());  
+                        if (("Lato destro".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
+                            ("Lato sinistro".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                            out.println("Ti trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
+                            out.println(getStanzaCorrente().getDescrizione());
+                        } else {
+                            if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
+                                "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
+                                "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) { 
+                                out.println("Ti trovi qui: " + getStanzaCorrente().getNome());
+                                out.println("================================================");
+                                out.println(getStanzaCorrente().getDescrizione());  
+                            }
                         }
                     }
+                } else {
+                    out.println("Non sai dove sei entrato perche' e' tutto buio.");
                 }
-            } else {
-                out.println("Non sai dove sei entrato perché è tutto buio.");
             }
-        }
-        if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-            if (hasSoldiGioielli()) {
-                int bottinoFinale = bottinoBase + (isRicattoDirettore() ? bottinoExtra : 0);
-                if (isRicattoDirettore()) {
-                    out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
-                    setGiocoTerminato(true);
-                    fermaTimer(); // Ferma il timer
-                } else {
-                    out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro è incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
-                    setGiocoTerminato(true);
-                    fermaTimer(); // Ferma il timer
-                }
-                System.out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
-            } else {
-                out.println("Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante? (sì/no)");
-                Scanner scanner = new Scanner(System.in);
-                String risposta = scanner.nextLine().trim().toLowerCase();
-                if ("sì".equals(risposta) || "si".equals(risposta)) {
-                    int bottinoFinale = bottinoBase;
+            if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
+                if (hasSoldiGioielli()) {
+                    int bottinoFinale = bottinoBase + (isRicattoDirettore() ? bottinoExtra : 0);
                     if (isRicattoDirettore()) {
-                        bottinoFinale += bottinoExtra;
+                        out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                        setGiocoTerminato(true);
+                        fermaTimer(); // Ferma il timer
+                    } else {
+                        out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                        setGiocoTerminato(true);
+                        fermaTimer(); // Ferma il timer
                     }
-                    out.println("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
-                    setGiocoTerminato(true);
-                    fermaTimer(); // Ferma il timer
+                    System.out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
                 } else {
-                    out.println("Hai deciso di rimanere e completare la missione.");
-                    setStanzaCorrente(cr);
+                    out.println("Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante? (si'/no)");
+                    Scanner scanner = new Scanner(System.in);
+                    String risposta = scanner.nextLine().trim().toLowerCase();
+                    if ("si'".equals(risposta) || "si".equals(risposta)) {
+                        int bottinoFinale = bottinoBase;
+                        if (isRicattoDirettore()) {
+                            bottinoFinale += bottinoExtra;
+                        }
+                        out.println("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
+                        setGiocoTerminato(true);
+                        fermaTimer(); // Ferma il timer
+                    } else {
+                        out.println("Hai deciso di rimanere e completare la missione.");
+                        setStanzaCorrente(cr);
+                    }
                 }
             }
         }
     }
-}
 
     /**
-     * Ferma il timer della guardia se è attivo.
+     * Ferma il timer della guardia se e' attivo.
      */
     @Override
     public void fermaTimer() {
@@ -192,7 +202,6 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
         }
         timerAttivo = false;
     }
-
 
     /**
      * Verifica se l'inventario contiene sia soldi che gioielli.
@@ -205,6 +214,11 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
         return haSoldi && haGioielli;
     }
 
+    /**
+     * Assegna un osservatore al gioco.
+     *
+     * @param o L'osservatore da assegnare.
+     */
     @Override
     public void assegna(Modifica o) {
         if (!osservatori.contains(o)) {
@@ -212,11 +226,19 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
         }
     }
 
+    /**
+     * Rimuove un osservatore dal gioco.
+     *
+     * @param o L'osservatore da rimuovere.
+     */
     @Override
     public void rimuovi(Modifica o) {
         osservatori.remove(o);
     }
 
+    /**
+     * Notifica tutti i gestori dei comandi delle modifiche.
+     */
     @Override
     public void notificaGestori() {
         for (Modifica o : osservatori) {
@@ -224,36 +246,51 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
         }
     }
 
+    /**
+     * Restituisce il messaggio iniziale del gioco.
+     *
+     * @return Il messaggio iniziale.
+     */
     @Override
     public String MessaggioIniziale() {
         return "L'avventura ha inizio";
     }
 
+    /**
+     * Verifica se il quadro elettrico e' disattivato.
+     *
+     * @return true se il quadro elettrico e' disattivato, altrimenti false.
+     */
     @Override
     public boolean isQuadroElettricoDisattivato() {
         return quadroElettricoDisattivato;
     }
 
+    /**
+     * Imposta lo stato del quadro elettrico.
+     *
+     * @param quadroElettricoDisattivato true per disattivare il quadro elettrico, false per attivarlo.
+     */
     @Override
     public void setQuadroElettricoDisattivato(boolean quadroElettricoDisattivato) {
         this.quadroElettricoDisattivato = quadroElettricoDisattivato;
     }
 
+    /**
+     * Verifica se il gioco e' terminato.
+     *
+     * @return true se il gioco e' terminato, altrimenti false.
+     */
     @Override
     public boolean isGiocoTerminato() {
         return giocoTerminato;
     }
 
-    @Override
-    public boolean isUscitoDalGioco() {
-        return uscitoDalGioco;
-    }
-
-    @Override
-    public void setUscitoDalGioco(boolean uscitoDalGioco) {
-        this.uscitoDalGioco = uscitoDalGioco;
-    }
-
+    /**
+     * Imposta lo stato del gioco come terminato o meno.
+     *
+     * @param giocoTerminato true per terminare il gioco, false altrimenti.
+     */
     @Override
     public void setGiocoTerminato(boolean giocoTerminato) {
         this.giocoTerminato = giocoTerminato;
@@ -262,56 +299,132 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
         }
     }
 
+    /**
+     * Verifica se il giocatore e' uscito dal gioco.
+     *
+     * @return true se il giocatore e' uscito dal gioco, altrimenti false.
+     */
+    @Override
+    public boolean isUscitoDalGioco() {
+        return uscitoDalGioco;
+    }
+
+    /**
+     * Imposta lo stato di uscita dal gioco del giocatore.
+     *
+     * @param uscitoDalGioco true se il giocatore e' uscito dal gioco, false altrimenti.
+     */
+    @Override
+    public void setUscitoDalGioco(boolean uscitoDalGioco) {
+        this.uscitoDalGioco = uscitoDalGioco;
+    }
+
+    /**
+     * Verifica se la torcia e' accesa.
+     *
+     * @return true se la torcia e' accesa, altrimenti false.
+     */
     @Override
     public boolean isTorciaAccesa() {
         return torciaAccesa;
     }
 
+    /**
+     * Imposta lo stato della torcia.
+     *
+     * @param torciaAccesa true per accendere la torcia, false per spegnerla.
+     */
     @Override
     public void setTorciaAccesa(boolean torciaAccesa) {
         this.torciaAccesa = torciaAccesa;
     }
 
+    /**
+     * Verifica se il direttore e' ricattato.
+     *
+     * @return true se il direttore e' ricattato, altrimenti false.
+     */
     @Override
     public boolean isRicattoDirettore() {
         return ricattoDirettore;
     }
 
+    /**
+     * Imposta lo stato di ricatto del direttore.
+     *
+     * @param ricattoDirettore true per ricattare il direttore, false altrimenti.
+     */
     @Override
     public void setRicattoDirettore(boolean ricattoDirettore) {
         this.ricattoDirettore = ricattoDirettore;
     }
 
+    /**
+     * Verifica se il timer e' attivo.
+     *
+     * @return true se il timer e' attivo, altrimenti false.
+     */
     @Override
     public boolean isTimerAttivo() {
         return timerAttivo;
     }
 
+    /**
+     * Imposta lo stato del timer.
+     *
+     * @param timerAttivo true per attivare il timer, false per disattivarlo.
+     */
     @Override
     public void setTimerAttivo(boolean timerAttivo) {
         this.timerAttivo = timerAttivo;
     }
 
+    /**
+     * Restituisce il timer della guardia.
+     *
+     * @return Il timer della guardia.
+     */
     @Override
     public TimerGuardia getTimerGuardia() {
         return timerGuardia;
     }
 
+    /**
+     * Imposta il timer della guardia.
+     *
+     * @param timerGuardia Il timer della guardia da impostare.
+     */
     @Override
     public void setTimerGuardia(TimerGuardia timerGuardia) {
         this.timerGuardia = timerGuardia;
     }
 
+    /**
+     * Restituisce il thread del timer.
+     *
+     * @return Il thread del timer.
+     */
     @Override
     public Thread getTimerThread() {
         return timerThread;
     }
 
+    /**
+     * Imposta il thread del timer.
+     *
+     * @param timerThread Il thread del timer da impostare.
+     */
     @Override
     public void setTimerThread(Thread timerThread) {
         this.timerThread = timerThread;
     }
 
+    /**
+     * Salva lo stato del gioco corrente su file.
+     *
+     * @param baseFileName Il nome base del file di salvataggio.
+     * @throws IOException se si verifica un errore durante il salvataggio.
+     */
     @Override
     public void salvaPartita(String baseFileName) throws IOException {
         if (timerGuardia != null) {
@@ -324,6 +437,14 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
         gestisciSalvataggi(baseFileName, ".");
     }
 
+    /**
+     * Carica lo stato del gioco da un file di salvataggio.
+     *
+     * @param filePath Il percorso del file di salvataggio.
+     * @return L'oggetto GestioneGioco caricato.
+     * @throws IOException se si verifica un errore durante il caricamento.
+     * @throws ClassNotFoundException se la classe non viene trovata durante il caricamento.
+     */
     @Override
     public GestioneGioco caricaPartita(String filePath) throws IOException, ClassNotFoundException {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
@@ -344,6 +465,11 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
         }
     }
 
+    /**
+     * Avvia il timer della guardia.
+     *
+     * @param minuti Il tempo in minuti per cui il timer deve essere avviato.
+     */
     @Override
     public void startTimer(int minuti) {
         if (timerGuardia == null) {
@@ -352,8 +478,13 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
             timerThread.start();
         }
     }
-    
 
+    /**
+     * Restituisce l'elenco dei file di salvataggio.
+     *
+     * @param directory La directory in cui cercare i file di salvataggio.
+     * @return La lista dei nomi dei file di salvataggio.
+     */
     @Override
     public List<String> elencoSalvataggi(String directory) {
         File dir = new File(directory);
@@ -372,9 +503,17 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Gestisce i file di salvataggio, sovrascrivendo quelli esistenti se necessario.
+     *
+     * @param baseFileName Il nome base del file di salvataggio.
+     * @param directory    La directory in cui salvare i file.
+     * @throws IOException se si verifica un errore durante il salvataggio.
+     */
     @Override
     public void gestisciSalvataggi(String baseFileName, String directory) throws IOException {
         List<String> salvataggi = elencoSalvataggi(directory);
+
         if (salvataggi.size() >= 5) {
             System.out.println("Hai raggiunto il numero massimo di salvataggi. Scegli un file da sovrascrivere:");
             for (int i = 0; i < salvataggi.size(); i++) {
@@ -382,12 +521,16 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
             }
             Scanner scanner = new Scanner(System.in);
             int scelta = scanner.nextInt();
+            scanner.nextLine(); // consume newline left-over
+
             if (scelta < 1 || scelta > salvataggi.size()) {
                 System.out.println("Scelta non valida. Operazione annullata.");
                 return;
             }
-            File fileDaSovrascrivere = new File(directory, salvataggi.get(scelta - 1));
-            if (!fileDaSovrascrivere.delete()) {
+            
+            String fileDaSovrascrivere = salvataggi.get(scelta - 1);
+            File file = new File(directory, fileDaSovrascrivere);
+            if (!file.delete()) {
                 System.out.println("Errore nella sovrascrittura del file. Operazione annullata.");
                 return;
             }
