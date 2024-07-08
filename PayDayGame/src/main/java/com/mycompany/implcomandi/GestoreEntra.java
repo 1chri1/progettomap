@@ -53,7 +53,7 @@ public class GestoreEntra implements Modifica, Serializable {
 
         // Controllo se siamo nel corridoio 1 e il comando entra è senza destinazione
         if (nomeStanzaCorrente.equalsIgnoreCase("Corridoio 1") && (nomeStanzaDestinazione == null || nomeStanzaDestinazione.isEmpty())) {
-            if (hasRequiredItem(descrizione, CHIAVE_UFFICI)) {
+            if (controlloInventario(descrizione, CHIAVE_UFFICI)) {
                 nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Ufficio Vicino Corridoio 1");
                 if (nuovaStanza != null) {
                     descrizione.setStanzaCorrente(nuovaStanza);
@@ -72,28 +72,28 @@ public class GestoreEntra implements Modifica, Serializable {
         } else {
             switch (nomeStanzaCorrente.toLowerCase()) {
                 case "lato destro":
-                    if (matchesDestination(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Scale")) {
+                    if (verificaDestinazione(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Scale")) {
                         nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Scale");
                     } else {
                         msg.append("Non capisco dove vuoi andare.");
                     }
                     break;
                 case "lato sinistro":
-                    if (matchesDestination(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Bagno")) {
+                    if (verificaDestinazione(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Bagno")) {
                         nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Bagno");
                     } else {
                         msg.append("Non capisco dove vuoi andare.");
                     }
                     break;
                 case "scale piano di sotto":
-                    if (matchesDestination(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Ufficio Direttore")) {
-                        if (hasRequiredItem(descrizione, CHIAVE_DIRETTORE)) {
+                    if (verificaDestinazione(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Ufficio Direttore")) {
+                        if (controlloInventario(descrizione, CHIAVE_DIRETTORE)) {
                             nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Ufficio Direttore");
                         } else {
                             msg.append("Non puoi entrare nell'ufficio del direttore. Ti manca la chiave.");
                         }
-                    } else if (matchesDestination(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Caveau")) {
-                        if (hasRequiredItem(descrizione, TESSERINO_CAVEAU)) {
+                    } else if (verificaDestinazione(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Caveau")) {
+                        if (controlloInventario(descrizione, TESSERINO_CAVEAU)) {
                             nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Caveau");
                         } else {
                             msg.append("Non puoi entrare nel caveau. Ti manca il tesserino.");
@@ -103,8 +103,8 @@ public class GestoreEntra implements Modifica, Serializable {
                     }
                     break;
                 case "corridoio 1":
-                    if (matchesDestination(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Ufficio Vicino Corridoio 1")) {
-                        if (hasRequiredItem(descrizione, CHIAVE_UFFICI)) {
+                    if (verificaDestinazione(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Ufficio Vicino Corridoio 1")) {
+                        if (controlloInventario(descrizione, CHIAVE_UFFICI)) {
                             nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Ufficio Vicino Corridoio 1");
                         } else {
                             msg.append("Non puoi entrare nell'ufficio vicino al corridoio 1. Ti manca la chiave degli uffici.");
@@ -114,8 +114,8 @@ public class GestoreEntra implements Modifica, Serializable {
                     }
                     break;
                 case "Scale":
-                    if (matchesDestination(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Ufficio Vicino Scale")) {
-                        if (hasRequiredItem(descrizione, CHIAVE_UFFICI)) {
+                    if (verificaDestinazione(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Ufficio Vicino Scale")) {
+                        if (controlloInventario(descrizione, CHIAVE_UFFICI)) {
                             nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Ufficio Vicino Scale");
                         } else {
                             msg.append("Non puoi entrare nell'ufficio vicino alle scale del piano di sopra. Ti manca la chiave degli uffici.");
@@ -147,7 +147,7 @@ public class GestoreEntra implements Modifica, Serializable {
      * @param nomeStanza il nome della stanza
      * @return true se la destinazione corrisponde, false altrimenti
      */
-    private boolean matchesDestination(int piano, String destinazione, String nomeStanza) {
+    private boolean verificaDestinazione(int piano, String destinazione, String nomeStanza) {
         Stanza stanza = Stanza.trovaStanza(piano, nomeStanza);
         if (stanza != null && (stanza.getNome().equalsIgnoreCase(destinazione) || stanza.getAlias().contains(destinazione))) {
             return true;
@@ -162,7 +162,7 @@ public class GestoreEntra implements Modifica, Serializable {
      * @param itemName il nome dell'oggetto richiesto
      * @return true se l'oggetto è presente, false altrimenti
      */
-    private boolean hasRequiredItem(GestioneGioco descrizione, String itemName) {
+    private boolean controlloInventario(GestioneGioco descrizione, String itemName) {
         for (Oggetto oggetto : descrizione.getInventario()) {
             if (oggetto.getNome().equalsIgnoreCase(itemName)) {
                 return true;

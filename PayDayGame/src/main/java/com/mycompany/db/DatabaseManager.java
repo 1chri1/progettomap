@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.h2.tools.Server;
 
 /**
- * Singleton class that manages the database connection and initialization.
+ * Classe Singleton che gestisce la connessione al database e la sua inizializzazione.
  */
 public class DatabaseManager {
 
@@ -18,9 +18,9 @@ public class DatabaseManager {
     private DatabaseManager() {}
 
     /**
-     * Returns the singleton instance of DatabaseManager.
+     * Restituisce l'istanza singleton di DatabaseManager.
      *
-     * @return The singleton instance of DatabaseManager.
+     * @return L'istanza singleton di DatabaseManager.
      */
     public static synchronized DatabaseManager getInstance() {
         if (instance == null) {
@@ -30,12 +30,12 @@ public class DatabaseManager {
     }
 
     /**
-     * Initializes the database server and connects to the specified database.
+     * Inizializza il server del database e si connette al database specificato.
      *
-     * @param dbUrl The URL of the database.
-     * @param user The username for the database.
-     * @param password The password for the database.
-     * @throws SQLException If a database access error occurs.
+     * @param dbUrl L'URL del database.
+     * @param user Il nome utente per il database.
+     * @param password La password per il database.
+     * @throws SQLException Se si verifica un errore di accesso al database.
      */
     public void initializeAndConnect(String dbUrl, String user, String password) throws SQLException {
         try {
@@ -46,7 +46,7 @@ public class DatabaseManager {
             System.out.println("H2 console is running at: " + h2Server.getURL());
 
             connection = DriverManager.getConnection(dbUrl, user, password);
-            this.dbName = dbUrl; // Store the current database URL
+            this.dbName = dbUrl; // Memorizza l'URL del database attuale
 
             initializeDatabase();
             System.out.println("Database e tabelle create con successo!");
@@ -57,16 +57,16 @@ public class DatabaseManager {
     }
 
     /**
-     * Returns the database connection.
+     * Restituisce la connessione al database.
      *
-     * @return The database connection.
+     * @return La connessione al database.
      */
     public Connection getConnection() {
         return connection;
     }
 
     /**
-     * Closes the database connection and stops the H2 server.
+     * Chiude la connessione al database e ferma il server H2.
      */
     public void close() {
         try {
@@ -82,9 +82,9 @@ public class DatabaseManager {
     }
 
     /**
-     * Initializes the database by creating necessary tables.
+     * Inizializza il database creando le tabelle necessarie.
      *
-     * @throws SQLException If a database access error occurs.
+     * @throws SQLException Se si verifica un errore di accesso al database.
      */
     private void initializeDatabase() throws SQLException {
         try (var stmt = connection.createStatement()) {
@@ -94,9 +94,9 @@ public class DatabaseManager {
     }
 
     /**
-     * Finds a free port for the H2 server.
+     * Trova una porta libera per il server H2.
      *
-     * @return A free port number.
+     * @return Un numero di porta libera.
      */
     private static int findFreePort() {
         try (var socket = new java.net.ServerSocket(0)) {
@@ -108,9 +108,9 @@ public class DatabaseManager {
     }
 
     /**
-     * Returns the current database URL.
+     * Restituisce l'URL del database attuale.
      *
-     * @return The current database URL.
+     * @return L'URL del database attuale.
      */
     public String getDbName() {
         return dbName;

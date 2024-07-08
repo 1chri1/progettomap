@@ -89,40 +89,126 @@ public abstract class GestioneGioco implements Serializable {
      */
     public abstract String MessaggioIniziale();
 
+    // Metodi di gestione dello stato del gioco
+
+    /**
+     * Verifica se il quadro elettrico è disattivato.
+     *
+     * @return true se il quadro elettrico è disattivato, altrimenti false
+     */
     public abstract boolean isQuadroElettricoDisattivato();
 
+    /**
+     * Imposta lo stato del quadro elettrico.
+     *
+     * @param quadroElettricoDisattivato true se il quadro elettrico è disattivato, altrimenti false
+     */
     public abstract void setQuadroElettricoDisattivato(boolean quadroElettricoDisattivato);
 
+    /**
+     * Verifica se il gioco è terminato.
+     *
+     * @return true se il gioco è terminato, altrimenti false
+     */
     public abstract boolean isGiocoTerminato();
 
+    /**
+     * Imposta lo stato del gioco come terminato.
+     *
+     * @param giocoTerminato true se il gioco è terminato, altrimenti false
+     */
     public abstract void setGiocoTerminato(boolean giocoTerminato);
 
+    /**
+     * Verifica se la torcia è accesa.
+     *
+     * @return true se la torcia è accesa, altrimenti false
+     */
     public abstract boolean isTorciaAccesa();
 
+    /**
+     * Imposta lo stato della torcia.
+     *
+     * @param torciaAccesa true se la torcia è accesa, altrimenti false
+     */
     public abstract void setTorciaAccesa(boolean torciaAccesa);
 
+    /**
+     * Verifica se il direttore è ricattato.
+     *
+     * @return true se il direttore è ricattato, altrimenti false
+     */
     public abstract boolean isRicattoDirettore();
 
+    /**
+     * Imposta lo stato di ricatto del direttore.
+     *
+     * @param ricattoDirettore true se il direttore è ricattato, altrimenti false
+     */
     public abstract void setRicattoDirettore(boolean ricattoDirettore);
 
+    /**
+     * Verifica se il timer è attivo.
+     *
+     * @return true se il timer è attivo, altrimenti false
+     */
     public abstract boolean isTimerAttivo();
 
+    /**
+     * Imposta lo stato del timer.
+     *
+     * @param timerAttivo true se il timer è attivo, altrimenti false
+     */
     public abstract void setTimerAttivo(boolean timerAttivo);
 
+    /**
+     * Restituisce il timer della guardia.
+     *
+     * @return il timer della guardia
+     */
     public abstract TimerGuardia getTimerGuardia();
 
+    /**
+     * Imposta il timer della guardia.
+     *
+     * @param timerGuardia il timer della guardia da impostare
+     */
     public abstract void setTimerGuardia(TimerGuardia timerGuardia);
 
+    /**
+     * Restituisce il thread del timer.
+     *
+     * @return il thread del timer
+     */
     public abstract Thread getTimerThread();
 
+    /**
+     * Imposta il thread del timer.
+     *
+     * @param timerThread il thread del timer da impostare
+     */
     public abstract void setTimerThread(Thread timerThread);
-    
+
+    /**
+     * Verifica se il giocatore è uscito dal gioco.
+     *
+     * @return true se il giocatore è uscito dal gioco, altrimenti false
+     */
     public abstract boolean isUscitoDalGioco();
 
+    /**
+     * Imposta lo stato di uscita dal gioco.
+     *
+     * @param uscitoDalGioco true se il giocatore è uscito dal gioco, altrimenti false
+     */
     public abstract void setUscitoDalGioco(boolean uscitoDalGioco);
-    
+
+    /**
+     * Ferma il timer della guardia.
+     */
     public abstract void fermaTimer();
 
+    // Metodi di gestione del timer
 
     /**
      * Avvia il timer della guardia.
@@ -132,6 +218,7 @@ public abstract class GestioneGioco implements Serializable {
     public abstract void startTimer(int minuti);
 
     // Metodi per la serializzazione
+
     /**
      * Salva lo stato attuale del gioco in un file.
      *
@@ -162,7 +249,7 @@ public abstract class GestioneGioco implements Serializable {
      * Gestisce i salvataggi, mantenendo solo gli ultimi n salvataggi.
      *
      * @param baseFileName il nome base dei file di salvataggio
-     * @param directory la directory in cui sono salvati i file
+     * @param directory    la directory in cui sono salvati i file
      * @throws IOException in caso di errore durante la gestione dei file
      */
     public abstract void gestisciSalvataggi(String baseFileName, String directory) throws IOException;

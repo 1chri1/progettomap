@@ -53,10 +53,12 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         this.dbManager = dbManager;
     }
 
+    // Metodi di inizializzazione e gestione del gioco
+
     /**
      * Inizializza il gioco, i comandi, le stanze e gli oggetti.
      *
-     * @throws Exception se si verifica un errore durante l'inizializzazione.
+     * @throws Exception se si verifica un errore durante l'inizializzazione
      */
     @Override
     public void inizializzazione() throws Exception {
@@ -96,8 +98,8 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Gestisce il prossimo spostamento del giocatore.
      *
-     * @param p   L'output del parser contenente il comando e altri dettagli.
-     * @param out Il PrintStream per l'output dei messaggi.
+     * @param p   L'output del parser contenente il comando e altri dettagli
+     * @param out Il PrintStream per l'output dei messaggi
      */
     @Override
     public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
@@ -190,8 +192,10 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         }
     }
 
+    // Metodi di gestione del timer
+
     /**
-     * Ferma il timer della guardia se e' attivo.
+     * Ferma il timer della guardia se è attivo.
      */
     @Override
     public void fermaTimer() {
@@ -204,62 +208,25 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     /**
-     * Verifica se l'inventario contiene sia soldi che gioielli.
+     * Avvia il timer della guardia.
      *
-     * @return true se l'inventario contiene sia soldi che gioielli, altrimenti false.
-     */
-    private boolean hasSoldiGioielli() {
-        boolean haSoldi = getInventario().stream().anyMatch(o -> "soldi".equalsIgnoreCase(o.getNome()));
-        boolean haGioielli = getInventario().stream().anyMatch(o -> "gioielli".equalsIgnoreCase(o.getNome()));
-        return haSoldi && haGioielli;
-    }
-
-    /**
-     * Assegna un osservatore al gioco.
-     *
-     * @param o L'osservatore da assegnare.
+     * @param minuti la durata del timer in minuti
      */
     @Override
-    public void assegna(Modifica o) {
-        if (!osservatori.contains(o)) {
-            osservatori.add(o);
+    public void startTimer(int minuti) {
+        if (timerGuardia == null) {
+            timerGuardia = new TimerGuardia(minuti, this);
+            timerThread = new Thread(timerGuardia);
+            timerThread.start();
         }
     }
 
-    /**
-     * Rimuove un osservatore dal gioco.
-     *
-     * @param o L'osservatore da rimuovere.
-     */
-    @Override
-    public void rimuovi(Modifica o) {
-        osservatori.remove(o);
-    }
+    // Metodi di gestione dello stato del gioco
 
     /**
-     * Notifica tutti i gestori dei comandi delle modifiche.
-     */
-    @Override
-    public void notificaGestori() {
-        for (Modifica o : osservatori) {
-            messaggi.add(o.aggiorna(this, parserOutput));
-        }
-    }
-
-    /**
-     * Restituisce il messaggio iniziale del gioco.
+     * Verifica se il quadro elettrico è disattivato.
      *
-     * @return Il messaggio iniziale.
-     */
-    @Override
-    public String MessaggioIniziale() {
-        return "L'avventura ha inizio";
-    }
-
-    /**
-     * Verifica se il quadro elettrico e' disattivato.
-     *
-     * @return true se il quadro elettrico e' disattivato, altrimenti false.
+     * @return true se il quadro elettrico è disattivato, altrimenti false
      */
     @Override
     public boolean isQuadroElettricoDisattivato() {
@@ -269,7 +236,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Imposta lo stato del quadro elettrico.
      *
-     * @param quadroElettricoDisattivato true per disattivare il quadro elettrico, false per attivarlo.
+     * @param quadroElettricoDisattivato true se il quadro elettrico è disattivato, altrimenti false
      */
     @Override
     public void setQuadroElettricoDisattivato(boolean quadroElettricoDisattivato) {
@@ -277,9 +244,9 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     /**
-     * Verifica se il gioco e' terminato.
+     * Verifica se il gioco è terminato.
      *
-     * @return true se il gioco e' terminato, altrimenti false.
+     * @return true se il gioco è terminato, altrimenti false
      */
     @Override
     public boolean isGiocoTerminato() {
@@ -287,9 +254,9 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     /**
-     * Imposta lo stato del gioco come terminato o meno.
+     * Imposta lo stato del gioco come terminato.
      *
-     * @param giocoTerminato true per terminare il gioco, false altrimenti.
+     * @param giocoTerminato true se il gioco è terminato, altrimenti false
      */
     @Override
     public void setGiocoTerminato(boolean giocoTerminato) {
@@ -300,9 +267,9 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     /**
-     * Verifica se il giocatore e' uscito dal gioco.
+     * Verifica se il giocatore è uscito dal gioco.
      *
-     * @return true se il giocatore e' uscito dal gioco, altrimenti false.
+     * @return true se il giocatore è uscito dal gioco, altrimenti false
      */
     @Override
     public boolean isUscitoDalGioco() {
@@ -310,9 +277,9 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     /**
-     * Imposta lo stato di uscita dal gioco del giocatore.
+     * Imposta lo stato di uscita dal gioco.
      *
-     * @param uscitoDalGioco true se il giocatore e' uscito dal gioco, false altrimenti.
+     * @param uscitoDalGioco true se il giocatore è uscito dal gioco, altrimenti false
      */
     @Override
     public void setUscitoDalGioco(boolean uscitoDalGioco) {
@@ -320,9 +287,9 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     /**
-     * Verifica se la torcia e' accesa.
+     * Verifica se la torcia è accesa.
      *
-     * @return true se la torcia e' accesa, altrimenti false.
+     * @return true se la torcia è accesa, altrimenti false
      */
     @Override
     public boolean isTorciaAccesa() {
@@ -332,7 +299,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Imposta lo stato della torcia.
      *
-     * @param torciaAccesa true per accendere la torcia, false per spegnerla.
+     * @param torciaAccesa true se la torcia è accesa, altrimenti false
      */
     @Override
     public void setTorciaAccesa(boolean torciaAccesa) {
@@ -340,9 +307,9 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     /**
-     * Verifica se il direttore e' ricattato.
+     * Verifica se il direttore è ricattato.
      *
-     * @return true se il direttore e' ricattato, altrimenti false.
+     * @return true se il direttore è ricattato, altrimenti false
      */
     @Override
     public boolean isRicattoDirettore() {
@@ -352,7 +319,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Imposta lo stato di ricatto del direttore.
      *
-     * @param ricattoDirettore true per ricattare il direttore, false altrimenti.
+     * @param ricattoDirettore true se il direttore è ricattato, altrimenti false
      */
     @Override
     public void setRicattoDirettore(boolean ricattoDirettore) {
@@ -360,9 +327,9 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     /**
-     * Verifica se il timer e' attivo.
+     * Verifica se il timer è attivo.
      *
-     * @return true se il timer e' attivo, altrimenti false.
+     * @return true se il timer è attivo, altrimenti false
      */
     @Override
     public boolean isTimerAttivo() {
@@ -372,7 +339,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Imposta lo stato del timer.
      *
-     * @param timerAttivo true per attivare il timer, false per disattivarlo.
+     * @param timerAttivo true se il timer è attivo, altrimenti false
      */
     @Override
     public void setTimerAttivo(boolean timerAttivo) {
@@ -382,7 +349,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Restituisce il timer della guardia.
      *
-     * @return Il timer della guardia.
+     * @return il timer della guardia
      */
     @Override
     public TimerGuardia getTimerGuardia() {
@@ -392,7 +359,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Imposta il timer della guardia.
      *
-     * @param timerGuardia Il timer della guardia da impostare.
+     * @param timerGuardia il timer della guardia da impostare
      */
     @Override
     public void setTimerGuardia(TimerGuardia timerGuardia) {
@@ -402,7 +369,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Restituisce il thread del timer.
      *
-     * @return Il thread del timer.
+     * @return il thread del timer
      */
     @Override
     public Thread getTimerThread() {
@@ -412,18 +379,20 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Imposta il thread del timer.
      *
-     * @param timerThread Il thread del timer da impostare.
+     * @param timerThread il thread del timer da impostare
      */
     @Override
     public void setTimerThread(Thread timerThread) {
         this.timerThread = timerThread;
     }
 
+    // Metodi di gestione del salvataggio del gioco
+
     /**
      * Salva lo stato del gioco corrente su file.
      *
-     * @param baseFileName Il nome base del file di salvataggio.
-     * @throws IOException se si verifica un errore durante il salvataggio.
+     * @param baseFileName il nome base del file di salvataggio
+     * @throws IOException se si verifica un errore durante il salvataggio
      */
     @Override
     public void salvaPartita(String baseFileName) throws IOException {
@@ -440,10 +409,10 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Carica lo stato del gioco da un file di salvataggio.
      *
-     * @param filePath Il percorso del file di salvataggio.
-     * @return L'oggetto GestioneGioco caricato.
-     * @throws IOException se si verifica un errore durante il caricamento.
-     * @throws ClassNotFoundException se la classe non viene trovata durante il caricamento.
+     * @param filePath il percorso del file di salvataggio
+     * @return l'oggetto GestioneGioco caricato
+     * @throws IOException se si verifica un errore durante il caricamento
+     * @throws ClassNotFoundException se la classe non viene trovata durante il caricamento
      */
     @Override
     public GestioneGioco caricaPartita(String filePath) throws IOException, ClassNotFoundException {
@@ -466,24 +435,10 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     }
 
     /**
-     * Avvia il timer della guardia.
-     *
-     * @param minuti Il tempo in minuti per cui il timer deve essere avviato.
-     */
-    @Override
-    public void startTimer(int minuti) {
-        if (timerGuardia == null) {
-            timerGuardia = new TimerGuardia(minuti, this);
-            timerThread = new Thread(timerGuardia);
-            timerThread.start();
-        }
-    }
-
-    /**
      * Restituisce l'elenco dei file di salvataggio.
      *
-     * @param directory La directory in cui cercare i file di salvataggio.
-     * @return La lista dei nomi dei file di salvataggio.
+     * @param directory la directory in cui cercare i file di salvataggio
+     * @return la lista dei nomi dei file di salvataggio
      */
     @Override
     public List<String> elencoSalvataggi(String directory) {
@@ -506,9 +461,9 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     /**
      * Gestisce i file di salvataggio, sovrascrivendo quelli esistenti se necessario.
      *
-     * @param baseFileName Il nome base del file di salvataggio.
-     * @param directory    La directory in cui salvare i file.
-     * @throws IOException se si verifica un errore durante il salvataggio.
+     * @param baseFileName il nome base del file di salvataggio
+     * @param directory    la directory in cui salvare i file
+     * @throws IOException se si verifica un errore durante il salvataggio
      */
     @Override
     public void gestisciSalvataggi(String baseFileName, String directory) throws IOException {
@@ -545,5 +500,60 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             System.err.println("Errore durante il salvataggio della partita: " + e.getMessage());
             throw e;
         }
+    }
+
+    // Altri metodi
+
+    /**
+     * Assegna un osservatore al gioco.
+     *
+     * @param o L'osservatore da assegnare
+     */
+    @Override
+    public void assegna(Modifica o) {
+        if (!osservatori.contains(o)) {
+            osservatori.add(o);
+        }
+    }
+
+    /**
+     * Rimuove un osservatore dal gioco.
+     *
+     * @param o L'osservatore da rimuovere
+     */
+    @Override
+    public void rimuovi(Modifica o) {
+        osservatori.remove(o);
+    }
+
+    /**
+     * Notifica tutti i gestori dei comandi delle modifiche.
+     */
+    @Override
+    public void notificaGestori() {
+        for (Modifica o : osservatori) {
+            messaggi.add(o.aggiorna(this, parserOutput));
+        }
+    }
+
+    /**
+     * Restituisce il messaggio iniziale del gioco.
+     *
+     * @return Il messaggio iniziale
+     */
+    @Override
+    public String MessaggioIniziale() {
+        return "L'avventura ha inizio";
+    }
+
+    /**
+     * Verifica se l'inventario contiene sia soldi che gioielli.
+     *
+     * @return true se l'inventario contiene sia soldi che gioielli, altrimenti false
+     */
+    private boolean hasSoldiGioielli() {
+        boolean haSoldi = getInventario().stream().anyMatch(o -> "soldi".equalsIgnoreCase(o.getNome()));
+        boolean haGioielli = getInventario().stream().anyMatch(o -> "gioielli".equalsIgnoreCase(o.getNome()));
+        return haSoldi && haGioielli;
     }
 }
