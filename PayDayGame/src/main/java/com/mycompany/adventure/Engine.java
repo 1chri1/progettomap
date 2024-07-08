@@ -228,12 +228,16 @@ public class Engine {
      *
      * @return l'incipit del gioco
      */
-    public String Incipit() {
+    public static String Incipit() {
         return "Benvenuto in PayDay!\n\n"
                + "In una citta' corrotta, dove la legge e' solo un lontano ricordo, tu e la tua banda di ladri\n"
                + "avete un obiettivo ambizioso: rapinare la banca piu' sorvegliata della citta'.\n\n"
                + "L'obiettivo e' semplice, ma pericoloso: infiltrati nella banca, evita le guardie e le telecamere,\n"
-               + "disattiva il quadro elettrico per oscurare le telecamere di sicurezza, e raggiungi il caveau.\n\n"
+               + "e disattiva il quadro elettrico per oscurare le telecamere di sicurezza.\n\n"
+               + "Ma ricorda, una volta disattivato il quadro, l'oscurità sarà totale. Dovrai trovare una torcia\n"
+               + "per orientarti nel buio.\n\n"
+               + "Inoltre, il caveau non sarà facilmente accessibile. Dovrai cercare le chiavi della stanza del direttore,\n"
+               + "che ti sveleranno il modo di accedere al caveau.\n\n"
                + "All'interno del caveau, troverai una fortuna in soldi e gioielli. Ma attenzione,\n"
                + "il direttore della banca nasconde un segreto: delle prove compromettenti che possono\n"
                + "essere usate per ricattarlo e ottenere un bottino piu' alto.\n\n"
@@ -241,6 +245,7 @@ public class Engine {
                + "Pianifica i tuoi movimenti con attenzione, raccogli tutto il bottino possibile e scappa dal garage.\n\n"
                + "Buona fortuna, e che la tua avventura abbia inizio!";
     }
+
     
     /**
      * Salva la partita corrente.
@@ -252,7 +257,6 @@ public class Engine {
         String nomeSalvataggio = scanner.nextLine().trim();
         try {
             game.salvaPartita(nomeSalvataggio);
-            System.out.println("Partita salvata con successo.");
             partitaSalvata = true; // Indica che la partita è stata salvata
         } catch (IOException e) {
             System.err.println("Errore durante il salvataggio della partita: " + e.getMessage());
