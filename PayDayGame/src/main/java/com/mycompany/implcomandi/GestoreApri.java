@@ -6,10 +6,9 @@ import com.mycompany.swing.GameWindow;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.OggettoContenitore;
 import com.mycompany.type.TipoComandi;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.io.PrintStream;
+import javax.swing.JOptionPane;
 
 /**
  * Gestore del comando "apri". Implementa l'interfaccia Modifica.
@@ -36,11 +35,11 @@ public class GestoreApri implements Modifica, Serializable {
             }
 
             if (oggetto != null) {
-                messaggio.append(gestisciAperturaOggetto(descrizione, oggetto, descrizione.getOutputStream()));
+                messaggio.append(gestisciAperturaOggetto(descrizione, oggetto));
             }
 
             if (oggettoInventario != null) {
-                messaggio.append(gestisciAperturaOggettoInventario(descrizione, oggettoInventario, descrizione.getOutputStream()));
+                messaggio.append(gestisciAperturaOggettoInventario(descrizione, oggettoInventario));
             }    
         } else {
             return "";
@@ -49,7 +48,7 @@ public class GestoreApri implements Modifica, Serializable {
         return messaggio.toString();
     }
 
-    private String gestisciAperturaOggetto(GestioneGioco gioco, Oggetto oggetto, PrintStream out) {
+    private String gestisciAperturaOggetto(GestioneGioco gioco, Oggetto oggetto) {
         if (!oggetto.isApribile()) {
             return "Non puoi aprire questo oggetto.";
         }
@@ -59,19 +58,14 @@ public class GestoreApri implements Modifica, Serializable {
         }
 
         if (oggetto instanceof OggettoContenitore && "cassetta".equalsIgnoreCase(oggetto.getNome())) {
-            // Chiedi il codice all'utente
-            try {
-                out.print("Inserisci il codice di 4 cifre: ");
-                String codiceInserito = leggiCodice(System.in, 4);
-                
-                if (codiceInserito.equals(CODICE_CORRETTO)) {
-                    oggetto.setAperto(true);
-                    return "Codice corretto! " + apriContenitore(gioco, (OggettoContenitore) oggetto);
-                } else {
-                    return "Codice errato. Non puoi aprire la cassetta.\n";
-                }
-            } catch (IOException e) {
-                return "Errore durante la lettura del codice.";
+            // Chiedi il codice all'utente tramite JOptionPane
+            String codiceInserito = JOptionPane.showInputDialog(null, "Inserisci il codice di 4 cifre:");
+            
+            if (codiceInserito != null && codiceInserito.length() == 4 && codiceInserito.equals(CODICE_CORRETTO)) {
+                oggetto.setAperto(true);
+                return "Codice corretto! " + apriContenitore(gioco, (OggettoContenitore) oggetto);
+            } else {
+                return "Codice errato. Non puoi aprire la cassetta.\n";
             }
         }
 
@@ -85,7 +79,7 @@ public class GestoreApri implements Modifica, Serializable {
         return messaggio.toString();
     }
 
-    private String gestisciAperturaOggettoInventario(GestioneGioco gioco, Oggetto oggettoInventario, PrintStream out) {
+    private String gestisciAperturaOggettoInventario(GestioneGioco gioco, Oggetto oggettoInventario) {
         if (!oggettoInventario.isApribile()) {
             return "Non puoi aprire questo oggetto.";
         }
@@ -121,11 +115,5 @@ public class GestoreApri implements Modifica, Serializable {
         contenitore.getList().clear();
 
         return messaggio.toString();
-    }
-
-    private String leggiCodice(InputStream in, int lunghezzaMassima) throws IOException {
-        byte[] buffer = new byte[lunghezzaMassima];
-        int letti = in.read(buffer, 0, lunghezzaMassima);
-        return new String(buffer, 0, letti).trim();
     }
 }
