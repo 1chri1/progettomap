@@ -11,11 +11,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class Engine {
 
@@ -26,11 +27,6 @@ public class Engine {
     private BlockingQueue<String> inputQueue;
     private GameWindow gameWindow;
 
-    /**
-     * Costruttore per inizializzare il gioco e il parser.
-     *
-     * @param game L'oggetto GestioneGioco che rappresenta il gioco.
-     */
     public Engine(GestioneGioco game) {
         this.game = game;
         this.outputStream = System.out; // Default to System.out
@@ -39,37 +35,19 @@ public class Engine {
         inizializzaParser();
     }
 
-    /**
-     * Imposta l'output stream per il gioco.
-     *
-     * @param outputStream Il nuovo output stream.
-     */
     public void setOutputStream(PrintStream outputStream) {
         this.outputStream = outputStream;
         this.game.setOutputStream(outputStream); // Imposta l'output stream nel gioco
     }
 
-    /**
-     * Imposta la finestra di gioco.
-     *
-     * @param gameWindow La finestra di gioco.
-     */
     public void setGameWindow(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
     }
 
-    /**
-     * Metodo per inserire input nella coda.
-     *
-     * @param input L'input da inserire.
-     */
     public void enqueueInput(String input) {
         inputQueue.offer(input);
     }
 
-    /**
-     * Metodo per inizializzare il gioco.
-     */
     private void inizializzaGioco() {
         try {
             this.game.inizializzazione();
@@ -78,9 +56,6 @@ public class Engine {
         }
     }
 
-    /**
-     * Metodo per inizializzare il parser.
-     */
     private void inizializzaParser() {
         try {
             Set<String> stopwords = Utility.caricaFile(new File("./resources/stopwords"));
@@ -90,9 +65,6 @@ public class Engine {
         }
     }
 
-    /**
-     * Esegue il ciclo principale del gioco.
-     */
     public void execute() {
         boolean running = true;
 
@@ -183,9 +155,6 @@ public class Engine {
         }
     }
 
-    /**
-     * Mostra il menu iniziale del gioco.
-     */
     private void mostraMenuIniziale() {
         outputStream.println("====================================================");
         outputStream.println("*                  PayDayGame 2024                 *");
@@ -224,9 +193,6 @@ public class Engine {
         }
     }
 
-    /**
-     * Inizia una nuova partita.
-     */
     private void nuovaPartita() {
         String dbUrl = "jdbc:h2:mem:testdb"; // Configurazione per il database in memoria
         String user = "user";
@@ -237,6 +203,7 @@ public class Engine {
             dbManager.close(); // Chiudi la connessione al database corrente se esiste
             dbManager.initializeAndConnect(dbUrl, user, password); // Reimposta il database
             game = new PayDayGame(dbManager); // Crea un nuovo oggetto GestioneGioco
+            game.setEngine(this); // Imposta l'engine nel gioco
             game.setOutputStream(outputStream); // Imposta l'output stream nel nuovo gioco
             inizializzaGioco(); // Inizializza il gioco
         } catch (SQLException e) {
@@ -244,9 +211,6 @@ public class Engine {
         }
     }
 
-    /**
-     * Mostra il messaggio iniziale del gioco.
-     */
     private void mostraMessaggioIniziale() {
         outputStream.println();
         outputStream.println(Incipit());
@@ -258,11 +222,6 @@ public class Engine {
         outputStream.print("?> ");
     }
 
-    /**
-     * Restituisce l'incipit del gioco, inclusi l'obiettivo e il piano della rapina.
-     *
-     * @return l'incipit del gioco
-     */
     public static String Incipit() {
         return "Benvenuto in PayDay!\n\n"
                + "In una citta' corrotta, dove la legge e' solo un lontano ricordo, tu e la tua banda di ladri\n"
@@ -281,10 +240,6 @@ public class Engine {
                + "Buona fortuna, e che la tua avventura abbia inizio!";
     }
 
-    
-    /**
-     * Salva la partita corrente.
-     */
     private void salvaPartita() {
         outputStream.print("Inserisci il nome del salvataggio: ");
         String nomeSalvataggio = readInput().trim();
@@ -296,9 +251,6 @@ public class Engine {
         }
     }
 
-    /**
-     * Carica una partita salvata.
-     */
     private void caricaPartita() {
         List<String> salvataggi = game.elencoSalvataggi(".");
         if (salvataggi.isEmpty()) {
@@ -322,6 +274,7 @@ public class Engine {
                         String fileDaCaricare = salvataggi.get(scelta - 1);
                         try {
                             game = (GestioneGioco) game.caricaPartita(fileDaCaricare);
+                            game.setEngine(this); // Imposta l'engine nel gioco caricato
                             game.setOutputStream(outputStream); // Imposta l'output stream nel gioco caricato
                             outputStream.println("Partita caricata con successo.");
                             sceltaValida = true;
@@ -337,11 +290,6 @@ public class Engine {
         }
     }
 
-    /**
-     * Metodo principale per avviare il gioco.
-     *
-     * @param args Argomenti della riga di comando.
-     */
     public static void main(String[] args) {
         String dbUrl = "jdbc:h2:mem:testdb"; // Configurazione per il database in memoria
         String user = "user";
@@ -350,20 +298,18 @@ public class Engine {
         DatabaseManager dbManager = DatabaseManager.getInstance();
 
         try {
-            // Inizializza e connetti al database
             dbManager.initializeAndConnect(dbUrl, user, password);
 
-            // Inizializza il gioco
-            GestioneGioco game = new PayDayGame(dbManager); // Passiamo dbManager qui
+            PayDayGame game = new PayDayGame(dbManager); // Passiamo dbManager qui
             Engine engine = new Engine(game);
-            
-            // Crea la finestra di gioco
+            game.setEngine(engine); // Imposta l'engine nel gioco
+
             GameWindow gameWindow = new GameWindow(engine);
             TextAreaOutputStream taOutputStream = new TextAreaOutputStream(gameWindow.getOutputArea());
             PrintStream ps = new PrintStream(taOutputStream);
             engine.setOutputStream(ps);
             engine.setGameWindow(gameWindow);
-            
+
             SwingUtilities.invokeLater(() -> {
                 gameWindow.setVisible(true);
             });
@@ -377,12 +323,7 @@ public class Engine {
         }
     }
 
-    /**
-     * Metodo per leggere l'input dell'utente.
-     *
-     * @return la stringa inserita dall'utente
-     */
-    private String readInput() {
+    String readInput() {
         try {
             return inputQueue.take();
         } catch (InterruptedException e) {
@@ -391,12 +332,12 @@ public class Engine {
         }
     }
 
-    /**
-     * Metodo per processare un comando tramite l'interfaccia grafica.
-     *
-     * @param command Il comando da processare.
-     */
     public void processCommand(String command) {
         enqueueInput(command);
+        notifyInput();
+    }
+
+    private synchronized void notifyInput() {
+        notify();
     }
 }

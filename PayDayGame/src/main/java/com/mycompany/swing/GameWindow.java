@@ -1,6 +1,7 @@
 package com.mycompany.swing;
 
 import com.mycompany.adventure.Engine;
+import com.mycompany.adventure.PayDayGame;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -58,11 +59,13 @@ public class GameWindow extends JFrame {
         }
     }
 
+
+
     public JTextArea getOutputArea() {
         return outputArea;
     }
 
-    public static void appendOutput(String text) { // Metodo statico per aggiungere testo all'outputArea
+    public static void appendOutput(String text) {
         outputArea.append(text + "\n");
         outputArea.setCaretPosition(outputArea.getDocument().getLength());
     }

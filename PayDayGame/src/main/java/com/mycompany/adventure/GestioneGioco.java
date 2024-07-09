@@ -22,6 +22,8 @@ public abstract class GestioneGioco implements Serializable {
     private final List<Comandi> comandi = new ArrayList<>();
     private final List<Oggetto> inventario = new ArrayList<>();
     private Stanza stanzaCorrente; // visibile solo nel package a cui appartiene
+    transient Engine engine;
+
 
     /**
      * Restituisce la lista delle stanze del gioco.
@@ -32,6 +34,14 @@ public abstract class GestioneGioco implements Serializable {
         return stanze;
     }
 
+    
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
     /**
      * Restituisce la lista dei comandi del gioco.
      *

@@ -12,7 +12,18 @@ public class TextAreaOutputStream extends OutputStream {
 
     @Override
     public void write(int b) {
-        textArea.append(String.valueOf((char) b));
-        textArea.setCaretPosition(textArea.getDocument().getLength());
+        SwingUtilities.invokeLater(() -> {
+            textArea.append(String.valueOf((char) b));
+            textArea.setCaretPosition(textArea.getDocument().getLength());
+        });
+    }
+    
+    @Override
+    public void write(byte[] b, int off, int len) {
+        final String text = new String(b, off, len);
+        SwingUtilities.invokeLater(() -> {
+            textArea.append(text);
+            textArea.setCaretPosition(textArea.getDocument().getLength());
+        });
     }
 }

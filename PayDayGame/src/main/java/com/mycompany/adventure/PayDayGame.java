@@ -27,20 +27,21 @@ import com.mycompany.type.Stanza;
 import com.mycompany.type.TipoComandi;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.swing.SwingUtilities;
 
-/**
- * Classe che gestisce il gioco PayDay.
- */
 public class PayDayGame extends GestioneGioco implements GestoreComandi, Serializable {
 
-    private static final long serialVersionUID = 1L;
+     private static final long serialVersionUID = 1L;
     private final List<Modifica> osservatori = new ArrayList<>();
     private ParserOutput parserOutput;
     private final List<String> messaggi = new ArrayList<>();
@@ -57,6 +58,8 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     private int tempoRimastoTimer; // in secondi
     private boolean uscitoDalGioco;
     private transient PrintStream outputStream;
+    private transient Engine engine;
+ 
 
     /**
      * Costruttore del gioco PayDay.
@@ -67,6 +70,12 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         this.dbManager = dbManager;
         this.outputStream = System.out; // Default to System.out
     }
+    
+    // Aggiungi un metodo per impostare l'engine
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+   
 
     // Metodi di inizializzazione e gestione del gioco
 
@@ -489,16 +498,29 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             for (int i = 0; i < salvataggi.size(); i++) {
                 outputStream.println((i + 1) + ". " + salvataggi.get(i));
             }
-            Scanner scanner = new Scanner(System.in);
-            int scelta = scanner.nextInt();
-            scanner.nextLine(); // consume newline left-over
 
-            if (scelta < 1 || scelta > salvataggi.size()) {
-                outputStream.println("Scelta non valida. Operazione annullata.");
-                return;
+            final int[] scelta = new int[1];
+            scelta[0] = -1;
+
+            // Leggi l'input per la scelta del file da sovrascrivere
+            while (scelta[0] < 1 || scelta[0] > salvataggi.size()) {
+                try {
+                    synchronized (engine) {
+                        engine.wait(); // Attendi fino a quando non viene notificato
+                    }
+                    String sceltaInput = engine.readInput(); // Leggi l'input
+                    scelta[0] = Integer.parseInt(sceltaInput);
+                    if (scelta[0] < 1 || scelta[0] > salvataggi.size()) {
+                        outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
+                        scelta[0] = -1; // Indica una scelta non valida
+                    }
+                } catch (NumberFormatException | InterruptedException e) {
+                    outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
+                    scelta[0] = -1; // Indica una scelta non valida
+                }
             }
-            
-            String fileDaSovrascrivere = salvataggi.get(scelta - 1);
+
+            String fileDaSovrascrivere = salvataggi.get(scelta[0] - 1);
             File file = new File(directory, fileDaSovrascrivere);
             if (!file.delete()) {
                 outputStream.println("Errore nella sovrascrittura del file. Operazione annullata.");
@@ -517,7 +539,12 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         }
     }
 
-    // Altri metodi
+    public void notifyInput() {
+        synchronized (this) {
+            this.notify();
+        }
+    }      
+
 
     /**
      * Assegna un osservatore al gioco.
