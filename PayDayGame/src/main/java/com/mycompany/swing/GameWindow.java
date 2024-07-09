@@ -50,7 +50,7 @@ public class GameWindow extends JFrame {
         });
     }
 
-    private void processInput() {
+  private void processInput() {
         String input = inputField.getText();
         inputField.setText("");
         if (input != null && !input.trim().isEmpty()) {
