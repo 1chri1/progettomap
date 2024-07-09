@@ -60,7 +60,7 @@ public class GestoreAttiva implements Modifica, Serializable {
                     msg.append("Non puoi attivare questo oggetto.");
                 }
             } else {
-                msg.append("Non trovi l'oggetto da attivare.");
+                msg.append("Non trovo l'oggetto da attivare.");
             }
         }
 

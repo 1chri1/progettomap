@@ -2,6 +2,7 @@ package com.mycompany.implComandi;
 
 import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
+import com.mycompany.swing.GameWindow;  // Aggiungi questa importazione
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.TipoComandi;
 import java.io.Serializable;
@@ -68,11 +69,11 @@ public class GestorePrendi implements Modifica, Serializable {
      */
     private void mostraDialogoDirettore() {
         // Interazioni con l'utente tramite la console
-        System.out.println("\nDirettore: Cosa stai facendo con quei documenti?");
-        System.out.println("Giocatore: Direttore, ho trovato questi documenti nel caveau. Possono rovinarti.");
-        System.out.println("Direttore: Quanto vuoi per il tuo silenzio?");
-        System.out.println("Giocatore: Voglio una somma di denaro extra.");
-        System.out.println("Direttore: Hai vinto. Prendi i soldi, ma sappi che se scegli di non ricattarmi, potrei aiutarti in futuro.");
-        System.out.println("\nOra puoi decidere se ricattare il direttore per ottenere subito i soldi extra \no ignorarlo e potenzialmente avere un alleato in futuro.\n");
+        GameWindow.appendOutput("\nDirettore: Cosa stai facendo con quei documenti?\n");
+        GameWindow.appendOutput("Giocatore: Direttore, ho trovato questi documenti nel caveau. Possono rovinarti.\n");
+        GameWindow.appendOutput("Direttore: Quanto vuoi per il tuo silenzio?\n");
+        GameWindow.appendOutput("Giocatore: Voglio una somma di denaro extra.\n");
+        GameWindow.appendOutput("Direttore: Hai vinto. Prendi i soldi, ma sappi che se scegli di non ricattarmi, potrei aiutarti in futuro.\n");
+        GameWindow.appendOutput("\nOra puoi decidere se ricattare il direttore per ottenere subito i soldi extra \no ignorarlo e potenzialmente avere un alleato in futuro.\n");
     }
 }
