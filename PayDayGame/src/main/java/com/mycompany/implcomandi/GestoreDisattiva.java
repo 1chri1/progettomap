@@ -48,7 +48,7 @@ public class GestoreDisattiva implements Modifica, Serializable {
                         if (oggettoDaDisattivare.getNome().equalsIgnoreCase("quadro elettrico")) {
                             descrizione.setQuadroElettricoDisattivato(true);
                             msg.append("Hai disattivato: ").append(oggettoDaDisattivare.getDescrizione());
-                            System.out.println("Attenzione: è scattato l'allarme.\nHai 5 minuti per completare la rapina.");
+                            msg.append("\nAttenzione: è scattato l'allarme.\nHai 5 minuti per completare la rapina.");
                             // Avvia il timer della guardia solo se non è già attivo
                             if (!descrizione.isTimerAttivo()) {
                                 descrizione.startTimer(5); // Timer di 5 minuti

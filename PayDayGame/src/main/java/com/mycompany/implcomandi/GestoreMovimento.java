@@ -2,6 +2,7 @@ package com.mycompany.implComandi;
 
 import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
+import com.mycompany.swing.GameWindow;
 import com.mycompany.type.Stanza;
 import java.io.Serializable;
 
@@ -39,7 +40,7 @@ public class GestoreMovimento implements Modifica, Serializable {
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 1") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
-                    return "Sei andato avanti nel corridoio, ora vedi nuove porte";
+                    GameWindow.appendOutput("Sei andato avanti nel corridoio, ora vedi nuove porte");
                 }
                 nextRoom = stanzaCorrente.getNord();
                 messaggio = "A nord c'è ";
@@ -51,19 +52,19 @@ public class GestoreMovimento implements Modifica, Serializable {
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 3") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
-                    System.out.println("Sei andato avanti nel corridoio, ora vedi nuove porte");
+                    GameWindow.appendOutput("Sei andato avanti nel corridoio, ora vedi nuove porte");
                 }
                 nextRoom = stanzaCorrente.getSud();
                 messaggio = "A sud c'è ";
                 break;
             case EST:
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Bagno")) {
-                    System.out.println("Sei entrato nel corridoio, ora vedi nuove porte");
+                    GameWindow.appendOutput("Sei entrato nel corridoio, ora vedi nuove porte");
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Lato sinistro")) {
-                    messaggio = "A ovest c'è l'ingresso per il ";
+                    messaggio = "A est c'è l'ingresso per il ";
                 } else {
-                    messaggio = "A ovest c'è ";
+                    messaggio = "A est c'è ";
                 }
                 nextRoom = stanzaCorrente.getEst();
                 break;
@@ -71,7 +72,7 @@ public class GestoreMovimento implements Modifica, Serializable {
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Scale") || 
                     stanzaCorrente.getNome().equalsIgnoreCase("Magazzino") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1")) {
-                    System.out.println("Sei entrato avanti nel corridoio, ora vedi nuove porte");
+                    GameWindow.appendOutput("Sei entrato avanti nel corridoio, ora vedi nuove porte");
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Lato destro")) {
                     messaggio = "A ovest c'è l'ingresso per le ";
@@ -94,7 +95,7 @@ public class GestoreMovimento implements Modifica, Serializable {
                     descrizione.setGiocoTerminato(true);
                 }
                 if ("Sala Controllo".equalsIgnoreCase(nextRoom.getNome())) {
-                    System.out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco è terminato.");
+                    GameWindow.appendOutput("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco è terminato.");
                     descrizione.setGiocoTerminato(true);
                 }
                 return "";

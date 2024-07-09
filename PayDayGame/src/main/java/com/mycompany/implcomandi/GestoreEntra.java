@@ -2,6 +2,7 @@ package com.mycompany.implComandi;
 
 import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
+import com.mycompany.swing.GameWindow;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.Stanza;
 import com.mycompany.type.TipoComandi;
@@ -45,9 +46,11 @@ public class GestoreEntra implements Modifica, Serializable {
             }
             if (nuovaStanza != null) {
                 descrizione.setStanzaCorrente(nuovaStanza);
-                return "Sei entrato in: " + nuovaStanza.getNome();
+                GameWindow.appendOutput("Sei entrato in: " + nuovaStanza.getNome());
+                return "";
             } else {
-                return "Non riesci ad entrare in nessuna stanza da qui.";
+                GameWindow.appendOutput("Non riesci ad entrare in nessuna stanza da qui.");
+                return "";
             }
         }
 
@@ -57,13 +60,16 @@ public class GestoreEntra implements Modifica, Serializable {
                 nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Ufficio Vicino Corridoio 1");
                 if (nuovaStanza != null) {
                     descrizione.setStanzaCorrente(nuovaStanza);
-                    return "Sei entrato in: " + nuovaStanza.getNome();
+                    GameWindow.appendOutput("Sei entrato in: " + nuovaStanza.getNome());
+                    return "";
                 } else {
-                    return "Non riesci ad entrare in nessuna stanza da qui.";
+                    GameWindow.appendOutput("Non riesci ad entrare in nessuna stanza da qui.");
+                    return "";
                 }
             } else {
                 msg.append("Non puoi entrare nell'ufficio vicino al corridoio 1. Ti manca la chiave degli uffici.");
-                return msg.toString();
+                GameWindow.appendOutput(msg.toString());
+                return "";
             }
         }
 
@@ -113,7 +119,7 @@ public class GestoreEntra implements Modifica, Serializable {
                         msg.append("Non capisco dove vuoi andare.");
                     }
                     break;
-                case "Scale":
+                case "scale":
                     if (verificaDestinazione(stanzaCorrente.getPiano(), nomeStanzaDestinazione, "Ufficio Vicino Scale")) {
                         if (controlloInventario(descrizione, CHIAVE_UFFICI)) {
                             nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano(), "Ufficio Vicino Scale");
@@ -126,7 +132,8 @@ public class GestoreEntra implements Modifica, Serializable {
                     break;
                 default:
                     msg.append("Non puoi entrare qui.");
-                    return msg.toString();
+                    GameWindow.appendOutput(msg.toString());
+                    return "";
             }
         }
 
@@ -136,7 +143,8 @@ public class GestoreEntra implements Modifica, Serializable {
             msg.append("Non capisco dove vuoi andare.");
         }
 
-        return msg.toString();
+        GameWindow.appendOutput(msg.toString());
+        return "";
     }
 
     /**

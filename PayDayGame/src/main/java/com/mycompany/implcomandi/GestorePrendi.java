@@ -67,12 +67,12 @@ public class GestorePrendi implements Modifica, Serializable {
      * @param descrizione la descrizione del gioco
      */
     private void mostraDialogoDirettore() {
+        // Interazioni con l'utente tramite la console
         System.out.println("\nDirettore: Cosa stai facendo con quei documenti?");
         System.out.println("Giocatore: Direttore, ho trovato questi documenti nel caveau. Possono rovinarti.");
         System.out.println("Direttore: Quanto vuoi per il tuo silenzio?");
         System.out.println("Giocatore: Voglio una somma di denaro extra.");
         System.out.println("Direttore: Hai vinto. Prendi i soldi, ma sappi che se scegli di non ricattarmi, potrei aiutarti in futuro.");
         System.out.println("\nOra puoi decidere se ricattare il direttore per ottenere subito i soldi extra \no ignorarlo e potenzialmente avere un alleato in futuro.\n");
-}
-
+    }
 }

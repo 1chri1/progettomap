@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameWindow extends JFrame {
-    private JTextArea outputArea;
+    private static JTextArea outputArea;
     private JTextField inputField;
     private JButton sendButton;
     private Engine engine;
@@ -54,10 +54,16 @@ public class GameWindow extends JFrame {
         inputField.setText("");
         if (input != null && !input.trim().isEmpty()) {
             engine.processCommand(input);
+            outputArea.append(input + "\n"); // Aggiungi questo per visualizzare il comando nell'outputArea
         }
     }
 
     public JTextArea getOutputArea() {
         return outputArea;
+    }
+
+    public static void appendOutput(String text) { // Metodo statico per aggiungere testo all'outputArea
+        outputArea.append(text + "\n");
+        outputArea.setCaretPosition(outputArea.getDocument().getLength());
     }
 }
