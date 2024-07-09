@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.h2.tools.Server;
 
 /**
- * Classe Singleton che gestisce la connessione al database e la sua inizializzazione.
+ * Classe singleton che gestisce la connessione e l'inizializzazione del database.
  */
 public class DatabaseManager {
 
@@ -33,20 +33,20 @@ public class DatabaseManager {
      * Inizializza il server del database e si connette al database specificato.
      *
      * @param dbUrl L'URL del database.
-     * @param user Il nome utente per il database.
+     * @param user L'username per il database.
      * @param password La password per il database.
      * @throws SQLException Se si verifica un errore di accesso al database.
      */
     public void initializeAndConnect(String dbUrl, String user, String password) throws SQLException {
         try {
             int port = findFreePort();
-            System.out.println("Using port: " + port);
+            System.out.println("Utilizzo la porta: " + port);
 
-            h2Server = Server.createWebServer("-webPort", String.valueOf(port), "-tcpAllowOthers").start();
-            System.out.println("H2 console is running at: " + h2Server.getURL());
+            h2Server = Server.createWebServer("-webPort", String.valueOf(port), "-tcpAllowOthers", "-webAllowOthers").start();
+            System.out.println("La console H2 è in esecuzione su: " + h2Server.getURL());
 
             connection = DriverManager.getConnection(dbUrl, user, password);
-            this.dbName = dbUrl; // Memorizza l'URL del database attuale
+            this.dbName = dbUrl; // Memorizza l'URL corrente del database
 
             initializeDatabase();
             System.out.println("Database e tabelle create con successo!");
@@ -96,7 +96,7 @@ public class DatabaseManager {
     /**
      * Trova una porta libera per il server H2.
      *
-     * @return Un numero di porta libera.
+     * @return Un numero di porta libero.
      */
     private static int findFreePort() {
         try (var socket = new java.net.ServerSocket(0)) {
@@ -108,9 +108,9 @@ public class DatabaseManager {
     }
 
     /**
-     * Restituisce l'URL del database attuale.
+     * Restituisce l'URL corrente del database.
      *
-     * @return L'URL del database attuale.
+     * @return L'URL corrente del database.
      */
     public String getDbName() {
         return dbName;

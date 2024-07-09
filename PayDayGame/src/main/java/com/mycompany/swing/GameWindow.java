@@ -1,0 +1,63 @@
+package com.mycompany.swing;
+
+import com.mycompany.adventure.Engine;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class GameWindow extends JFrame {
+    private JTextArea outputArea;
+    private JTextField inputField;
+    private JButton sendButton;
+    private Engine engine;
+
+    public GameWindow(Engine engine) {
+        this.engine = engine;
+        setTitle("PayDayGame");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        outputArea = new JTextArea();
+        outputArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(outputArea);
+        add(scrollPane, BorderLayout.CENTER);
+
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BorderLayout());
+        inputField = new JTextField();
+        sendButton = new JButton("Send");
+
+        inputPanel.add(inputField, BorderLayout.CENTER);
+        inputPanel.add(sendButton, BorderLayout.EAST);
+
+        add(inputPanel, BorderLayout.SOUTH);
+
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                processInput();
+            }
+        });
+
+        inputField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                processInput();
+            }
+        });
+    }
+
+    private void processInput() {
+        String input = inputField.getText();
+        inputField.setText("");
+        if (input != null && !input.trim().isEmpty()) {
+            engine.processCommand(input);
+        }
+    }
+
+    public JTextArea getOutputArea() {
+        return outputArea;
+    }
+}

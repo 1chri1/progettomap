@@ -39,7 +39,7 @@ public class GestoreMovimento implements Modifica, Serializable {
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 1") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
-                    System.out.println("Sei andato avanti nel corridoio, ora vedi nuove porte");
+                    return "Sei andato avanti nel corridoio, ora vedi nuove porte";
                 }
                 nextRoom = stanzaCorrente.getNord();
                 messaggio = "A nord c'è ";

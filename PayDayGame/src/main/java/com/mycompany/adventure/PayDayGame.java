@@ -1,14 +1,28 @@
 package com.mycompany.adventure;
 
-import com.google.gson.JsonObject;
-import com.mycompany.implComandi.*;
-import com.mycompany.parser.ParserOutput;
-import com.mycompany.inizializzazione.InizializzazioneComandi;
-import com.mycompany.inizializzazione.InizializzazioneStanze;
-import com.mycompany.inizializzazione.InizializzazioneOggetti;
 import com.mycompany.db.DatabaseManager;
+import com.mycompany.implComandi.GestoreApri;
+import com.mycompany.implComandi.GestoreAscolta;
+import com.mycompany.implComandi.GestoreAttiva;
+import com.mycompany.implComandi.GestoreDisattiva;
+import com.mycompany.implComandi.GestoreEntra;
+import com.mycompany.implComandi.GestoreEsci;
+import com.mycompany.implComandi.GestoreGuarda;
+import com.mycompany.implComandi.GestoreInventario;
+import com.mycompany.implComandi.GestoreMovimento;
+import com.mycompany.implComandi.GestorePrendi;
+import com.mycompany.implComandi.GestoreRicatta;
+import com.mycompany.implComandi.GestoreSali;
+import com.mycompany.implComandi.GestoreScendi;
+import com.mycompany.implComandi.Modifica;
+import com.mycompany.inizializzazione.InizializzazioneComandi;
+import com.mycompany.inizializzazione.InizializzazioneOggetti;
+import com.mycompany.inizializzazione.InizializzazioneStanze;
 import com.mycompany.meteo.Meteo;
+import com.mycompany.parser.ParserOutput;
 import com.mycompany.thread.TimerGuardia;
+import com.mycompany.type.Comandi;
+import com.mycompany.type.Oggetto;
 import com.mycompany.type.Stanza;
 import com.mycompany.type.TipoComandi;
 
@@ -17,10 +31,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.io.PrintStream;
-import java.util.Scanner;
 
 /**
  * Classe che gestisce il gioco PayDay.
@@ -43,6 +56,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     private boolean timerAttivo;
     private int tempoRimastoTimer; // in secondi
     private boolean uscitoDalGioco;
+    private transient PrintStream outputStream;
 
     /**
      * Costruttore del gioco PayDay.
@@ -51,6 +65,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
      */
     public PayDayGame(DatabaseManager dbManager) {
         this.dbManager = dbManager;
+        this.outputStream = System.out; // Default to System.out
     }
 
     // Metodi di inizializzazione e gestione del gioco
@@ -123,13 +138,13 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                     return;
                 }
                 if ("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato()) {
-                    System.out.println("Sei stato arrestato perche' le telecamere sono attive. Il gioco e' terminato.");
+                    out.println("Sei stato arrestato perche' le telecamere sono attive. Il gioco e' terminato.");
                 }
                 return;
             }
             if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
                 setGiocoTerminato(true);
-                System.out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
+                out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
                 fermaTimer();  // Ferma il timer
                 return;
             }
@@ -170,7 +185,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                         setGiocoTerminato(true);
                         fermaTimer(); // Ferma il timer
                     }
-                    System.out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
+                    out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
                 } else {
                     out.println("Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante? (si'/no)");
                     Scanner scanner = new Scanner(System.in);
@@ -420,16 +435,16 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             PayDayGame giocoCaricato = (PayDayGame) in.readObject();
             // Reimposta il dbManager dopo il caricamento
             giocoCaricato.dbManager = DatabaseManager.getInstance();
-            System.out.println("Timer attivo: " + giocoCaricato.timerAttivo); // Debug per verificare lo stato del timer
+            outputStream.println("Timer attivo: " + giocoCaricato.timerAttivo); // Debug per verificare lo stato del timer
             if (giocoCaricato.timerAttivo) {
                 int minutiRimasti = giocoCaricato.tempoRimastoTimer / 60;
-                System.out.println("Tempo rimasto per il timer caricato: " + minutiRimasti + " minuti (" + giocoCaricato.tempoRimastoTimer + " secondi).");
+                outputStream.println("Tempo rimasto per il timer caricato: " + minutiRimasti + " minuti (" + giocoCaricato.tempoRimastoTimer + " secondi).");
                 giocoCaricato.startTimer(minutiRimasti); // Riavvia il timer con il tempo rimanente in minuti
-                System.out.println("Timer riavviato con successo.");
+                outputStream.println("Timer riavviato con successo.");
             }
             return giocoCaricato;
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Errore durante il caricamento della partita: " + e.getMessage());
+            outputStream.println("Errore durante il caricamento della partita: " + e.getMessage());
             throw e;
         }
     }
@@ -470,23 +485,23 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         List<String> salvataggi = elencoSalvataggi(directory);
 
         if (salvataggi.size() >= 5) {
-            System.out.println("Hai raggiunto il numero massimo di salvataggi. Scegli un file da sovrascrivere:");
+            outputStream.println("Hai raggiunto il numero massimo di salvataggi. Scegli un file da sovrascrivere:");
             for (int i = 0; i < salvataggi.size(); i++) {
-                System.out.println((i + 1) + ". " + salvataggi.get(i));
+                outputStream.println((i + 1) + ". " + salvataggi.get(i));
             }
             Scanner scanner = new Scanner(System.in);
             int scelta = scanner.nextInt();
             scanner.nextLine(); // consume newline left-over
 
             if (scelta < 1 || scelta > salvataggi.size()) {
-                System.out.println("Scelta non valida. Operazione annullata.");
+                outputStream.println("Scelta non valida. Operazione annullata.");
                 return;
             }
             
             String fileDaSovrascrivere = salvataggi.get(scelta - 1);
             File file = new File(directory, fileDaSovrascrivere);
             if (!file.delete()) {
-                System.out.println("Errore nella sovrascrittura del file. Operazione annullata.");
+                outputStream.println("Errore nella sovrascrittura del file. Operazione annullata.");
                 return;
             }
         }
@@ -495,9 +510,9 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         String fileName = "save_" + baseFileName + "_" + timeStamp + ".dat";
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(directory, fileName)))) {
             out.writeObject(this);
-            System.out.println("Partita salvata con successo come " + fileName);
+            outputStream.println("Partita salvata con successo come " + fileName);
         } catch (IOException e) {
-            System.err.println("Errore durante il salvataggio della partita: " + e.getMessage());
+            outputStream.println("Errore durante il salvataggio della partita: " + e.getMessage());
             throw e;
         }
     }
@@ -555,5 +570,15 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         boolean haSoldi = getInventario().stream().anyMatch(o -> "soldi".equalsIgnoreCase(o.getNome()));
         boolean haGioielli = getInventario().stream().anyMatch(o -> "gioielli".equalsIgnoreCase(o.getNome()));
         return haSoldi && haGioielli;
+    }
+
+    @Override
+    public void setOutputStream(PrintStream outputStream) {
+        this.outputStream = outputStream;
+    }
+
+    @Override
+    public PrintStream getOutputStream() {
+        return outputStream;
     }
 }
