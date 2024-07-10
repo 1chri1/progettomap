@@ -103,33 +103,32 @@ public class Engine {
 
             while (giocoAttivo && !game.isUscitoDalGioco()) {
                 if (partitaSalvata) {
-                    outputStream.println("Vuoi rimanere nella partita corrente o vuoi tornare al menu principale? (rimani/menu)");
-                    String scelta = readInput().trim().toLowerCase();
-                    if (scelta.equals("menu")) {
+                    int scelta = JOptionPane.showOptionDialog(null, "Vuoi rimanere nella partita corrente o vuoi tornare al menu principale?", "Scelta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Rimani", "Menu"}, "Rimani");
+                    if (scelta == JOptionPane.NO_OPTION) {
                         giocoAttivo = false;
                         partitaSalvata = false; // Resetta il flag per evitare il messaggio ripetuto
                         break;
-                    } else if (scelta.equals("rimani")) {
+                    } else if (scelta == JOptionPane.YES_OPTION) {
                         partitaSalvata = false; // Resetta il flag per continuare nella partita corrente
                     } else {
-                        outputStream.println("Scelta non valida. Operazione annullata.");
                         continue;
                     }
                 }
 
                 while (!game.isGiocoTerminato() && !partitaSalvata) {
                     String command = readInput();
+                    if (command == null) {
+                        continue;
+                    }
                     if (command.equalsIgnoreCase("salva")) {
                         salvaPartita();
                         break;
                     } else if (command.equalsIgnoreCase("carica")) {
                         outputStream.println("Per caricare una partita salvata devi uscire dalla partita in corso e tornare al menu iniziale.");
-                        outputStream.println("Vuoi procedere? (sì/no)");
-                        String conferma = readInput().trim().toLowerCase();
-                        if (conferma.equals("sì") || conferma.equals("si")) {
-                            outputStream.println("Vuoi salvare la partita corrente prima di tornare al menu? (sì/no)");
-                            String risposta = readInput().trim().toLowerCase();
-                            if (risposta.equals("sì") || risposta.equals("si")) {
+                        int conferma = JOptionPane.showConfirmDialog(null, "Vuoi procedere?", "Conferma Caricamento", JOptionPane.YES_NO_OPTION);
+                        if (conferma == JOptionPane.YES_OPTION) {
+                            int risposta = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di tornare al menu?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
+                            if (risposta == JOptionPane.YES_OPTION) {
                                 salvaPartita();
                             }
                             giocoAttivo = false;
@@ -139,12 +138,10 @@ public class Engine {
                         }
                         break;
                     } else if (command.equalsIgnoreCase("esci")) {
-                        outputStream.println("Sei sicuro di voler uscire dal gioco? (sì/no)");
-                        String confermaEsci = readInput().trim().toLowerCase();
-                        if (confermaEsci.equals("sì") || confermaEsci.equals("si")) {
-                            outputStream.println("Vuoi salvare la partita corrente prima di uscire? (sì/no)");
-                            String rispostaSalva = readInput().trim().toLowerCase();
-                            if (rispostaSalva.equals("sì") || rispostaSalva.equals("si")) {
+                        int confermaEsci = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire dal gioco?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
+                        if (confermaEsci == JOptionPane.YES_OPTION) {
+                            int rispostaSalva = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di uscire?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
+                            if (rispostaSalva == JOptionPane.YES_OPTION) {
                                 salvaPartita();
                             } else {
                                 game.fermaTimer(); // Ferma il timer quando si esce senza salvare
@@ -202,8 +199,10 @@ public class Engine {
 
         boolean sceltaValida = false;
         while (!sceltaValida) {
-            outputStream.print("Scegli un'opzione: ");
-            String scelta = readInput().trim().toLowerCase();
+            String scelta = JOptionPane.showInputDialog(null, "Scegli un'opzione:");
+            if (scelta == null) {
+                continue;
+            }
             switch (scelta) {
                 case "1":
                     nuovaPartita();
@@ -287,8 +286,7 @@ public class Engine {
      * Salva la partita corrente.
      */
     private void salvaPartita() {
-        outputStream.print("Inserisci il nome del salvataggio: ");
-        String nomeSalvataggio = readInput().trim();
+        String nomeSalvataggio = JOptionPane.showInputDialog(null, "Inserisci il nome del salvataggio:");
         try {
             game.salvaPartita(nomeSalvataggio);
             partitaSalvata = true; // Indica che la partita è stata salvata
@@ -308,12 +306,8 @@ public class Engine {
         } else {
             boolean sceltaValida = false;
             while (!sceltaValida) {
-                outputStream.println("Scegli un file da caricare:");
-                for (int i = 0; i < salvataggi.size(); i++) {
-                    outputStream.println((i + 1) + ". " + salvataggi.get(i));
-                }
-
-                String sceltaInput = readInput();
+                String sceltaInput = JOptionPane.showInputDialog(null, "Scegli un file da caricare:\n" + 
+                    String.join("\n", salvataggi));
                 int scelta;
                 try {
                     scelta = Integer.parseInt(sceltaInput);
@@ -385,7 +379,7 @@ public class Engine {
      *
      * @return la stringa inserita dall'utente
      */
-    public synchronized String readInput() {
+    public String readInput() {
         try {
             return inputQueue.take();
         } catch (InterruptedException e) {
@@ -401,10 +395,5 @@ public class Engine {
      */
     public void processCommand(String command) {
         enqueueInput(command);
-        notifyInput();
-    }
-
-    private synchronized void notifyInput() {
-        notify();
     }
 }

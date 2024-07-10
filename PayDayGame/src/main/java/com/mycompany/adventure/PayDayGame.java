@@ -27,22 +27,20 @@ import com.mycompany.type.Stanza;
 import com.mycompany.type.TipoComandi;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.swing.SwingUtilities;
+import javax.swing.JOptionPane;
 
 public class PayDayGame extends GestioneGioco implements GestoreComandi, Serializable {
 
-     private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final List<Modifica> osservatori = new ArrayList<>();
     private ParserOutput parserOutput;
     private final List<String> messaggi = new ArrayList<>();
@@ -60,7 +58,6 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     private boolean uscitoDalGioco;
     private transient PrintStream outputStream;
     private transient Engine engine;
- 
 
     /**
      * Costruttore del gioco PayDay.
@@ -71,12 +68,11 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         this.dbManager = dbManager;
         this.outputStream = System.out; // Default to System.out
     }
-    
+
     // Aggiungi un metodo per impostare l'engine
     public void setEngine(Engine engine) {
         this.engine = engine;
     }
-   
 
     // Metodi di inizializzazione e gestione del gioco
 
@@ -127,104 +123,92 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
      * @param out Il PrintStream per l'output dei messaggi
      */
     @Override
-public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
-    parserOutput = p;
-    messaggi.clear();
-    if (p.getComando() == null) {
-        out.println("Non ho capito cosa devo fare! Prova con un altro comando.");
-    } else {
-        Stanza cr = getStanzaCorrente();
-        notificaGestori();
-        boolean move = !cr.equals(getStanzaCorrente()) && getStanzaCorrente() != null;
-        if (!messaggi.isEmpty()) {
-            for (String m : messaggi) {
-                if (m.length() > 0) {
-                    out.println(m);
+    public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
+        parserOutput = p;
+        messaggi.clear();
+        if (p.getComando() == null) {
+            out.println("Non ho capito cosa devo fare! Prova con un altro comando.");
+        } else {
+            Stanza cr = getStanzaCorrente();
+            notificaGestori();
+            boolean move = !cr.equals(getStanzaCorrente()) && getStanzaCorrente() != null;
+            if (!messaggi.isEmpty()) {
+                for (String m : messaggi) {
+                    if (m.length() > 0) {
+                        out.println(m);
+                    }
                 }
             }
-        }
-        if (isGiocoTerminato()) {
-            if (p.getComando().getTipo() == TipoComandi.ESCI) {
+            if (isGiocoTerminato()) {
+                if (p.getComando().getTipo() == TipoComandi.ESCI) {
+                    return;
+                }
+                if ("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato()) {
+                    out.println("Sei stato arrestato perche' le telecamere sono attive. Il gioco e' terminato.");
+                }
                 return;
             }
-            if ("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato()) {
-                out.println("Sei stato arrestato perche' le telecamere sono attive. Il gioco e' terminato.");
+            if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
+                setGiocoTerminato(true);
+                out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
+                fermaTimer();  // Ferma il timer
+                return;
             }
-            return;
-        }
-        if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-            setGiocoTerminato(true);
-            out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
-            fermaTimer();  // Ferma il timer
-            return;
-        }
-        if (move) {
-            if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
-                if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
-                    ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-                    out.println("Ti trovi all'" + getStanzaCorrente().getNome());
-                    out.println(getStanzaCorrente().getDescrizione());
-                } else {
-                    if (("Lato destro".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
-                        ("Lato sinistro".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-                        out.println("Ti trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
+            if (move) {
+                if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
+                    if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
+                        ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                        out.println("Ti trovi all'" + getStanzaCorrente().getNome());
                         out.println(getStanzaCorrente().getDescrizione());
                     } else {
-                        if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
-                            "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
-                            "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) { 
-                            out.println("Ti trovi qui: " + getStanzaCorrente().getNome());
-                            out.println("================================================");
-                            out.println(getStanzaCorrente().getDescrizione());  
+                        if (("Lato destro".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
+                            ("Lato sinistro".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                            out.println("Ti trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
+                            out.println(getStanzaCorrente().getDescrizione());
+                        } else {
+                            if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
+                                "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
+                                "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) { 
+                                out.println("Ti trovi qui: " + getStanzaCorrente().getNome());
+                                out.println("================================================");
+                                out.println(getStanzaCorrente().getDescrizione());  
+                            }
                         }
                     }
-                }
-            } else {
-                out.println("Non sai dove sei entrato perche' e' tutto buio.");
-            }
-        }
-        if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-            if (hasSoldiGioielli()) {
-                int bottinoFinale = bottinoBase + (isRicattoDirettore() ? bottinoExtra : 0);
-                if (isRicattoDirettore()) {
-                    out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                 } else {
-                    out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                    out.println("Non sai dove sei entrato perche' e' tutto buio.");
                 }
-                setGiocoTerminato(true);
-                fermaTimer(); // Ferma il timer
-                out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
-            } else {
-                out.println("Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante? (si'/no)");
-                String risposta = engine.readInput();
-                if ("si".equalsIgnoreCase(risposta) || "si'".equalsIgnoreCase(risposta)) {
-                    int bottinoFinale = 0;
+            }
+            if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
+                if (hasSoldiGioielli()) {
+                    int bottinoFinale = bottinoBase + (isRicattoDirettore() ? bottinoExtra : 0);
                     if (isRicattoDirettore()) {
-                        bottinoFinale += bottinoExtra;
+                        out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                    } else {
+                        out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                     }
-                    out.println("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
                     setGiocoTerminato(true);
                     fermaTimer(); // Ferma il timer
+                    out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
                 } else {
-                    out.println("Hai deciso di rimanere e completare la missione.");
-                    setStanzaCorrente(cr);
+                    int risposta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
+                    if (risposta == JOptionPane.YES_OPTION) {
+                        int bottinoFinale = 0;
+                        if (isRicattoDirettore()) {
+                            bottinoFinale += bottinoExtra;
+                        }
+                        out.println("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
+                        setGiocoTerminato(true);
+                        fermaTimer(); // Ferma il timer
+                    } else {
+                        out.println("Hai deciso di rimanere e completare la missione.");
+                        setStanzaCorrente(cr);
+                    }
                 }
             }
         }
     }
-}
 
-
-private String leggiInput() {
-    synchronized (engine) {
-        try {
-            engine.wait(); // Attendi fino a quando non viene notificato
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-    return engine.readInput(); // Leggi l'input
-}
     // Metodi di gestione del timer
 
     /**
@@ -447,7 +431,7 @@ private String leggiInput() {
      * @throws IOException se si verifica un errore durante il caricamento
      * @throws ClassNotFoundException se la classe non viene trovata durante il caricamento
      */
- @Override
+    @Override
     public GestioneGioco caricaPartita(String filePath) throws IOException, ClassNotFoundException {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
             PayDayGame giocoCaricato = (PayDayGame) in.readObject();
@@ -466,6 +450,7 @@ private String leggiInput() {
             throw e;
         }
     }
+
     /**
      * Restituisce l'elenco dei file di salvataggio.
      *
@@ -498,63 +483,51 @@ private String leggiInput() {
      * @throws IOException se si verifica un errore durante il salvataggio
      */
     @Override
-public void gestisciSalvataggi(String baseFileName, String directory) throws IOException {
-    List<String> salvataggi = elencoSalvataggi(directory);
+    public void gestisciSalvataggi(String baseFileName, String directory) throws IOException {
+        List<String> salvataggi = elencoSalvataggi(directory);
 
-    if (salvataggi.size() >= 5) {
-        outputStream.println("Hai raggiunto il numero massimo di salvataggi. Scegli un file da sovrascrivere:");
-        for (int i = 0; i < salvataggi.size(); i++) {
-            outputStream.println((i + 1) + ". " + salvataggi.get(i));
-        }
+        if (salvataggi.size() >= 5) {
+            outputStream.println("Hai raggiunto il numero massimo di salvataggi. Scegli un file da sovrascrivere:");
+            for (int i = 0; i < salvataggi.size(); i++) {
+                outputStream.println((i + 1) + ". " + salvataggi.get(i));
+            }
 
-        final int[] scelta = new int[1];
-        scelta[0] = -1;
+            final int[] scelta = new int[1];
+            scelta[0] = -1;
 
-        // Leggi l'input per la scelta del file da sovrascrivere
-        while (scelta[0] < 1 || scelta[0] > salvataggi.size()) {
-            try {
-                // Attendi che l'engine legga l'input
-                synchronized (engine) {
-                    engine.wait(); // Attendi fino a quando non viene notificato
-                }
-                String sceltaInput = engine.readInput(); // Leggi l'input
-                scelta[0] = Integer.parseInt(sceltaInput);
-                if (scelta[0] < 1 || scelta[0] > salvataggi.size()) {
+            // Leggi l'input per la scelta del file da sovrascrivere
+            while (scelta[0] < 1 || scelta[0] > salvataggi.size()) {
+                String sceltaInput = JOptionPane.showInputDialog(null, "Inserisci il numero del file da sovrascrivere:");
+                try {
+                    scelta[0] = Integer.parseInt(sceltaInput);
+                    if (scelta[0] < 1 || scelta[0] > salvataggi.size()) {
+                        outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
+                        scelta[0] = -1; // Indica una scelta non valida
+                    }
+                } catch (NumberFormatException e) {
                     outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
                     scelta[0] = -1; // Indica una scelta non valida
                 }
-            } catch (NumberFormatException | InterruptedException e) {
-                outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
-                scelta[0] = -1; // Indica una scelta non valida
+            }
+
+            String fileDaSovrascrivere = salvataggi.get(scelta[0] - 1);
+            File file = new File(directory, fileDaSovrascrivere);
+            if (!file.delete()) {
+                outputStream.println("Errore nella sovrascrittura del file. Operazione annullata.");
+                return;
             }
         }
 
-        String fileDaSovrascrivere = salvataggi.get(scelta[0] - 1);
-        File file = new File(directory, fileDaSovrascrivere);
-        if (!file.delete()) {
-            outputStream.println("Errore nella sovrascrittura del file. Operazione annullata.");
-            return;
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "save_" + baseFileName + "_" + timeStamp + ".dat";
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(directory, fileName)))) {
+            out.writeObject(this);
+            outputStream.println("Partita salvata con successo come " + fileName);
+        } catch (IOException e) {
+            outputStream.println("Errore durante il salvataggio della partita: " + e.getMessage());
+            throw e;
         }
     }
-
-    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-    String fileName = "save_" + baseFileName + "_" + timeStamp + ".dat";
-    try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(directory, fileName)))) {
-        out.writeObject(this);
-        outputStream.println("Partita salvata con successo come " + fileName);
-    } catch (IOException e) {
-        outputStream.println("Errore durante il salvataggio della partita: " + e.getMessage());
-        throw e;
-    }
-}
-
-
-    public void notifyInput() {
-        synchronized (this) {
-            this.notify();
-        }
-    }      
-
 
     /**
      * Assegna un osservatore al gioco.

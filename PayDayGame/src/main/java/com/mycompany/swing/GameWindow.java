@@ -1,7 +1,7 @@
 package com.mycompany.swing;
 
 import com.mycompany.adventure.Engine;
-import com.mycompany.adventure.PayDayGame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -50,7 +50,7 @@ public class GameWindow extends JFrame {
         });
     }
 
-  private void processInput() {
+    private void processInput() {
         String input = inputField.getText();
         inputField.setText("");
         if (input != null && !input.trim().isEmpty()) {
@@ -58,8 +58,6 @@ public class GameWindow extends JFrame {
             outputArea.append(input + "\n"); // Aggiungi questo per visualizzare il comando nell'outputArea
         }
     }
-
-
 
     public JTextArea getOutputArea() {
         return outputArea;
