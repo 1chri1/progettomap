@@ -3,6 +3,7 @@ package com.mycompany.adventure;
 import com.mycompany.parser.Parser;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.db.DatabaseManager;
+import com.mycompany.meteo.Meteo;
 import com.mycompany.swing.GameWindow;
 import com.mycompany.swing.TextAreaOutputStream;
 
@@ -11,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -98,7 +98,7 @@ public class Engine {
         boolean running = true;
 
         while (running) {
-            mostraMenuIniziale();
+            gameWindow.showMenuPanel();
             boolean giocoAttivo = true;
 
             while (giocoAttivo && !game.isUscitoDalGioco()) {
@@ -106,10 +106,11 @@ public class Engine {
                     int scelta = JOptionPane.showOptionDialog(null, "Vuoi rimanere nella partita corrente o vuoi tornare al menu principale?", "Scelta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Rimani", "Menu"}, "Rimani");
                     if (scelta == JOptionPane.NO_OPTION) {
                         giocoAttivo = false;
-                        partitaSalvata = false; // Resetta il flag per evitare il messaggio ripetuto
+                        partitaSalvata = false;
+                        gameWindow.showMenuPanel();
                         break;
                     } else if (scelta == JOptionPane.YES_OPTION) {
-                        partitaSalvata = false; // Resetta il flag per continuare nella partita corrente
+                        partitaSalvata = false;
                     } else {
                         continue;
                     }
@@ -133,6 +134,7 @@ public class Engine {
                             }
                             giocoAttivo = false;
                             partitaSalvata = false;
+                            gameWindow.showMenuPanel();
                         } else {
                             outputStream.println("Operazione di caricamento annullata. Puoi continuare a giocare.");
                         }
@@ -144,7 +146,7 @@ public class Engine {
                             if (rispostaSalva == JOptionPane.YES_OPTION) {
                                 salvaPartita();
                             } else {
-                                game.fermaTimer(); // Ferma il timer quando si esce senza salvare
+                                game.fermaTimer();
                             }
                             outputStream.println("Hai deciso di uscire dal gioco. Arrivederci!");
                             giocoAttivo = false;
@@ -160,6 +162,7 @@ public class Engine {
                     } else {
                         game.ProssimoSpostamento(p, outputStream);
                         if (game.isGiocoTerminato()) {
+                            gameWindow.showMenuPanel();
                             break;
                         }
                         if (game.getStanzaCorrente() == null) {
@@ -171,55 +174,13 @@ public class Engine {
                 }
 
                 if (game.isGiocoTerminato()) {
+                    gameWindow.showMenuPanel();
                     break;
                 }
             }
 
             if (game.isUscitoDalGioco()) {
-                game.setUscitoDalGioco(false); // Resetta lo stato per il prossimo ciclo
-            }
-        }
-    }
-
-    /**
-     * Mostra il menu iniziale del gioco.
-     */
-    private void mostraMenuIniziale() {
-        outputStream.println("====================================================");
-        outputStream.println("*                  PayDayGame 2024                 *");
-        outputStream.println("*                   developed by                   *");
-        outputStream.println("*              Alessandro Aldo Mangione            *");
-        outputStream.println("*                   Tommaso Palumbo                *");
-        outputStream.println("*                   Christian Vurchio              *");
-        outputStream.println("====================================================");
-        outputStream.println();
-        outputStream.println("1. Inizia una nuova partita");
-        outputStream.println("2. Carica partita");
-        outputStream.println("3. Esci");
-
-        boolean sceltaValida = false;
-        while (!sceltaValida) {
-            String scelta = JOptionPane.showInputDialog(null, "Scegli un'opzione:");
-            if (scelta == null) {
-                continue;
-            }
-            switch (scelta) {
-                case "1":
-                    nuovaPartita();
-                    mostraMessaggioIniziale();
-                    sceltaValida = true;
-                    break;
-                case "2":
-                    caricaPartita();
-                    sceltaValida = true;
-                    break;
-                case "3":
-                    outputStream.println("Grazie per aver giocato! Alla prossima!");
-                    System.exit(0);
-                    break;
-                default:
-                    outputStream.println("Scelta non valida. Per favore, seleziona 1, 2 o 3.");
-                    break;
+                game.setUscitoDalGioco(false);
             }
         }
     }
@@ -227,7 +188,7 @@ public class Engine {
     /**
      * Inizia una nuova partita.
      */
-    private void nuovaPartita() {
+    public void nuovaPartita() {
         String dbUrl = "jdbc:h2:mem:testdb"; // Configurazione per il database in memoria
         String user = "user";
         String password = "password";
@@ -239,7 +200,9 @@ public class Engine {
             game = new PayDayGame(dbManager); // Crea un nuovo oggetto GestioneGioco
             game.setOutputStream(outputStream); // Imposta l'output stream nel nuovo gioco
             game.setEngine(this); // Passa l'istanza di Engine al gioco
+            GameWindow.clearOutput(); // Pulisce l'output prima di mostrare il messaggio iniziale
             inizializzaGioco(); // Inizializza il gioco
+            mostraMessaggioIniziale();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -248,7 +211,7 @@ public class Engine {
     /**
      * Mostra il messaggio iniziale del gioco.
      */
-    private void mostraMessaggioIniziale() {
+    public void mostraMessaggioIniziale() {
         outputStream.println();
         outputStream.println(Incipit());
         outputStream.println(game.MessaggioIniziale());
@@ -298,12 +261,13 @@ public class Engine {
     /**
      * Carica una partita salvata.
      */
-    private void caricaPartita() {
+    public void caricaPartita() {
         List<String> salvataggi = game.elencoSalvataggi(".");
         if (salvataggi.isEmpty()) {
             outputStream.println("Non ci sono salvataggi disponibili.");
-            mostraMenuIniziale(); // Torna al menu iniziale
+            gameWindow.showMenuPanel(); // Torna al menu iniziale
         } else {
+            gameWindow.clearOutput(); // Pulisce l'output prima di mostrare il messaggio iniziale
             boolean sceltaValida = false;
             while (!sceltaValida) {
                 String sceltaInput = JOptionPane.showInputDialog(null, "Scegli un file da caricare:\n" + 
@@ -396,4 +360,8 @@ public class Engine {
     public void processCommand(String command) {
         enqueueInput(command);
     }
+    
+    public GameWindow getGameWindow() {
+        return gameWindow;
+}
 }
