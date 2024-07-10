@@ -119,6 +119,12 @@ public class InizializzazioneOggetti {
             gioielli.setPrendibile(true);
             caveau.getOggetti().add(gioielli);
             insertOggetto(gioielli, caveau);
+            
+            Oggetto direttore = new Oggetto(12, "direttore", "capo");
+            direttore.setAlias(new String[]{"direttore"});
+            
+            caveau.getOggetti().add(direttore);
+            insertOggetto(direttore, caveau);
         }
 
         // Inizializzazione oggetti per l'ufficio del direttore
@@ -128,7 +134,7 @@ public class InizializzazioneOggetti {
             ufficioDirettore.getOggetti().add(armadio);
             insertOggetto(armadio, ufficioDirettore);
 
-            Oggetto tesserinoCaveau = new Oggetto(12, "tesserino caveau", "Tesserino per entrare nel caveau (nell’armadio).");
+            Oggetto tesserinoCaveau = new Oggetto(13, "tesserino caveau", "Tesserino per entrare nel caveau (nell’armadio).");
             tesserinoCaveau.setAlias(new String[]{"tesserino"});
             tesserinoCaveau.setPrendibile(true);
             armadio.aggiungi(tesserinoCaveau);

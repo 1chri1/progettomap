@@ -6,7 +6,6 @@ import com.mycompany.implComandi.GestoreAscolta;
 import com.mycompany.implComandi.GestoreAttiva;
 import com.mycompany.implComandi.GestoreDisattiva;
 import com.mycompany.implComandi.GestoreEntra;
-import com.mycompany.implComandi.GestoreEsci;
 import com.mycompany.implComandi.GestoreGuarda;
 import com.mycompany.implComandi.GestoreInventario;
 import com.mycompany.implComandi.GestoreMovimento;
@@ -109,7 +108,6 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         this.assegna(new GestoreEntra());
         this.assegna(new GestoreScendi());
         this.assegna(new GestoreSali());
-        this.assegna(new GestoreEsci());
         this.assegna(new GestoreAttiva());
         this.assegna(new GestoreRicatta());
 

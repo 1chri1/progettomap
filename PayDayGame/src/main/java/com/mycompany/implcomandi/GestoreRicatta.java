@@ -22,16 +22,24 @@ public class GestoreRicatta implements Modifica, Serializable {
     @Override
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
         if (parserOutput.getComando().getTipo() == TipoComandi.RICATTA) {
-            Oggetto documentiRicatto = descrizione.getInventario().stream()
-                    .filter(o -> "documenti ricatto".equalsIgnoreCase(o.getNome()))
-                    .findFirst()
-                    .orElse(null);
+            // Estrae l'oggetto dal parserOutput
+            String oggettoDaRicattare = parserOutput.getOggetto() != null ? parserOutput.getOggetto().getNome() : "";
 
-            if (documentiRicatto != null) {
-                descrizione.setRicattoDirettore(true);
-                return "Hai ricattato il direttore con i documenti! Ora il tuo bottino sarà più alto.";
+            // Verifica se l'oggetto è il direttore
+            if ("direttore".equalsIgnoreCase(oggettoDaRicattare)) {
+                Oggetto documentiRicatto = descrizione.getInventario().stream()
+                        .filter(o -> "documenti ricatto".equalsIgnoreCase(o.getNome()))
+                        .findFirst()
+                        .orElse(null);
+
+                if (documentiRicatto != null) {
+                    descrizione.setRicattoDirettore(true);
+                    return "Hai ricattato il direttore con i documenti! Ora il tuo bottino sarà più alto.";
+                } else {
+                    return "Non hai i documenti per ricattare il direttore.";
+                }
             } else {
-                return "Non hai i documenti per ricattare il direttore.";
+                return "Puoi ricattare solo il direttore.";
             }
         }
         return "";

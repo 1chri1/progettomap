@@ -129,8 +129,7 @@ public void execute() {
                     salvaPartita();
                     break;
                 } else if (command.equalsIgnoreCase("carica")) {
-                    outputStream.println("Per caricare una partita salvata devi uscire dalla partita in corso e tornare al menu iniziale.");
-                    int conferma = JOptionPane.showConfirmDialog(null, "Vuoi procedere?", "Conferma Caricamento", JOptionPane.YES_NO_OPTION);
+                    int conferma = JOptionPane.showConfirmDialog(null, "Per caricare una partita salvata devi uscire dalla partita in corso e tornare al menu iniziale. \nVuoi procedere?", "Conferma Caricamento", JOptionPane.YES_NO_OPTION);
                     if (conferma == JOptionPane.YES_OPTION) {
                         int risposta = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di tornare al menu?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
                         if (risposta == JOptionPane.YES_OPTION) {
