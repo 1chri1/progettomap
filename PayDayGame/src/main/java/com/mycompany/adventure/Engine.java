@@ -95,96 +95,102 @@ public class Engine {
     /**
      * Esegue il ciclo principale del gioco.
      */
-    public void execute() {
-        boolean running = true;
 
-        while (running) {
-            gameWindow.showMenuPanel();
-            boolean giocoAttivo = true;
+public void execute() {
+    boolean running = true;
+    
+    gameWindow.showMenuPanel();
+    while (running) {
+        
+        boolean giocoAttivo = true;
+        
+        while (giocoAttivo && !game.isUscitoDalGioco()) {
+            if (partitaSalvata) {
+                int scelta = JOptionPane.showOptionDialog(null, "Vuoi rimanere nella partita corrente o vuoi tornare al menu principale?", "Scelta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Rimani", "Menu"}, "Rimani");
+                if (scelta == JOptionPane.NO_OPTION) {
+                    giocoAttivo = false;
+                    partitaSalvata = false;
+                    gameWindow.showMenuPanel();
+                    break;
+                } else if (scelta == JOptionPane.YES_OPTION) {
+                    outputStream.println("Sei rimasto nella partita");
+                    partitaSalvata = false;
+                } else {
+                    continue;
+                }
+            }
 
-            while (giocoAttivo && !game.isUscitoDalGioco()) {
-                if (partitaSalvata) {
-                    int scelta = JOptionPane.showOptionDialog(null, "Vuoi rimanere nella partita corrente o vuoi tornare al menu principale?", "Scelta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Rimani", "Menu"}, "Rimani");
-                    if (scelta == JOptionPane.NO_OPTION) {
+            while (!game.isGiocoTerminato() && !partitaSalvata) {
+                String command = readInput();
+                if (command == null) {
+                    continue;
+                }
+                if (command.equalsIgnoreCase("salva")) {
+                    salvaPartita();
+                    break;
+                } else if (command.equalsIgnoreCase("carica")) {
+                    outputStream.println("Per caricare una partita salvata devi uscire dalla partita in corso e tornare al menu iniziale.");
+                    int conferma = JOptionPane.showConfirmDialog(null, "Vuoi procedere?", "Conferma Caricamento", JOptionPane.YES_NO_OPTION);
+                    if (conferma == JOptionPane.YES_OPTION) {
+                        int risposta = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di tornare al menu?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
+                        if (risposta == JOptionPane.YES_OPTION) {
+                            salvaPartita();
+                        }
                         giocoAttivo = false;
                         partitaSalvata = false;
                         gameWindow.showMenuPanel();
-                        break;
-                    } else if (scelta == JOptionPane.YES_OPTION) {
-                        partitaSalvata = false;
                     } else {
-                        continue;
+                        outputStream.println("Operazione di caricamento annullata. Puoi continuare a giocare.");
                     }
-                }
-
-                while (!game.isGiocoTerminato() && !partitaSalvata) {
-                    String command = readInput();
-                    if (command == null) {
-                        continue;
-                    }
-                    if (command.equalsIgnoreCase("salva")) {
-                        salvaPartita();
-                        break;
-                    } else if (command.equalsIgnoreCase("carica")) {
-                        outputStream.println("Per caricare una partita salvata devi uscire dalla partita in corso e tornare al menu iniziale.");
-                        int conferma = JOptionPane.showConfirmDialog(null, "Vuoi procedere?", "Conferma Caricamento", JOptionPane.YES_NO_OPTION);
-                        if (conferma == JOptionPane.YES_OPTION) {
-                            int risposta = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di tornare al menu?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
-                            if (risposta == JOptionPane.YES_OPTION) {
-                                salvaPartita();
-                            }
-                            giocoAttivo = false;
-                            partitaSalvata = false;
-                            gameWindow.showMenuPanel();
+                    break;
+                } else if (command.equalsIgnoreCase("esci")) {
+                    int confermaEsci = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire dal gioco?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
+                    if (confermaEsci == JOptionPane.YES_OPTION) {
+                        int rispostaSalva = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di uscire?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
+                        if (rispostaSalva == JOptionPane.YES_OPTION) {
+                            salvaPartita();
                         } else {
-                            outputStream.println("Operazione di caricamento annullata. Puoi continuare a giocare.");
+                            game.fermaTimer();
                         }
-                        break;
-                    } else if (command.equalsIgnoreCase("esci")) {
-                        int confermaEsci = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire dal gioco?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
-                        if (confermaEsci == JOptionPane.YES_OPTION) {
-                            int rispostaSalva = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di uscire?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
-                            if (rispostaSalva == JOptionPane.YES_OPTION) {
-                                salvaPartita();
-                            } else {
-                                game.fermaTimer();
-                            }
-                            outputStream.println("Hai deciso di uscire dal gioco. Arrivederci!");
-                            giocoAttivo = false;
-                            game.setUscitoDalGioco(true);
-                        } else {
-                            outputStream.println("Operazione di uscita annullata. Puoi continuare a giocare.");
-                        }
-                        break;
-                    }
-                    ParserOutput p = parser.parse(command, game.getComandi(), game.getStanzaCorrente().getOggetti(), game.getInventario(), game.getStanze());
-                    if (p == null || p.getComando() == null) {
-                        outputStream.println("Non capisco quello che mi vuoi dire.");
+                        
+                        giocoAttivo = false;
+                        game.setUscitoDalGioco(true);
                     } else {
-                        game.ProssimoSpostamento(p, outputStream);
-                        if (game.isGiocoTerminato()) {
-                            gameWindow.showMenuPanel();
-                            break;
-                        }
-                        if (game.getStanzaCorrente() == null) {
-                            outputStream.println("La tua avventura termina qui! Complimenti!");
-                            System.exit(0);
-                        }
+                        outputStream.println("Operazione di uscita annullata. Puoi continuare a giocare.");
                     }
-                    outputStream.print("?> ");
-                }
-
-                if (game.isGiocoTerminato()) {
-                    gameWindow.showMenuPanel();
                     break;
                 }
+                ParserOutput p = parser.parse(command, game.getComandi(), game.getStanzaCorrente().getOggetti(), game.getInventario(), game.getStanze());
+                if (p == null || p.getComando() == null) {
+                    outputStream.println("Non capisco quello che mi vuoi dire.");
+                } else {
+                    game.ProssimoSpostamento(p, outputStream);
+                    if (game.isGiocoTerminato()) {
+                        partitaSalvata = false; // Impostiamo questo a false per assicurarsi che non mostri il menu di nuovo
+                        break;  
+                    }
+                    if (game.getStanzaCorrente() == null) {
+                        outputStream.println("La tua avventura termina qui! Complimenti!");
+                        System.exit(0);
+                    }
+                }
+                outputStream.print("?> ");
             }
 
-            if (game.isUscitoDalGioco()) {
-                game.setUscitoDalGioco(false);
+            if (game.isGiocoTerminato()) {
+                gameWindow.showMenuPanel();
+                break;
             }
         }
+
+        if (game.isUscitoDalGioco()) {
+            game.setUscitoDalGioco(false);
+        }
     }
+}
+
+
+
 
     /**
      * Inizia una nuova partita.
@@ -203,6 +209,7 @@ public class Engine {
             game.setEngine(this); // Passa l'istanza di Engine al gioco
             GameWindow.clearOutput(); // Pulisce l'output prima di mostrare il messaggio iniziale
             inizializzaGioco(); // Inizializza il gioco
+            
             mostraMessaggioIniziale();
         } catch (SQLException e) {
             e.printStackTrace();
