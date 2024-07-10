@@ -220,6 +220,9 @@ public void execute() {
      * Mostra il messaggio iniziale del gioco.
      */
     public void mostraMessaggioIniziale() {
+        
+         // Stampa informazioni meteo
+        Meteo.stampaMeteo("Rome");
         outputStream.println();
         outputStream.println(Incipit());
         outputStream.println(game.MessaggioIniziale());

@@ -72,10 +72,13 @@ public class GameWindow extends JFrame {
         return outputArea;
     }
 
-    public static void appendOutput(String text) {
+   public static void appendOutput(String text) {
+    SwingUtilities.invokeLater(() -> {
         outputArea.append(text + "\n");
         outputArea.setCaretPosition(outputArea.getDocument().getLength());
-    }
+    });
+}
+
 
     public static void clearOutput() {
         outputArea.setText("");

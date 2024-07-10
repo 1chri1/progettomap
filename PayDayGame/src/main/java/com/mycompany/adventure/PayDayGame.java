@@ -113,8 +113,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         this.assegna(new GestoreAttiva());
         this.assegna(new GestoreRicatta());
 
-        // Stampa informazioni meteo
-        Meteo.stampaMeteo("Rome");
+       
 
         Stanza hall = Stanza.trovaStanza(0, "Esterno dell'ingresso principale");
         setStanzaCorrente(hall);
