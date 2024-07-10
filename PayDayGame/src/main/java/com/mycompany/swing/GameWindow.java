@@ -110,5 +110,10 @@ public class GameWindow extends JFrame {
         inputField.setEnabled(enabled);
         sendButton.setEnabled(enabled);
     }
+    
+    public MenuPanel getMenuPanel() {
+        return menuPanel;
+    }
+
 
 }

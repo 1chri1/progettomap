@@ -40,6 +40,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class PayDayGame extends GestioneGioco implements GestoreComandi, Serializable {
 
@@ -289,15 +290,19 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                 this.giocoTerminato = true;
                 uscitoDalGioco = true;
                 scheduler.shutdown();
-                // Riabilita l'input se necessario
-                engine.getGameWindow().setInputEnabled(true);
-            }, 10, TimeUnit.SECONDS);
+                // Torna al menu principale
+                SwingUtilities.invokeLater(() -> engine.getGameWindow().showMenuPanel());
+            }, 5, TimeUnit.SECONDS);
+            engine.getGameWindow().setInputEnabled(true); // Assicura che l'input sia abilitato
+
         } else {
             this.giocoTerminato = false;
             uscitoDalGioco = false;
             engine.getGameWindow().setInputEnabled(true); // Assicura che l'input sia abilitato
         }
     }
+
+
 
 
 
