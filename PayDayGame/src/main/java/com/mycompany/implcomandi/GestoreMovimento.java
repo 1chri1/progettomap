@@ -40,10 +40,16 @@ public class GestoreMovimento implements Modifica, Serializable {
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 1") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
-                    GameWindow.appendOutput("Sei andato avanti nel corridoio, ora vedi nuove porte");
+                    if(!descrizione.isQuadroElettricoDisattivato()||descrizione.isTorciaAccesa())
+                    {
+                        GameWindow.appendOutput("Sei andato avanti nel corridoio, ora vedi nuove porte");
+                    }
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Hall")){
-                    GameWindow.appendOutput("Sei entrato nel corridoio, ora vedi nuove porte");
+                    if(!descrizione.isQuadroElettricoDisattivato()||descrizione.isTorciaAccesa())
+                    {
+                        GameWindow.appendOutput("Sei entrato nel corridoio, ora vedi nuove porte");
+                    }
                 }
                 nextRoom = stanzaCorrente.getNord();
                 messaggio = "A nord c'è ";
@@ -55,7 +61,10 @@ public class GestoreMovimento implements Modifica, Serializable {
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 3") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
-                    GameWindow.appendOutput("Sei andato avanti nel corridoio, ora vedi nuove porte");
+                    if(!descrizione.isQuadroElettricoDisattivato()||descrizione.isTorciaAccesa())
+                    {
+                        GameWindow.appendOutput("Sei andato avanti nel corridoio, ora vedi nuove porte");
+                    }
                 }
                 nextRoom = stanzaCorrente.getSud();
                 messaggio = "A sud c'è ";
