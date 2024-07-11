@@ -6,6 +6,7 @@ import com.mycompany.db.DatabaseManager;
 import com.mycompany.meteo.Meteo;
 import com.mycompany.swing.GameWindow;
 import com.mycompany.swing.TextAreaOutputStream;
+import com.mycompany.thread.TimerGuardia;
 
 import javax.swing.*;
 import java.io.File;
@@ -149,7 +150,6 @@ public void execute() {
                         if (rispostaSalva == JOptionPane.YES_OPTION) {
                             salvaPartita();
                         } else {
-                            game.fermaTimer();
                             outputStream.println("Stai per uscire dal gioco, attendere...");
                             game.setGiocoTerminato(true);
                         }

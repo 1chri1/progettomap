@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class TimerGuardia implements Runnable, Serializable {
     private static final long serialVersionUID = 1L;
     private int tempoRimasto; // in secondi
-    private boolean running;
+    private static boolean running;
     private transient final GestioneGioco gioco;
 
     /**
@@ -66,7 +66,7 @@ public class TimerGuardia implements Runnable, Serializable {
     /**
      * Metodo per fermare il timer.
      */
-    public void stop() {
+    public static void stop() {
         running = false;
         Thread.currentThread().interrupt(); // Interrompe il thread per fermare immediatamente l'esecuzione
     }

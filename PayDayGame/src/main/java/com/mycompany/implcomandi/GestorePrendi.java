@@ -39,7 +39,7 @@ public class GestorePrendi implements Modifica, Serializable {
                     descrizione.getStanzaCorrente().getOggetti().remove(parserOutput.getOggetto());
                     msg.append("Hai appena raccolto: ").append(parserOutput.getOggetto().getDescrizione());
                     
-                    if (haDocumentiRicatto(descrizione)) {
+                    if (haDocumentiRicatto(descrizione)&&parserOutput.getOggetto().getNome().equalsIgnoreCase("documenti ricatto")) {
                         mostraDialogoDirettore();
                     }
                 } else {

@@ -134,8 +134,6 @@ public abstract class GestioneGioco implements Serializable {
 
     public abstract void setUscitoDalGioco(boolean uscitoDalGioco);
 
-    public abstract void fermaTimer();
-
     // Metodi di gestione del timer
 
     public abstract void startTimer(int minuti);

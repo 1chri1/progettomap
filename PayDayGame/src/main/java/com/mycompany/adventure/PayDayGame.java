@@ -19,6 +19,7 @@ import com.mycompany.inizializzazione.InizializzazioneOggetti;
 import com.mycompany.inizializzazione.InizializzazioneStanze;
 import com.mycompany.meteo.Meteo;
 import com.mycompany.parser.ParserOutput;
+import com.mycompany.swing.GameWindow;
 import com.mycompany.thread.TimerGuardia;
 import com.mycompany.type.Comandi;
 import com.mycompany.type.Oggetto;
@@ -141,37 +142,10 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
                 }
             }
         }
-        if (p.getComando().getTipo() == TipoComandi.ESCI) {
-            int confermaEsci = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire dal gioco?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
-
-            if (confermaEsci == JOptionPane.YES_OPTION) {
-                int rispostaSalva = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di uscire?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
-
-                if (rispostaSalva == JOptionPane.YES_OPTION) {
-                    try {
-                        salvaPartita("salvataggio_uscita");
-                        out.println("Partita salvata con successo.");
-                    } catch (Exception e) {
-                        out.println("Errore durante il salvataggio della partita: " + e.getMessage());
-                    }
-                } else {
-                    fermaTimer();
-                }
-
-                out.println("Hai deciso di uscire dal gioco. Arrivederci!");
-                setGiocoTerminato(true);
-                setUscitoDalGioco(true);
-                return; // Esci immediatamente dal metodo per evitare ulteriori elaborazioni
-            } else {
-                out.println("Hai deciso di rimanere nel gioco.");
-                return; // Esci immediatamente dal metodo per evitare ulteriori elaborazioni
-            }
-        }
 
         if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
             out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
             setGiocoTerminato(true);
-            fermaTimer();  // Ferma il timer
             return;
         }
         if (move) {
@@ -208,9 +182,7 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
                     out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                 }
                 setGiocoTerminato(true);
-                fermaTimer(); // Ferma il timer
                 out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
-                return; // Aggiunto il ritorno qui per fermare ulteriori elaborazioni
             } else {
                 int risposta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
                 if (risposta == JOptionPane.YES_OPTION) {
@@ -218,14 +190,11 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
                     if (isRicattoDirettore()) {
                         bottinoFinale += bottinoExtra;
                     }
-                    outputStream.println("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
+                    GameWindow.appendOutput("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
                     setGiocoTerminato(true);
-                    fermaTimer(); // Ferma il timer
-                    return; // Aggiunto il ritorno qui per fermare ulteriori elaborazioni
                 } else {
                     outputStream.println("Hai deciso di rimanere e completare la missione.");
                     setStanzaCorrente(cr);
-                    return; // Esci immediatamente dal metodo per evitare ulteriori elaborazioni
                 }
             }
         }
@@ -235,19 +204,6 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
 
 
     // Metodi di gestione del timer
-
-    /**
-     * Ferma il timer della guardia se è attivo.
-     */
-    @Override
-    public void fermaTimer() {
-        if (timerGuardia != null) {
-            timerGuardia.stop();
-            timerGuardia = null;
-            timerThread = null;
-        }
-        timerAttivo = false;
-    }
 
     /**
      * Avvia il timer della guardia.
