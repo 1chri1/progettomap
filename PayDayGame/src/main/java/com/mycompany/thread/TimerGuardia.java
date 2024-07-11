@@ -11,7 +11,7 @@ public class TimerGuardia implements Runnable, Serializable {
     private static final long serialVersionUID = 1L;
     private int tempoRimasto; // in secondi
     private boolean running;
-    private transient GestioneGioco gioco;
+    private transient final GestioneGioco gioco;
 
     /**
      * Costruttore della classe TimerGuardia.
@@ -80,12 +80,4 @@ public class TimerGuardia implements Runnable, Serializable {
         return tempoRimasto;
     }
 
-    /**
-     * Imposta il riferimento all'oggetto GestioneGioco.
-     *
-     * @param gioco il riferimento all'oggetto GestioneGioco da impostare
-     */
-    public void setGioco(GestioneGioco gioco) {
-        this.gioco = gioco;
-    }
 }

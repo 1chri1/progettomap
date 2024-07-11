@@ -150,10 +150,10 @@ public void execute() {
                             salvaPartita();
                         } else {
                             game.fermaTimer();
+                            outputStream.println("Stai per uscire dal gioco, attendere...");
+                            game.setGiocoTerminato(true);
                         }
-                        
                         giocoAttivo = false;
-                        game.setUscitoDalGioco(true);
                     } else {
                         outputStream.println("Operazione di uscita annullata. Puoi continuare a giocare.");
                     }

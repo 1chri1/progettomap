@@ -111,7 +111,8 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         this.assegna(new GestoreAttiva());
         this.assegna(new GestoreRicatta());
 
-       
+        engine.getGameWindow().setInputEnabled(true); // Assicura che l'input sia abilitato
+
 
         Stanza hall = Stanza.trovaStanza(0, "Esterno dell'ingresso principale");
         setStanzaCorrente(hall);
@@ -302,7 +303,7 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
   @Override
 public void setGiocoTerminato(boolean giocoTerminato) {
     if (giocoTerminato) {
-        // Disabilita l'input
+        // Disabilita l'input e stampa il messaggio
         engine.getGameWindow().setInputEnabled(false);
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -479,6 +480,8 @@ public void setGiocoTerminato(boolean giocoTerminato) {
             PayDayGame giocoCaricato = (PayDayGame) in.readObject();
             // Reimposta il dbManager dopo il caricamento
             giocoCaricato.dbManager = DatabaseManager.getInstance();
+            engine.getGameWindow().setInputEnabled(true); // Assicura che l'input sia abilitato
+
             outputStream.println("Timer attivo: " + giocoCaricato.timerAttivo); // Debug per verificare lo stato del timer
             if (giocoCaricato.timerAttivo) {
                 int minutiRimasti = giocoCaricato.tempoRimastoTimer / 60;
