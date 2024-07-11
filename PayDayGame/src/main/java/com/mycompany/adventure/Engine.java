@@ -259,53 +259,76 @@ public void execute() {
      * Salva la partita corrente.
      */
     private void salvaPartita() {
-        String nomeSalvataggio = JOptionPane.showInputDialog(null, "Inserisci il nome del salvataggio:");
-        try {
-            game.salvaPartita(nomeSalvataggio);
-            partitaSalvata = true; // Indica che la partita è stata salvata
-        } catch (IOException e) {
-            outputStream.println("Errore durante il salvataggio della partita: " + e.getMessage());
+    String nomeSalvataggio = null;
+    while (true) {
+        nomeSalvataggio = JOptionPane.showInputDialog(null, "Inserisci il nome del salvataggio:");
+        if (nomeSalvataggio == null) { // Se l'utente ha cliccato "Cancel"
+            outputStream.println("Operazione di salvataggio annullata.");
+            return; // Esce dal metodo senza salvare
         }
+        if (!nomeSalvataggio.trim().isEmpty()) {
+            break; // Esce dal ciclo se l'input non è vuoto
+        }
+        outputStream.println("Il nome del salvataggio non può essere vuoto. Riprova.");
     }
+
+    try {
+        game.salvaPartita(nomeSalvataggio);
+        partitaSalvata = true; // Indica che la partita è stata salvata
+    } catch (IOException e) {
+        outputStream.println("Errore durante il salvataggio della partita: " + e.getMessage());
+    }
+}
+
 
     /**
      * Carica una partita salvata.
      */
     public void caricaPartita() {
-        List<String> salvataggi = game.elencoSalvataggi(".");
-        if (salvataggi.isEmpty()) {
-            outputStream.println("Non ci sono salvataggi disponibili.");
-            gameWindow.showMenuPanel(); // Torna al menu iniziale
-        } else {
-            gameWindow.clearOutput(); // Pulisce l'output prima di mostrare il messaggio iniziale
-            boolean sceltaValida = false;
-            while (!sceltaValida) {
-                String sceltaInput = JOptionPane.showInputDialog(null, "Scegli un file da caricare:\n" + 
-                    String.join("\n", salvataggi));
-                int scelta;
-                try {
-                    scelta = Integer.parseInt(sceltaInput);
-                    if (scelta < 1 || scelta > salvataggi.size()) {
-                        outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
-                    } else {
-                        String fileDaCaricare = salvataggi.get(scelta - 1);
-                        try {
-                            game = (GestioneGioco) game.caricaPartita(fileDaCaricare);
-                            game.setOutputStream(outputStream); // Imposta l'output stream nel gioco caricato
-                            game.setEngine(this); // Imposta l'istanza di Engine nel gioco caricato
-                            outputStream.println("Partita caricata con successo.");
-                            sceltaValida = true;
-                            partitaSalvata = false; // Resetta il flag per evitare il messaggio ripetuto
-                        } catch (IOException | ClassNotFoundException e) {
-                            outputStream.println("Errore durante il caricamento della partita: " + e.getMessage());
-                        }
-                    }
-                } catch (NumberFormatException e) {
+    List<String> salvataggi = game.elencoSalvataggi(".");
+    if (salvataggi.isEmpty()) {
+        outputStream.println("Non ci sono salvataggi disponibili.");
+        gameWindow.showMenuPanel(); // Torna al menu iniziale
+    } else {
+        gameWindow.clearOutput(); // Pulisce l'output prima di mostrare il messaggio iniziale
+        boolean sceltaValida = false;
+        while (!sceltaValida) {
+            StringBuilder elencoSalvataggi = new StringBuilder("Scegli un file da caricare:\n");
+            for (int i = 0; i < salvataggi.size(); i++) {
+                elencoSalvataggi.append((i + 1)).append(". ").append(salvataggi.get(i)).append("\n");
+            }
+            String sceltaInput = JOptionPane.showInputDialog(null, elencoSalvataggi.toString());
+            if (sceltaInput == null) { // Se l'utente ha cliccato "Cancel"
+                SwingUtilities.invokeLater(() -> this.getGameWindow().showMenuPanel());
+                break;
+            }
+            int scelta;
+            try {
+                scelta = Integer.parseInt(sceltaInput);
+                if (scelta < 1 || scelta > salvataggi.size()) {
                     outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
+                } else {
+                    String fileDaCaricare = salvataggi.get(scelta - 1);
+                    try {
+                        game = (GestioneGioco) game.caricaPartita(fileDaCaricare);
+                        game.setOutputStream(outputStream); // Imposta l'output stream nel gioco caricato
+                        game.setEngine(this); // Imposta l'istanza di Engine nel gioco caricato
+                        outputStream.println("Partita caricata con successo.");
+                        sceltaValida = true;
+                        partitaSalvata = false; // Resetta il flag per evitare il messaggio ripetuto
+                    } catch (IOException | ClassNotFoundException e) {
+                        outputStream.println("Errore durante il caricamento della partita: " + e.getMessage());
+                    }
                 }
+            } catch (NumberFormatException e) {
+                outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
             }
         }
     }
+}
+
+
+
 
     /**
      * Metodo principale per avviare il gioco.

@@ -123,7 +123,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
      * @param p   L'output del parser contenente il comando e altri dettagli
      * @param out Il PrintStream per l'output dei messaggi
      */
-   @Override
+ @Override
 public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
     parserOutput = p;
     messaggi.clear();
@@ -167,18 +167,9 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
             }
         }
 
-        if (isGiocoTerminato()) {
-            if (p.getComando().getTipo() == TipoComandi.ESCI) {
-                return;
-            }
-            if ("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato()) {
-                out.println("Sei stato arrestato perche' le telecamere sono attive. Il gioco e' terminato.");
-            }
-            return;
-        }
         if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-            setGiocoTerminato(true);
             out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
+            setGiocoTerminato(true);
             fermaTimer();  // Ferma il timer
             return;
         }
@@ -208,7 +199,7 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
             }
         }
         if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-            if (hasSoldiGioielli()) {
+              if (hasSoldi() && hasGioielli()) {
                 int bottinoFinale = bottinoBase + (isRicattoDirettore() ? bottinoExtra : 0);
                 if (isRicattoDirettore()) {
                     out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
@@ -218,6 +209,7 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
                 setGiocoTerminato(true);
                 fermaTimer(); // Ferma il timer
                 out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
+                return; // Aggiunto il ritorno qui per fermare ulteriori elaborazioni
             } else {
                 int risposta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
                 if (risposta == JOptionPane.YES_OPTION) {
@@ -225,17 +217,20 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
                     if (isRicattoDirettore()) {
                         bottinoFinale += bottinoExtra;
                     }
-                    out.println("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
+                    outputStream.println("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
                     setGiocoTerminato(true);
                     fermaTimer(); // Ferma il timer
+                    return; // Aggiunto il ritorno qui per fermare ulteriori elaborazioni
                 } else {
-                    out.println("Hai deciso di rimanere e completare la missione.");
+                    outputStream.println("Hai deciso di rimanere e completare la missione.");
                     setStanzaCorrente(cr);
+                    return; // Esci immediatamente dal metodo per evitare ulteriori elaborazioni
                 }
             }
         }
     }
 }
+
 
 
     // Metodi di gestione del timer
@@ -304,28 +299,27 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
      *
      * @param giocoTerminato true se il gioco è terminato, altrimenti false
      */
-    @Override
-    public void setGiocoTerminato(boolean giocoTerminato) {
-        if (giocoTerminato) {
-            // Disabilita l'input
-            engine.getGameWindow().setInputEnabled(false);
+  @Override
+public void setGiocoTerminato(boolean giocoTerminato) {
+    if (giocoTerminato) {
+        // Disabilita l'input
+        engine.getGameWindow().setInputEnabled(false);
 
-            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.schedule(() -> {
-                this.giocoTerminato = true;
-                uscitoDalGioco = true;
-                scheduler.shutdown();
-                // Torna al menu principale
-                SwingUtilities.invokeLater(() -> engine.getGameWindow().showMenuPanel());
-            }, 5, TimeUnit.SECONDS);
-            engine.getGameWindow().setInputEnabled(true); // Assicura che l'input sia abilitato
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.schedule(() -> {
+            this.giocoTerminato = true;
+            uscitoDalGioco = true;
+            scheduler.shutdown();
+            // Torna al menu principale
+            SwingUtilities.invokeLater(() -> engine.getGameWindow().showMenuPanel());
+        }, 5, TimeUnit.SECONDS);
 
-        } else {
-            this.giocoTerminato = false;
-            uscitoDalGioco = false;
-            engine.getGameWindow().setInputEnabled(true); // Assicura che l'input sia abilitato
-        }
+    } else {
+        this.giocoTerminato = false;
+        uscitoDalGioco = false;
+        engine.getGameWindow().setInputEnabled(true); // Assicura che l'input sia abilitato
     }
+}
 
 
 
@@ -530,36 +524,39 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
      * @param directory    la directory in cui salvare i file
      * @throws IOException se si verifica un errore durante il salvataggio
      */
-   @Override
+ @Override
 public void gestisciSalvataggi(String baseFileName, String directory) throws IOException {
     List<String> salvataggi = elencoSalvataggi(directory);
     boolean salvataggioCompleto = false;
 
     if (salvataggi.size() >= 5) {
-        outputStream.println("Hai raggiunto il numero massimo di salvataggi. Scegli un file da sovrascrivere:");
+        StringBuilder elencoSalvataggi = new StringBuilder("Hai raggiunto il numero massimo di salvataggi.\nScegli un file da sovrascrivere:\n");
         for (int i = 0; i < salvataggi.size(); i++) {
-            outputStream.println((i + 1) + ". " + salvataggi.get(i));
+            elencoSalvataggi.append((i + 1)).append(". ").append(salvataggi.get(i)).append("\n");
         }
 
-        final int[] scelta = new int[1];
-        scelta[0] = -1;
+        int scelta = -1;
 
         // Leggi l'input per la scelta del file da sovrascrivere
-        while (scelta[0] < 1 || scelta[0] > salvataggi.size()) {
-            String sceltaInput = JOptionPane.showInputDialog(null, "Inserisci il numero del file da sovrascrivere:");
+        while (scelta < 1 || scelta > salvataggi.size()) {
+            String sceltaInput = JOptionPane.showInputDialog(null, elencoSalvataggi.toString());
+            if (sceltaInput == null) { // Se l'utente ha cliccato "Cancel"
+                outputStream.println("Operazione di sovrascrittura annullata.");
+                return;
+            }
             try {
-                scelta[0] = Integer.parseInt(sceltaInput);
-                if (scelta[0] < 1 || scelta[0] > salvataggi.size()) {
+                scelta = Integer.parseInt(sceltaInput);
+                if (scelta < 1 || scelta > salvataggi.size()) {
                     outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
-                    scelta[0] = -1; // Indica una scelta non valida
+                    scelta = -1; // Indica una scelta non valida
                 }
             } catch (NumberFormatException e) {
                 outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
-                scelta[0] = -1; // Indica una scelta non valida
+                scelta = -1; // Indica una scelta non valida
             }
         }
 
-        String fileDaSovrascrivere = salvataggi.get(scelta[0] - 1);
+        String fileDaSovrascrivere = salvataggi.get(scelta - 1);
         File file = new File(directory, fileDaSovrascrivere);
         if (!file.delete()) {
             outputStream.println("Errore nella sovrascrittura del file. Operazione annullata.");
@@ -628,11 +625,14 @@ public void gestisciSalvataggi(String baseFileName, String directory) throws IOE
      *
      * @return true se l'inventario contiene sia soldi che gioielli, altrimenti false
      */
-    private boolean hasSoldiGioielli() {
-        boolean haSoldi = getInventario().stream().anyMatch(o -> "soldi".equalsIgnoreCase(o.getNome()));
-        boolean haGioielli = getInventario().stream().anyMatch(o -> "gioielli".equalsIgnoreCase(o.getNome()));
-        return haSoldi && haGioielli;
-    }
+    private boolean hasSoldi() {
+    return getInventario().stream().anyMatch(o -> "soldi".equalsIgnoreCase(o.getNome()));
+}
+
+private boolean hasGioielli() {
+    return getInventario().stream().anyMatch(o -> "gioielli".equalsIgnoreCase(o.getNome()));
+}
+
 
     @Override
     public void setOutputStream(PrintStream outputStream) {

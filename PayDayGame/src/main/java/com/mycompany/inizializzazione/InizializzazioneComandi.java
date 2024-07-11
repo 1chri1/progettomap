@@ -36,7 +36,7 @@ public class InizializzazioneComandi {
         game.getComandi().add(ovest);
 
         Comandi esci = new Comandi(TipoComandi.ESCI, "esci");
-        esci.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati", "exit", "basta"});
+        esci.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati", "exit", "basta",});
         game.getComandi().add(esci);
 
         Comandi guarda = new Comandi(TipoComandi.GUARDA, "guarda");
