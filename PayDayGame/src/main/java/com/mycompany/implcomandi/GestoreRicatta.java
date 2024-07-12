@@ -22,6 +22,11 @@ public class GestoreRicatta implements Modifica, Serializable {
     @Override
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
         if (parserOutput.getComando().getTipo() == TipoComandi.RICATTA) {
+            // Verifica se la stanza corrente è il caveau
+            if (!"caveau".equalsIgnoreCase(descrizione.getStanzaCorrente().getNome())) {
+                return "\nNon c'è nessuno che puoi ricattare qui.\n";
+            }
+            
             // Estrae l'oggetto dal parserOutput
             String oggettoDaRicattare = parserOutput.getOggetto() != null ? parserOutput.getOggetto().getNome() : "";
 
@@ -34,12 +39,12 @@ public class GestoreRicatta implements Modifica, Serializable {
 
                 if (documentiRicatto != null) {
                     descrizione.setRicattoDirettore(true);
-                    return "Hai ricattato il direttore con i documenti! Ora il tuo bottino sarà più alto.";
+                    return "\nHai ricattato il direttore con i documenti! Ora il tuo bottino sarà più alto.\n";
                 } else {
-                    return "Non hai i documenti per ricattare il direttore.";
+                    return "\nNon hai i documenti per ricattare il direttore.\n";
                 }
             } else {
-                return "Puoi ricattare solo il direttore.";
+                return "\nPuoi ricattare solo il direttore.\n";
             }
         }
         return "";

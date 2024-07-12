@@ -30,12 +30,12 @@ public class GestoreAscolta implements Modifica, Serializable {
 
             // Verifica se ci sono oggetti nella stanza corrente o nell'inventario
             if (descrizione.getStanzaCorrente().getOggetti().isEmpty() && descrizione.getInventario().isEmpty()) {
-                return "Non ci sono oggetti da ascoltare in questa stanza o nel tuo inventario.";
+                return "\nNon ci sono oggetti da ascoltare in questa stanza o nel tuo inventario.\n";
             }
 
             // Caso 1: Nessun oggetto specificato
             if (oggetto == null) {
-                msg.append("Non capisco cosa vuoi ascoltare.");
+                msg.append("\nNon capisco cosa vuoi ascoltare.\n");
             }
             // Caso 2: Oggetto specificato e l'oggetto è nell'inventario o nella stanza corrente
             else {
@@ -49,10 +49,10 @@ public class GestoreAscolta implements Modifica, Serializable {
                         msg.append("'Segretario: Certamente, Direttore. Mi occuperò di tutto subito.'\n");
                         msg.append("----------------------------------------------------------------------------------------------------------------------------------------\n");
                     } else {
-                        msg.append("Non puoi ascoltare questo oggetto.");
+                        msg.append("\nNon puoi ascoltare questo oggetto.\n");
                     }
                 } else {
-                    msg.append("Non trovi l'oggetto da ascoltare.");
+                    msg.append("\nNon trovi l'oggetto da ascoltare.\n");
                 }
             }
         }

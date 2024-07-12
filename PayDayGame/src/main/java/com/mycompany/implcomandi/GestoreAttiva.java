@@ -28,11 +28,11 @@ public class GestoreAttiva implements Modifica, Serializable {
 
             // Verifica se ci sono oggetti nella stanza corrente o nell'inventario
             if (descrizione.getStanzaCorrente().getOggetti().isEmpty() && descrizione.getInventario().isEmpty()) {
-                return "Non ci sono oggetti in questa stanza o nel tuo inventario.";
+                return "\nNon ci sono oggetti in questa stanza o nel tuo inventario.\n";
             }
 
             if (oggettoDaAttivare == null) {
-                return "Non capisco cosa vuoi attivare.";
+                return "\nNon capisco cosa vuoi attivare.\n";
             }
 
             boolean oggettoTrovato = descrizione.getStanzaCorrente().getOggetti().contains(oggettoDaAttivare) ||
@@ -42,25 +42,25 @@ public class GestoreAttiva implements Modifica, Serializable {
                 if (oggettoDaAttivare.isDisattivabile()) {
                     if ((oggettoDaAttivare.getNome().equalsIgnoreCase("quadro elettrico") && !descrizione.isQuadroElettricoDisattivato()) ||
                         (oggettoDaAttivare.getNome().equalsIgnoreCase("torcia") && descrizione.isTorciaAccesa())) {
-                        msg.append("L'oggetto è già attivato.");
+                        msg.append("\nL'oggetto è già attivato.\n");
                     } else {
                         if (oggettoDaAttivare.getNome().equalsIgnoreCase("quadro elettrico")) {
                             descrizione.setQuadroElettricoDisattivato(false);
-                            msg.append("Hai attivato: ").append(oggettoDaAttivare.getDescrizione());
+                            msg.append("\nHai attivato: ").append(oggettoDaAttivare.getDescrizione() + "\n");
                         } else if (oggettoDaAttivare.getNome().equalsIgnoreCase("torcia")) {
                             if (descrizione.getInventario().contains(oggettoDaAttivare)) {
                                 descrizione.setTorciaAccesa(true);
-                                msg.append("Hai attivato: ").append(oggettoDaAttivare.getDescrizione());
+                                msg.append("\nHai attivato: ").append(oggettoDaAttivare.getDescrizione() + "\n");
                             } else {
-                                msg.append("Devi prima prendere la torcia per poterla attivare.");
+                                msg.append("\nDevi prima prendere la torcia per poterla attivare.\n");
                             }
                         }
                     }
                 } else {
-                    msg.append("Non puoi attivare questo oggetto.");
+                    msg.append("\nNon puoi attivare questo oggetto.\n");
                 }
             } else {
-                msg.append("Non trovo l'oggetto da attivare.");
+                msg.append("\nNon trovo l'oggetto da attivare.\n");
             }
         }
 

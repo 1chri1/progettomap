@@ -88,7 +88,7 @@ public class InizializzazioneStanze {
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Hall");
             pstmt.setString(3, "Punto di ingresso principale, sorvegliato da due guardie all'esterno.");
-            pstmt.setString(4, "Per fortuna le telecamere sono disattivate, c'è una porta alla tua sinistra.");
+            pstmt.setString(4, "Per fortuna le telecamere sono disattivate, vedi una porta.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
@@ -136,19 +136,19 @@ public class InizializzazioneStanze {
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Corridoio 1");
             pstmt.setString(3, "");
-            pstmt.setString(4, "Ci sono delle porte alla tua destra e dietro di te.");
+            pstmt.setString(4, "Ci sono delle porte intorno a te.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Corridoio 2");
             pstmt.setString(3, "");
-            pstmt.setString(4, "Ci sono delle porte alla tua destra e alla tua sinistra.");
+            pstmt.setString(4, "Ci sono delle porte intorno a te.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, 0);
             pstmt.setString(2, "Corridoio 3");
             pstmt.setString(3, "Cruciale per la storia del gioco");
-            pstmt.setString(4, "Ci sono delle porte alla tua destra e alla tua sinistra, sulla parete di fronte c'è il quadro elettrico della banca.");
+            pstmt.setString(4, "Ci sono delle porte intorno a te e su una parete vedi il quadro elettrico della banca.");
             pstmt.executeUpdate();
 
             // Seminterrato
@@ -167,13 +167,13 @@ public class InizializzazioneStanze {
             pstmt.setInt(1, -1);
             pstmt.setString(2, "Scale Piano di Sotto");
             pstmt.setString(3, "Le scale che portano al piano superiore.");
-            pstmt.setString(4, "Ci sono delle porte davanti e dietro di te, alla tua sinistra c'è quello che sembrerebbe un caveau.");
+            pstmt.setString(4, "Ci sono delle porte e quello che sembrerebbe un caveau.");
             pstmt.executeUpdate();
 
             pstmt.setInt(1, -1);
             pstmt.setString(2, "Garage/Uscita");
             pstmt.setString(3, "Il garage della banca da cui è possibile anche uscire.");
-            pstmt.setString(4, "Al momento è completamente vuoto.");
+            pstmt.setString(4, "");
             pstmt.executeUpdate();
 
             pstmt.close();
@@ -389,7 +389,7 @@ public class InizializzazioneStanze {
 
         Stanza ufficioVicinaScale = stanzeMap.get("Ufficio Vicino Scale");
         if (ufficioVicinaScale != null) {
-            ufficioVicinaScale.setAlias(new String[]{"ufficio scale", "ufficio vicino alle scale"});
+            ufficioVicinaScale.setAlias(new String[]{"ufficio", "ufficio scale", "ufficio vicino alle scale"});
         }
 
         Stanza ufficioVicinaCorridoio1 = stanzeMap.get("Ufficio Vicino Corridoio 1");

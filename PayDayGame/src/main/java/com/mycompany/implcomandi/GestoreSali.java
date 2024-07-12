@@ -31,12 +31,12 @@ public class GestoreSali implements Modifica, Serializable {
                 Stanza nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano() + 1, "Scale");
                 if (nuovaStanza != null) {
                     descrizione.setStanzaCorrente(nuovaStanza);
-                    msg.append("Sei salito nelle scale del piano di sopra.");
+                    msg.append("\nSei salito nelle scale del piano di sopra.\n");
                 } else {
-                    msg.append("Le scale del piano di sopra non esistono.");
+                    msg.append("\nLe scale del piano di sopra non esistono.\n");
                 }
             } else {
-                msg.append("Non puoi salire da qui.");
+                msg.append("\nNon puoi salire da qui.\n");
             }
         }
         return msg.toString();

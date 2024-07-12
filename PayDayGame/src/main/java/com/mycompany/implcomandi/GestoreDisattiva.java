@@ -28,11 +28,11 @@ public class GestoreDisattiva implements Modifica, Serializable {
 
             // Verifica se ci sono oggetti nella stanza corrente o nell'inventario
             if (descrizione.getStanzaCorrente().getOggetti().isEmpty() && descrizione.getInventario().isEmpty()) {
-                return "Non ci sono oggetti in questa stanza o nel tuo inventario.";
+                return "\nNon ci sono oggetti in questa stanza o nel tuo inventario.\n";
             }
 
             if (oggettoDaDisattivare == null) {
-                return "Non capisco cosa vuoi disattivare.";
+                return "\nNon capisco cosa vuoi disattivare.\n";
             }
 
             boolean oggettoTrovato = descrizione.getStanzaCorrente().getOggetti().contains(oggettoDaDisattivare) ||
@@ -42,26 +42,26 @@ public class GestoreDisattiva implements Modifica, Serializable {
                 if (oggettoDaDisattivare.isDisattivabile()) {
                     if ((oggettoDaDisattivare.getNome().equalsIgnoreCase("quadro elettrico") && descrizione.isQuadroElettricoDisattivato()) ||
                         (oggettoDaDisattivare.getNome().equalsIgnoreCase("torcia") && !descrizione.isTorciaAccesa())) {
-                        msg.append("L'oggetto è già disattivato.");
+                        msg.append("\nL'oggetto è già disattivato.\n");
                     } else {
                         if (oggettoDaDisattivare.getNome().equalsIgnoreCase("quadro elettrico")) {
                             descrizione.setQuadroElettricoDisattivato(true);
-                            msg.append("Hai disattivato: ").append(oggettoDaDisattivare.getDescrizione());
-                            msg.append("\nAttenzione: è scattato l'allarme.\nHai 5 minuti per completare la rapina.");
+                            msg.append("\nHai disattivato: ").append(oggettoDaDisattivare.getDescrizione());
+                            msg.append("\nAttenzione: è scattato l'allarme.\nHai 5 minuti per completare la rapina.\n");
                             // Avvia il timer della guardia solo se non è già attivo
                             if (!descrizione.isTimerAttivo()) {
-                                descrizione.startTimer(5); // Timer di 5 minuti
+                                descrizione.startTimer(55); // Timer di 5 minuti
                             }
                         } else if (oggettoDaDisattivare.getNome().equalsIgnoreCase("torcia")) {
                             descrizione.setTorciaAccesa(false);
-                            msg.append("Hai disattivato: ").append(oggettoDaDisattivare.getDescrizione());
+                            msg.append("\nHai disattivato: ").append(oggettoDaDisattivare.getDescrizione() + "\n");
                         }
                     }
                 } else {
-                    msg.append("Non puoi disattivare questo oggetto.");
+                    msg.append("\nNon puoi disattivare questo oggetto.\n");
                 }
             } else {
-                msg.append("Non trovi l'oggetto da disattivare.");
+                msg.append("\nNon trovi l'oggetto da disattivare.\n");
             }
         }
 

@@ -15,12 +15,5 @@ public class GameUtils {
      * @param id l'ID dell'oggetto da cercare
      * @return l'oggetto con l'ID specificato, oppure null se non trovato
      */
-    public static Oggetto getOggettiInventario(List<Oggetto> inventario, int id) {
-        for (Oggetto o : inventario) {
-            if (o.getId() == id) {
-                return o;
-            }
-        }
-        return null;
-    }
+   
 }

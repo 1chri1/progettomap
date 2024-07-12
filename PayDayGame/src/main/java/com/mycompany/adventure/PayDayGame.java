@@ -117,6 +117,8 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
     public void prossimoSpostamento(ParserOutput p, PrintStream out) {
         parserOutput = p;
         MESSAGGI.clear();
+        String MSG_NOUSCITA="\nHai deciso di rimanere e completare la missione.\n";
+        
         if (p.getComando() == null) {
             out.println("Non ho capito cosa devo fare! Prova con un altro comando.");
         } else {
@@ -132,46 +134,49 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             }
 
             if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-                out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
+                out.println("\nSei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
                 setGiocoTerminato(true,5);
                 return;
             }
             if (move) {
-                if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
-                    if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
-                        ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-                        out.println("Ti trovi all'" + getStanzaCorrente().getNome());
-                        out.println(getStanzaCorrente().getDescrizione());
+            if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
+                if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
+                    ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                    out.println("\nTi trovi all'" + getStanzaCorrente().getNome());
+                    out.println(getStanzaCorrente().getDescrizione() + "\n");
+                } else {
+                    if (("Lato destro".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
+                        ("Lato sinistro".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                        out.println("\nTi trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
+                        out.println(getStanzaCorrente().getDescrizione() + "\n");
                     } else {
-                        if (("Lato destro".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
-                            ("Lato sinistro".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-                            out.println("Ti trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
-                            out.println(getStanzaCorrente().getDescrizione());
-                        } else {
-                            if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
-                                "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
-                                "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) { 
-                                out.println("Ti trovi qui: " + getStanzaCorrente().getNome());
+                        if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
+                            "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
+                            "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+
+                            if (!("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato())) {
+                                out.println("\nTi trovi qui: " + getStanzaCorrente().getNome());
                                 out.println("================================================");
-                                out.println(getStanzaCorrente().getDescrizione());  
+                                out.println(getStanzaCorrente().getDescrizione() + "\n");
                             }
                         }
                     }
-                } else {
-                    out.println("Non sai dove sei entrato perche' e' tutto buio.");
                 }
+            } else {
+                out.println("\nNon sai dove sei entrato perche' e' tutto buio.\n");
             }
+        }
             if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
                 int bottinoFinale=0;
                 if (hasSoldi() && hasGioielli()) {
                     bottinoFinale = BOTTINO_BASE + (isRicattoDirettore() ? BOTTINO_EXTRA : 0);
                     if (isRicattoDirettore()) {
-                        out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                        out.println("\nMissione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                     } else {
-                        out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                        out.println("\nMissione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                     }
                     setGiocoTerminato(true, 10);
-                    out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
+                    out.println("\nSei riuscito a scappare in tempo!"); // Messaggio di successo
                 } else if (hasSoldi()) {
                     int risposta = JOptionPane.showConfirmDialog(null, "Hai preso i soldi ma ti mancano ancora i gioielli. Sei sicuro di voler uscire?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
                     if (risposta == JOptionPane.YES_OPTION) {
@@ -179,23 +184,23 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                         if (isRicattoDirettore()) {
                             bottinoFinale += BOTTINO_EXTRA;
                         }
-                        GameWindow.appendOutput("Hai deciso di uscire senza prendere i gioielli. Il tuo bottino finale ammonta a " + bottinoFinale + " euro.");
+                        GameWindow.appendOutput("\nHai deciso di uscire senza prendere i gioielli. Il tuo bottino finale ammonta a " + bottinoFinale + " euro.");
                         setGiocoTerminato(true, 10);
                     } else {
-                        outputStream.println("Hai deciso di rimanere e completare la missione.");
+                        outputStream.println(MSG_NOUSCITA);
                         setStanzaCorrente(cr);
                     }
                 } else if (hasGioielli()) {
-                    int risposta = JOptionPane.showConfirmDialog(null, "Hai preso i gioielli ma ti mancano ancora i soldi. Sei sicuro di voler uscire?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
+                    int risposta = JOptionPane.showConfirmDialog(null, "\nHai preso i gioielli ma ti mancano ancora i soldi. Sei sicuro di voler uscire?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
                     if (risposta == JOptionPane.YES_OPTION) {
                         bottinoFinale = 0;
                         if (isRicattoDirettore()) {
                             bottinoFinale += BOTTINO_EXTRA;
                         }
-                        GameWindow.appendOutput("Hai deciso di uscire senza prendere i soldi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
+                        GameWindow.appendOutput("\nHai deciso di uscire senza prendere i soldi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
                         setGiocoTerminato(true, 10);
                     } else {
-                        outputStream.println("Hai deciso di rimanere e completare la missione.");
+                        outputStream.println(MSG_NOUSCITA);
                         setStanzaCorrente(cr);
                     }
                 } else {
@@ -205,10 +210,10 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                         if (isRicattoDirettore()) {
                             bottinoFinale += BOTTINO_EXTRA;
                         }
-                        GameWindow.appendOutput("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro.");
+                        GameWindow.appendOutput("\nHai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro.");
                         setGiocoTerminato(true, 10);
                     } else {
-                        outputStream.println("Hai deciso di rimanere e completare la missione.");
+                        outputStream.println(MSG_NOUSCITA);
                         setStanzaCorrente(cr);
                     }
                 }
@@ -574,16 +579,6 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         for (Modifica o : OSSERVATORI) {
             MESSAGGI.add(o.aggiorna(this, parserOutput));
         }
-    }
-
-    /**
-     * Restituisce il messaggio iniziale del gioco.
-     *
-     * @return Il messaggio iniziale
-     */
-    @Override
-    public String messaggioIniziale() {
-        return "L'avventura ha inizio";
     }
 
     /**

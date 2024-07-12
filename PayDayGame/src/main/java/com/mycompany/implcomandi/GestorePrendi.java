@@ -27,7 +27,7 @@ public class GestorePrendi implements Modifica, Serializable {
         if (parserOutput.getComando().getTipo() == TipoComandi.PRENDI) {
             // Verifica se ci sono oggetti nella stanza corrente
             if (descrizione.getStanzaCorrente().getOggetti().isEmpty()) {
-                return "Non ci sono oggetti in questa stanza.";
+                return "\nNon ci sono oggetti in questa stanza.\n";
             }
             // verifica se l'oggetto è diverso da null
             if (parserOutput.getOggetto() != null) {
@@ -36,16 +36,16 @@ public class GestorePrendi implements Modifica, Serializable {
                     // aggiunge l'oggetto all'inventario e lo rimuove dalla stanza corrente
                     descrizione.getInventario().add(parserOutput.getOggetto());
                     descrizione.getStanzaCorrente().getOggetti().remove(parserOutput.getOggetto());
-                    msg.append("Hai appena raccolto: ").append(parserOutput.getOggetto().getDescrizione());
+                    msg.append("\nHai appena raccolto: \n").append(parserOutput.getOggetto().getDescrizione() + "\n");
                     
                     if (haDocumentiRicatto(descrizione) && parserOutput.getOggetto().getNome().equalsIgnoreCase("documenti ricatto")) {
                         mostraDialogoDirettore();
                     }
                 } else {
-                    msg.append("Non puoi prendere questo oggetto");
+                    msg.append("\nNon puoi prendere questo oggetto\n");
                 }           
             } else {
-                msg.append("Non capisco cosa vuoi prendere");
+                msg.append("\nNon capisco cosa vuoi prendere\n");
             }
         }
         return msg.toString();

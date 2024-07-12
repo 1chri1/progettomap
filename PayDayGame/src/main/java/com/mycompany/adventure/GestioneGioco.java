@@ -101,14 +101,7 @@ public abstract class GestioneGioco implements Serializable {
      * @param out stream di output
      */
     public abstract void prossimoSpostamento(ParserOutput p, PrintStream out);
-
-    /**
-     * Restituisce il messaggio iniziale del gioco.
-     *
-     * @return messaggio iniziale
-     */
-    public abstract String messaggioIniziale();
-
+  
     // Metodi di gestione dello stato del gioco
 
     /**

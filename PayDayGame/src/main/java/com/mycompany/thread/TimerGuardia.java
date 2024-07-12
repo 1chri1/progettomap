@@ -35,7 +35,7 @@ public class TimerGuardia implements Runnable, Serializable {
                 Thread.sleep(1000); // Attende per un secondo (1.000 millisecondi)
                 tempoRimasto -= 1; // Decrementa il tempo rimanente di un secondo
                 if (tempoRimasto % 60 == 0) {
-                    GameWindow.appendOutput("La guardia sta cercando di risolvere il problema. Tempo rimanente: " + (tempoRimasto / 60) + " minuti.\n");
+                    GameWindow.appendOutput("\n\nLa guardia sta cercando di risolvere il problema. Tempo rimanente: " + (tempoRimasto / 60) + " minuti.\n");
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -54,10 +54,10 @@ public class TimerGuardia implements Runnable, Serializable {
 
             if (!GIOCO.isGiocoTerminato()) {
                 if (tempoRimasto <= 0) {
-                    GameWindow.appendOutput("La guardia ti ha trovato! Hai perso.\n");
+                    GameWindow.appendOutput("\nLa guardia ti ha trovato! Hai perso.\n");
                     GIOCO.setGiocoTerminato(true,7);
                 } else {
-                    GameWindow.appendOutput("Sei riuscito a scappare in tempo!\n");
+                    GameWindow.appendOutput("\nSei riuscito a scappare in tempo!\n");
                 }
             }
         }

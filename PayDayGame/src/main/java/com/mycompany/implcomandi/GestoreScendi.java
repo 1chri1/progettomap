@@ -31,12 +31,12 @@ public class GestoreScendi implements Modifica, Serializable {
                 Stanza nuovaStanza = Stanza.trovaStanza(stanzaCorrente.getPiano() - 1, "Scale Piano di Sotto");
                 if (nuovaStanza != null) {
                     descrizione.setStanzaCorrente(nuovaStanza);
-                    msg.append("Sei sceso nelle scale del piano di sotto.");
+                    msg.append("\nSei sceso nelle scale del piano di sotto.\n");
                 } else {
-                    msg.append("Le scale del piano di sotto non esistono.");
+                    msg.append("\nLe scale del piano di sotto non esistono.\n");
                 }
             } else {
-                msg.append("Non puoi scendere da qui.");
+                msg.append("\nNon puoi scendere da qui.\n");
             }
         }
         return msg.toString();

@@ -29,14 +29,14 @@ public class GestoreApri implements Modifica, Serializable {
         if (parserOutput.getComando().getTipo() == TipoComandi.APRI) {
             // Verifica se ci sono oggetti nella stanza corrente
             if (descrizione.getStanzaCorrente().getOggetti().isEmpty()) {
-                return "Non ci sono oggetti da aprire in questa stanza.";
+                return "\nNon ci sono oggetti da aprire in questa stanza.\n";
             }
 
             Oggetto oggetto = parserOutput.getOggetto();
             Oggetto oggettoInventario = parserOutput.getOggettoInventario();
 
             if (oggetto == null && oggettoInventario == null) {
-                return "Non riesco a capire cosa vuoi aprire.";
+                return "\nNon riesco a capire cosa vuoi aprire.\n";
             }
 
             if (oggetto != null) {
@@ -62,11 +62,11 @@ public class GestoreApri implements Modifica, Serializable {
      */
     private String gestisciAperturaOggetto(GestioneGioco gioco, Oggetto oggetto) {
         if (!oggetto.isApribile()) {
-            return "Non puoi aprire questo oggetto.";
+            return "\nNon puoi aprire questo oggetto.\n";
         }
 
         if (oggetto.isAperto()) {
-            return "L'oggetto è già aperto.";
+            return "\nL'oggetto è già aperto.\n";
         }
 
         if (oggetto instanceof OggettoContenitore && "cassetta".equalsIgnoreCase(oggetto.getNome())) {
@@ -75,15 +75,15 @@ public class GestoreApri implements Modifica, Serializable {
             
             if (codiceInserito != null && codiceInserito.length() == 4 && codiceInserito.equals(CODICE_CORRETTO)) {
                 oggetto.setAperto(true);
-                return "Codice corretto! " + apriContenitore(gioco, (OggettoContenitore) oggetto);
+                return "\nCodice corretto! " + apriContenitore(gioco, (OggettoContenitore) oggetto) + "\n";
             } else {
-                return "Codice errato. Non puoi aprire la cassetta.\n";
+                return "\nCodice errato. Non puoi aprire la cassetta.\n";
             }
         }
 
         oggetto.setAperto(true);
 
-        StringBuilder messaggio = new StringBuilder("Hai aperto: ").append(oggetto.getNome());
+        StringBuilder messaggio = new StringBuilder("\nHai aperto: ").append(oggetto.getNome());
         if (oggetto instanceof OggettoContenitore) {
             messaggio.append(apriContenitore(gioco, (OggettoContenitore) oggetto));
         }
@@ -100,16 +100,16 @@ public class GestoreApri implements Modifica, Serializable {
      */
     private String gestisciAperturaOggettoInventario(GestioneGioco gioco, Oggetto oggettoInventario) {
         if (!oggettoInventario.isApribile()) {
-            return "Non puoi aprire questo oggetto.";
+            return "\nNon puoi aprire questo oggetto.\n";
         }
 
         if (oggettoInventario.isAperto()) {
-            return "L'oggetto è già aperto.";
+            return "\nL'oggetto è già aperto.\n";
         }
 
         oggettoInventario.setAperto(true);
 
-        StringBuilder messaggio = new StringBuilder("Hai aperto nel tuo inventario: ").append(oggettoInventario.getNome());
+        StringBuilder messaggio = new StringBuilder("\nHai aperto nel tuo inventario: ").append(oggettoInventario.getNome() + "\n");
         if (oggettoInventario instanceof OggettoContenitore) {
             OggettoContenitore contenitore = (OggettoContenitore) oggettoInventario;
             messaggio.append(apriContenitore(gioco, contenitore));
@@ -130,8 +130,8 @@ public class GestoreApri implements Modifica, Serializable {
         if (contenitore.getList().isEmpty()) {
             return messaggio.toString();
         }
-
-        messaggio.append(" ").append(contenitore.getNome()).append(" contiene:");
+        messaggio.append("\n");
+        messaggio.append(contenitore.getNome()).append(" contiene:");
         for (Oggetto oggetto : contenitore.getList()) {
             gioco.getStanzaCorrente().getOggetti().add(oggetto);
             messaggio.append(" ").append(oggetto.getNome());

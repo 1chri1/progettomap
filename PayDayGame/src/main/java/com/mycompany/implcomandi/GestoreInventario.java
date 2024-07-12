@@ -23,7 +23,7 @@ public class GestoreInventario implements Modifica, Serializable {
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
         if (parserOutput.getComando().getTipo() == TipoComandi.INVENTARIO) {
             return descrizione.getInventario().isEmpty() 
-            ? "Il tuo inventario è vuoto!" 
+            ? "\nIl tuo inventario è vuoto!\n" 
             : messaggioInventario(descrizione);
         } else {
             return "";
@@ -37,10 +37,11 @@ public class GestoreInventario implements Modifica, Serializable {
      * @return una stringa contenente l'elenco degli oggetti nell'inventario
      */
     private String messaggioInventario(GestioneGioco descrizione) {
-        StringBuilder msg = new StringBuilder("Nel tuo inventario ci sono:\n");
+        StringBuilder msg = new StringBuilder("\nNel tuo inventario ci sono:\n");
         for (Oggetto object : descrizione.getInventario()) {
             msg.append(object.getNome()).append(": ").append(object.getDescrizione()).append("\n");
         }
+
         return msg.toString();
     }
 }

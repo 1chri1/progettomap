@@ -41,9 +41,9 @@ public class InizializzazioneOggetti {
 
         // Inizializzazione oggetti per il bagno
         if (bagno != null) {
-            Oggetto water1 = new Oggetto(1, "water1", "Un cesso pulito.");
-            Oggetto water2 = new Oggetto(2, "water2", "Un cesso sporco.");
-            Oggetto water3 = new Oggetto(3, "water3", "Un cesso normale.");
+            Oggetto water1 = new Oggetto(1, "water1", "Un gabinetto pulito.");
+            Oggetto water2 = new Oggetto(2, "water2", "Un gabinetto sporco.");
+            Oggetto water3 = new Oggetto(3, "water3", "Un gabinetto normale.");
             bagno.getOggetti().add(water1);
             bagno.getOggetti().add(water2);
             bagno.getOggetti().add(water3);
@@ -54,7 +54,7 @@ public class InizializzazioneOggetti {
 
         // Inizializzazione oggetti per l'ufficio vicino al corridoio 1
         if (ufficioVicinoCorridoio1 != null) {
-            Oggetto registratore = new Oggetto(4, "registratore", "Registratore con conversazione (per scoprire il codice della cassetta nel caveau).");
+            Oggetto registratore = new Oggetto(4, "registratore", "Registratore con conversazione.");
             registratore.setAlias(new String[]{"registratore", "conversazione"});
             ufficioVicinoCorridoio1.getOggetti().add(registratore);
             registratore.setAscoltabile(true);
@@ -108,13 +108,13 @@ public class InizializzazioneOggetti {
             insertOggetto(cassetta, caveau);
             insertOggetto(documentiRicatto, caveau);
 
-            Oggetto soldi = new Oggetto(10, "soldi", "Soldi (al centro della stanza).");
+            Oggetto soldi = new Oggetto(10, "soldi", "Soldi");
             soldi.setAlias(new String[]{"soldi"});
             soldi.setPrendibile(true);
             caveau.getOggetti().add(soldi);
             insertOggetto(soldi, caveau);
             
-            Oggetto gioielli = new Oggetto(11, "gioielli", "Gioielli (al centro della stanza).");
+            Oggetto gioielli = new Oggetto(11, "gioielli", "Gioielli");
             gioielli.setAlias(new String[]{"gioielli"});
             gioielli.setPrendibile(true);
             caveau.getOggetti().add(gioielli);
@@ -134,7 +134,7 @@ public class InizializzazioneOggetti {
             ufficioDirettore.getOggetti().add(armadio);
             insertOggetto(armadio, ufficioDirettore);
 
-            Oggetto tesserinoCaveau = new Oggetto(13, "tesserino caveau", "Tesserino per entrare nel caveau (nell’armadio).");
+            Oggetto tesserinoCaveau = new Oggetto(13, "tesserino caveau", "Tesserino per entrare nel caveau.");
             tesserinoCaveau.setAlias(new String[]{"tesserino"});
             tesserinoCaveau.setPrendibile(true);
             armadio.aggiungi(tesserinoCaveau);
