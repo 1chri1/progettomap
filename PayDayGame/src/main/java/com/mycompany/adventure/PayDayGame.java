@@ -63,7 +63,6 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
      *
      * @param engine l'engine da impostare
      */
-    @Override
     public void setEngine(Engine engine) {
         this.engine = engine;
     }
@@ -134,11 +133,11 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
 
             if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
                 out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
-                setGiocoTerminato(true, 5);
+                setGiocoTerminato(true,5);
                 return;
             }
             if (move) {
-                if (!GameUtils.isQuadroElettricoDisattivato(this) || GameUtils.isTorciaAccesa(this)) {
+                if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
                     if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
                         ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
                         out.println("Ti trovi all'" + getStanzaCorrente().getNome());
@@ -163,21 +162,21 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                 }
             }
             if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-                int bottinoFinale = 0;
-                if (GameUtils.hasSoldi(getInventario()) && GameUtils.hasGioielli(getInventario())) {
-                    bottinoFinale = BOTTINO_BASE + (GameUtils.isRicattoDirettore(this) ? BOTTINO_EXTRA : 0);
-                    if (GameUtils.isRicattoDirettore(this)) {
+                int bottinoFinale=0;
+                if (hasSoldi() && hasGioielli()) {
+                    bottinoFinale = BOTTINO_BASE + (isRicattoDirettore() ? BOTTINO_EXTRA : 0);
+                    if (isRicattoDirettore()) {
                         out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                     } else {
                         out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                     }
                     setGiocoTerminato(true, 10);
                     out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
-                } else if (GameUtils.hasSoldi(getInventario())) {
+                } else if (hasSoldi()) {
                     int risposta = JOptionPane.showConfirmDialog(null, "Hai preso i soldi ma ti mancano ancora i gioielli. Sei sicuro di voler uscire?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
                     if (risposta == JOptionPane.YES_OPTION) {
                         bottinoFinale = BOTTINO_BASE;
-                        if (GameUtils.isRicattoDirettore(this)) {
+                        if (isRicattoDirettore()) {
                             bottinoFinale += BOTTINO_EXTRA;
                         }
                         GameWindow.appendOutput("Hai deciso di uscire senza prendere i gioielli. Il tuo bottino finale ammonta a " + bottinoFinale + " euro.");
@@ -186,11 +185,11 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                         outputStream.println("Hai deciso di rimanere e completare la missione.");
                         setStanzaCorrente(cr);
                     }
-                } else if (GameUtils.hasGioielli(getInventario())) {
+                } else if (hasGioielli()) {
                     int risposta = JOptionPane.showConfirmDialog(null, "Hai preso i gioielli ma ti mancano ancora i soldi. Sei sicuro di voler uscire?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
                     if (risposta == JOptionPane.YES_OPTION) {
                         bottinoFinale = 0;
-                        if (GameUtils.isRicattoDirettore(this)) {
+                        if (isRicattoDirettore()) {
                             bottinoFinale += BOTTINO_EXTRA;
                         }
                         GameWindow.appendOutput("Hai deciso di uscire senza prendere i soldi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
@@ -203,7 +202,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                     int risposta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
                     if (risposta == JOptionPane.YES_OPTION) {
                         bottinoFinale = 0;
-                        if (GameUtils.isRicattoDirettore(this)) {
+                        if (isRicattoDirettore()) {
                             bottinoFinale += BOTTINO_EXTRA;
                         }
                         GameWindow.appendOutput("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro.");
@@ -575,6 +574,34 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         for (Modifica o : OSSERVATORI) {
             MESSAGGI.add(o.aggiorna(this, parserOutput));
         }
+    }
+
+    /**
+     * Restituisce il messaggio iniziale del gioco.
+     *
+     * @return Il messaggio iniziale
+     */
+    @Override
+    public String messaggioIniziale() {
+        return "L'avventura ha inizio";
+    }
+
+    /**
+     * Verifica se l'inventario contiene soldi.
+     *
+     * @return true se l'inventario contiene soldi, altrimenti false
+     */
+    private boolean hasSoldi() {
+        return getInventario().stream().anyMatch(o -> "soldi".equalsIgnoreCase(o.getNome()));
+    }
+
+    /**
+     * Verifica se l'inventario contiene gioielli.
+     *
+     * @return true se l'inventario contiene gioielli, altrimenti false
+     */
+    private boolean hasGioielli() {
+        return getInventario().stream().anyMatch(o -> "gioielli".equalsIgnoreCase(o.getNome()));
     }
 
     /**
