@@ -430,13 +430,12 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         if (timerGuardia != null) {
             timerAttivo = true;
             tempoRimastoTimer = timerGuardia.getTempoRimasto(); // Ottieni il tempo rimanente in secondi
-            timerGuardia.stop(); // Ferma il timer
+            TimerGuardia.stop(); // Ferma il timer
         } else {
             timerAttivo = false;
         }
         gestisciSalvataggi(baseFileName, ".");
     }
-
     /**
      * Carica lo stato del gioco da un file di salvataggio.
      *

@@ -149,7 +149,7 @@ public class Engine {
     /**
      * Salva la partita corrente.
      */
-    private void salvaPartita() {
+    private void gestoreSalva() {
         String nomeSalvataggio = null;
         while (true) {
             nomeSalvataggio = JOptionPane.showInputDialog(null, "Inserisci il nome del salvataggio:");
@@ -174,7 +174,7 @@ public class Engine {
     /**
      * Carica una partita salvata.
      */
-    public void caricaPartita() {
+    public void gestoreCarica() {
         List<String> salvataggi = game.elencoSalvataggi(".");
         if (salvataggi.isEmpty()) {
             JOptionPane.showMessageDialog(gameWindow, "Non ci sono salvataggi disponibili.");
@@ -249,14 +249,14 @@ public class Engine {
                         continue;
                     }
                     if (command.equalsIgnoreCase("salva")) {
-                        salvaPartita();
+                        gestoreSalva();
                         break;
                     } else if (command.equalsIgnoreCase("carica")) {
                         int conferma = JOptionPane.showConfirmDialog(null, "Per caricare una partita salvata devi uscire dalla partita in corso e tornare al menu iniziale. \nVuoi procedere?", "Conferma Caricamento", JOptionPane.YES_NO_OPTION);
                         if (conferma == JOptionPane.YES_OPTION) {
                             int risposta = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di tornare al menu?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
                             if (risposta == JOptionPane.YES_OPTION) {
-                                salvaPartita();
+                                gestoreSalva();
                             }
                             giocoAttivo = false;
                             partitaSalvata = false;
@@ -270,7 +270,7 @@ public class Engine {
                         if (confermaEsci == JOptionPane.YES_OPTION) {
                             int rispostaSalva = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di uscire?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
                             if (rispostaSalva == JOptionPane.YES_OPTION) {
-                                salvaPartita();
+                                gestoreSalva();
                             } else {
                                 outputStream.println("Stai per uscire dal gioco, attendere...");
                                 game.setGiocoTerminato(true,5);
