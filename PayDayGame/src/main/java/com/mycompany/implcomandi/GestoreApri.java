@@ -2,12 +2,10 @@ package com.mycompany.implComandi;
 
 import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
-import com.mycompany.swing.GameWindow;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.OggettoContenitore;
 import com.mycompany.type.TipoComandi;
 import java.io.Serializable;
-import java.io.PrintStream;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +15,13 @@ public class GestoreApri implements Modifica, Serializable {
     private static final long serialVersionUID = 1L;
     private static final String CODICE_CORRETTO = "9872"; // Il codice corretto della cassetta
 
+    /**
+     * Aggiorna lo stato del gioco in base all'output del parser.
+     *
+     * @param descrizione L'oggetto GestioneGioco che rappresenta lo stato corrente del gioco.
+     * @param parserOutput L'output del parser contenente il comando e gli oggetti associati.
+     * @return Il messaggio risultante dall'aggiornamento dello stato del gioco.
+     */
     @Override
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
         StringBuilder messaggio = new StringBuilder();
@@ -48,6 +53,13 @@ public class GestoreApri implements Modifica, Serializable {
         return messaggio.toString();
     }
 
+    /**
+     * Gestisce l'apertura di un oggetto nella stanza corrente.
+     *
+     * @param gioco L'oggetto GestioneGioco che rappresenta lo stato corrente del gioco.
+     * @param oggetto L'oggetto da aprire.
+     * @return Il messaggio risultante dall'apertura dell'oggetto.
+     */
     private String gestisciAperturaOggetto(GestioneGioco gioco, Oggetto oggetto) {
         if (!oggetto.isApribile()) {
             return "Non puoi aprire questo oggetto.";
@@ -79,6 +91,13 @@ public class GestoreApri implements Modifica, Serializable {
         return messaggio.toString();
     }
 
+    /**
+     * Gestisce l'apertura di un oggetto nell'inventario del giocatore.
+     *
+     * @param gioco L'oggetto GestioneGioco che rappresenta lo stato corrente del gioco.
+     * @param oggettoInventario L'oggetto dell'inventario da aprire.
+     * @return Il messaggio risultante dall'apertura dell'oggetto dell'inventario.
+     */
     private String gestisciAperturaOggettoInventario(GestioneGioco gioco, Oggetto oggettoInventario) {
         if (!oggettoInventario.isApribile()) {
             return "Non puoi aprire questo oggetto.";
@@ -99,6 +118,13 @@ public class GestoreApri implements Modifica, Serializable {
         return messaggio.toString();
     }
 
+    /**
+     * Apre un oggetto contenitore e trasferisce il contenuto nella stanza corrente.
+     *
+     * @param gioco L'oggetto GestioneGioco che rappresenta lo stato corrente del gioco.
+     * @param contenitore L'oggetto contenitore da aprire.
+     * @return Il messaggio risultante dall'apertura del contenitore.
+     */
     private String apriContenitore(GestioneGioco gioco, OggettoContenitore contenitore) {
         StringBuilder messaggio = new StringBuilder();
         if (contenitore.getList().isEmpty()) {

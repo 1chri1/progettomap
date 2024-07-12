@@ -9,7 +9,7 @@ import java.util.Set;
  * 
  * @autore Alessandro
  */
-public class UtilityParser  {
+public class UtilityParser {
 
     /**
      * Metodo per analizzare una stringa e rimuovere le stopwords.

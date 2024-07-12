@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt per cambiare questa licenza
- * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java per modificare questo template
- */
 package com.mycompany.type;
 
 import java.util.ArrayList;
@@ -53,6 +49,20 @@ public class OggettoContenitore extends Oggetto {
     public OggettoContenitore(List<Oggetto> list, String nome, String descrizione, Set<String> alias) {
         super(nome, descrizione, alias);
         this.list = list;
+    }
+    
+    /**
+     * Costruttore che crea un oggetto contenitore con identificatore, nome, descrizione e alias.
+     * 
+     * @param id l'identificatore dell'oggetto contenitore
+     * @param nome il nome dell'oggetto contenitore
+     * @param descrizione la descrizione dell'oggetto contenitore
+     * @param alias gli alias dell'oggetto contenitore
+     */
+    public OggettoContenitore(int id, String nome, String descrizione, Set<String> alias) {
+        super(id, nome, descrizione);
+        this.setAlias(alias.toArray(new String[0])); // Imposta gli alias
+        this.list = new ArrayList<>();
     }
 
     /**

@@ -6,7 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.mycompany.swing.GameWindow;  // Aggiungi questa importazione
+import com.mycompany.swing.GameWindow;
 
 public class Meteo {
 

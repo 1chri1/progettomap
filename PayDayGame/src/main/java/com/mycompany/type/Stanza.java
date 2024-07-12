@@ -16,7 +16,7 @@ import java.util.*;
 public class Stanza implements Serializable {
     private static final long serialVersionUID = 1L; // Versione della serializzazione
 
-    private final int PIANO; // Identificatore del PIANO
+    private final int PIANO; // Identificatore del piano
     private final String NOME; // Nome della stanza
     private String descrizione; // Descrizione della stanza
     private String guarda; // Informazioni aggiuntive visualizzabili quando si osserva la stanza
@@ -27,16 +27,16 @@ public class Stanza implements Serializable {
     private Stanza est = null; // Stanza adiacente a est
     private Stanza ovest = null; // Stanza adiacente a ovest
 
-    private final List<Oggetto> OGGETTI = new ArrayList<>(); // Lista degli OGGETTI presenti nella stanza
-    private final Set<String> ALIAS = new HashSet<>(); // Insieme degli ALIAS per la stanza
+    private final List<Oggetto> OGGETTI = new ArrayList<>(); // Lista degli oggetti presenti nella stanza
+    private final Set<String> ALIAS = new HashSet<>(); // Insieme degli alias per la stanza
 
-    // Mappa delle stanze per identificare il PIANO e il NOME
+    // Mappa delle stanze per identificare il piano e il nome
     private static final Map<String, Stanza> MAPPA_STANZE = new HashMap<>();
 
     /**
      * Costruttore della classe Stanza.
      * 
-     * @param piano Identificatore del PIANO
+     * @param piano Identificatore del piano
      * @param nome Nome della stanza
      */
     public Stanza(int piano, String nome) {
@@ -48,7 +48,7 @@ public class Stanza implements Serializable {
     /**
      * Costruttore della classe Stanza.
      * 
-     * @param piano Identificatore del PIANO
+     * @param piano Identificatore del piano
      * @param nome Nome della stanza
      * @param descrizione Descrizione della stanza
      */
@@ -60,10 +60,10 @@ public class Stanza implements Serializable {
     /**
      * Costruttore della classe Stanza.
      * 
-     * @param piano Identificatore del PIANO
+     * @param piano Identificatore del piano
      * @param nome Nome della stanza
      * @param descrizione Descrizione della stanza
-     * @param guarda Per la descrizione degli ambienti nella stanza
+     * @param guarda Informazioni aggiuntive visualizzabili quando si osserva la stanza
      */
     public Stanza(int piano, String nome, String descrizione, String guarda) {
         this(piano, nome, descrizione);
@@ -71,9 +71,9 @@ public class Stanza implements Serializable {
     }
 
     /**
-     * Genera una chiave univoca per la stanza basata sul PIANO e sul NOME.
+     * Genera una chiave univoca per la stanza basata sul piano e sul nome.
      * 
-     * @param piano Identificatore del PIANO
+     * @param piano Identificatore del piano
      * @param nome Nome della stanza
      * @return Chiave univoca per la mappa delle stanze
      */
@@ -82,9 +82,9 @@ public class Stanza implements Serializable {
     }
 
     /**
-     * Trova una stanza basata sul PIANO e sul NOME.
+     * Trova una stanza basata sul piano e sul nome.
      * 
-     * @param piano Identificatore del PIANO
+     * @param piano Identificatore del piano
      * @param nome Nome della stanza
      * @return La stanza corrispondente, null se non trovata
      */
@@ -93,7 +93,7 @@ public class Stanza implements Serializable {
     }
 
     /**
-     * Restituisce il NOME della stanza.
+     * Restituisce il nome della stanza.
      * 
      * @return Nome della stanza
      */
@@ -102,7 +102,7 @@ public class Stanza implements Serializable {
     }
 
     /**
-     * Restituisce il PIANO della stanza.
+     * Restituisce il piano della stanza.
      * 
      * @return Piano della stanza
      */
@@ -219,9 +219,9 @@ public class Stanza implements Serializable {
     }
 
     /**
-     * Restituisce la lista degli OGGETTI presenti nella stanza.
+     * Restituisce la lista degli oggetti presenti nella stanza.
      * 
-     * @return Lista degli OGGETTI presenti nella stanza
+     * @return Lista degli oggetti presenti nella stanza
      */
     public List<Oggetto> getOggetti() {
         return OGGETTI;
@@ -246,18 +246,18 @@ public class Stanza implements Serializable {
     }
 
     /**
-     * Restituisce l'insieme degli ALIAS della stanza.
+     * Restituisce l'insieme degli alias della stanza.
      * 
-     * @return Insieme degli ALIAS della stanza
+     * @return Insieme degli alias della stanza
      */
     public Set<String> getAlias() {
         return ALIAS;
     }
 
     /**
-     * Imposta gli ALIAS della stanza.
+     * Imposta gli alias della stanza.
      * 
-     * @param alias Insieme degli ALIAS della stanza
+     * @param alias Insieme degli alias della stanza
      */
     public void setAlias(Set<String> alias) {
         this.ALIAS.clear();
@@ -265,9 +265,9 @@ public class Stanza implements Serializable {
     }
 
     /**
-     * Imposta gli ALIAS della stanza usando un array.
+     * Imposta gli alias della stanza usando un array.
      * 
-     * @param alias Array di ALIAS della stanza
+     * @param alias Array di alias della stanza
      */
     public void setAlias(String[] alias) {
         this.ALIAS.clear();

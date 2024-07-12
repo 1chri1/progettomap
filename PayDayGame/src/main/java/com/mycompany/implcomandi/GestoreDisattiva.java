@@ -1,7 +1,6 @@
 package com.mycompany.implComandi;
 
 import com.mycompany.adventure.GestioneGioco;
-import com.mycompany.thread.TimerGuardia;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.TipoComandi;

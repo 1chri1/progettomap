@@ -1,19 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.swing;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Classe che rappresenta un pannello con un'immagine di sfondo.
+ */
 public class BackgroundPanel extends JPanel {
     private final Image SFONDO;
 
+    /**
+     * Costruttore della classe BackgroundPanel.
+     * 
+     * @param fileName il nome del file dell'immagine di sfondo
+     */
     public BackgroundPanel(String fileName) {
         SFONDO = new ImageIcon(fileName).getImage();
     }
 
+    /**
+     * Metodo per dipingere il componente.
+     * 
+     * @param g il contesto grafico da utilizzare per disegnare
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

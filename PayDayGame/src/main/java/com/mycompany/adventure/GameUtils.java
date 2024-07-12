@@ -11,7 +11,7 @@ public class GameUtils {
     /**
      * Ottiene un oggetto dall'inventario dato il suo ID.
      *
-     * @param inventory la lista degli oggetti nell'inventario
+     * @param inventario la lista degli oggetti nell'inventario
      * @param id l'ID dell'oggetto da cercare
      * @return l'oggetto con l'ID specificato, oppure null se non trovato
      */

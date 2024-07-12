@@ -41,15 +41,15 @@ public class InizializzazioneOggetti {
 
         // Inizializzazione oggetti per il bagno
         if (bagno != null) {
-            Oggetto cesso1 = new Oggetto(1, "cesso1", "Un cesso pulito.");
-            Oggetto cesso2 = new Oggetto(2, "cesso2", "Un cesso sporco.");
-            Oggetto cesso3 = new Oggetto(3, "cesso3", "Un cesso normale.");
-            bagno.getOggetti().add(cesso1);
-            bagno.getOggetti().add(cesso2);
-            bagno.getOggetti().add(cesso3);
-            insertOggetto(cesso1, bagno);
-            insertOggetto(cesso2, bagno);
-            insertOggetto(cesso3, bagno);
+            Oggetto water1 = new Oggetto(1, "water1", "Un cesso pulito.");
+            Oggetto water2 = new Oggetto(2, "water2", "Un cesso sporco.");
+            Oggetto water3 = new Oggetto(3, "water3", "Un cesso normale.");
+            bagno.getOggetti().add(water1);
+            bagno.getOggetti().add(water2);
+            bagno.getOggetti().add(water3);
+            insertOggetto(water1, bagno);
+            insertOggetto(water2, bagno);
+            insertOggetto(water3, bagno);
         }
 
         // Inizializzazione oggetti per l'ufficio vicino al corridoio 1

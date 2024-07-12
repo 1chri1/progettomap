@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Classe che rappresenta la finestra principale del gioco.
+ */
 public class GameWindow extends JFrame {
     private static JTextArea OUTPUT_AREA;
     private JTextField inputField;
@@ -15,6 +18,11 @@ public class GameWindow extends JFrame {
     private JPanel mainPanel;
     private MenuPanel menuPanel;
 
+    /**
+     * Costruttore della classe GameWindow.
+     * 
+     * @param engine l'engine del gioco
+     */
     public GameWindow(Engine engine) {
         this.engine = engine;
         setTitle("PayDayGame");
@@ -59,6 +67,9 @@ public class GameWindow extends JFrame {
         showMenuPanel();
     }
 
+    /**
+     * Elabora l'input dell'utente.
+     */
     private void processInput() {
         String input = inputField.getText();
         inputField.setText("");
@@ -68,34 +79,57 @@ public class GameWindow extends JFrame {
         }
     }
 
+    /**
+     * Restituisce l'area di output.
+     * 
+     * @return l'area di output
+     */
     public JTextArea getOutputArea() {
         return OUTPUT_AREA;
     }
 
-   public static void appendOutput(String text) {
-    SwingUtilities.invokeLater(() -> {
-        OUTPUT_AREA.append(text + "\n");
-        OUTPUT_AREA.setCaretPosition(OUTPUT_AREA.getDocument().getLength());
-    });
-}
+    /**
+     * Aggiunge testo all'area di output.
+     * 
+     * @param text il testo da aggiungere
+     */
+    public static void appendOutput(String text) {
+        SwingUtilities.invokeLater(() -> {
+            OUTPUT_AREA.append(text + "\n");
+            OUTPUT_AREA.setCaretPosition(OUTPUT_AREA.getDocument().getLength());
+        });
+    }
 
-
+    /**
+     * Pulisce l'area di output.
+     */
     public static void clearOutput() {
         OUTPUT_AREA.setText("");
     }
 
+    /**
+     * Mostra il pannello del menu.
+     */
     public void showMenuPanel() {
         clearOutput();
         CardLayout cl = (CardLayout) getContentPane().getLayout();
         cl.show(getContentPane(), "menu");
     }
 
+    /**
+     * Mostra il pannello del gioco.
+     */
     public void showGamePanel() {
         clearOutput();
         CardLayout cl = (CardLayout) getContentPane().getLayout();
         cl.show(getContentPane(), "game");
     }
 
+    /**
+     * Gestisce le azioni del menu.
+     * 
+     * @param e l'evento di azione
+     */
     private void handleMenuAction(ActionEvent e) {
         JButton source = (JButton) e.getSource();
         if (source == menuPanel.getNuovaPartitaButton()) {
@@ -108,15 +142,23 @@ public class GameWindow extends JFrame {
             System.exit(0);
         }
     }
-    
+
+    /**
+     * Abilita o disabilita l'input dell'utente.
+     * 
+     * @param enabled true per abilitare, false per disabilitare
+     */
     public void setInputEnabled(boolean enabled) {
         inputField.setEnabled(enabled);
         sendButton.setEnabled(enabled);
     }
-    
+
+    /**
+     * Restituisce il pannello del menu.
+     * 
+     * @return il pannello del menu
+     */
     public MenuPanel getMenuPanel() {
         return menuPanel;
     }
-
-
 }

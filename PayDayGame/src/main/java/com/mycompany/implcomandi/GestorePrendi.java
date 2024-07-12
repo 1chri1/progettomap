@@ -2,8 +2,7 @@ package com.mycompany.implComandi;
 
 import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
-import com.mycompany.swing.GameWindow;  // Aggiungi questa importazione
-import com.mycompany.type.Oggetto;
+import com.mycompany.swing.GameWindow;
 import com.mycompany.type.TipoComandi;
 import java.io.Serializable;
 
@@ -39,7 +38,7 @@ public class GestorePrendi implements Modifica, Serializable {
                     descrizione.getStanzaCorrente().getOggetti().remove(parserOutput.getOggetto());
                     msg.append("Hai appena raccolto: ").append(parserOutput.getOggetto().getDescrizione());
                     
-                    if (haDocumentiRicatto(descrizione)&&parserOutput.getOggetto().getNome().equalsIgnoreCase("documenti ricatto")) {
+                    if (haDocumentiRicatto(descrizione) && parserOutput.getOggetto().getNome().equalsIgnoreCase("documenti ricatto")) {
                         mostraDialogoDirettore();
                     }
                 } else {
@@ -64,8 +63,6 @@ public class GestorePrendi implements Modifica, Serializable {
 
     /**
      * Mostra il dialogo del direttore quando vengono trovati i documenti di ricatto.
-     * 
-     * @param descrizione la descrizione del gioco
      */
     private void mostraDialogoDirettore() {
         // Interazioni con l'utente tramite la console

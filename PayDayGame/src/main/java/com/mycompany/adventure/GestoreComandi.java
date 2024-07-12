@@ -5,7 +5,6 @@ import com.mycompany.implComandi.Modifica;
 /**
  * Interfaccia per la gestione dei comandi.
  * Fornisce i metodi necessari per assegnare, rimuovere e notificare i gestori di comandi.
- * 
  */
 public interface GestoreComandi {
     

@@ -79,5 +79,4 @@ public class TimerGuardia implements Runnable, Serializable {
     public int getTempoRimasto() {
         return tempoRimasto;
     }
-
 }

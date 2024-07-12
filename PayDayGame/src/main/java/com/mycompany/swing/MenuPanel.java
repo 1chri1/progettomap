@@ -4,11 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Pannello del menu principale del gioco, con pulsanti per avviare una nuova partita,
+ * caricare una partita esistente o uscire dal gioco.
+ */
 public class MenuPanel extends BackgroundPanel {
     private JButton nuovaPartitaButton;
     private JButton caricaButton;
     private JButton esciButton;
 
+    /**
+     * Costruttore per il pannello del menu.
+     * 
+     * @param listener l'ActionListener per gestire gli eventi dei pulsanti
+     * @param backgroundImagePath il percorso dell'immagine di sfondo
+     */
     public MenuPanel(ActionListener listener, String backgroundImagePath) {
         super(backgroundImagePath); // Passa il percorso dell'immagine di sfondo al costruttore di BackgroundPanel
         setLayout(new GridBagLayout());
@@ -37,14 +47,29 @@ public class MenuPanel extends BackgroundPanel {
         esciButton.addActionListener(listener);
     }
 
+    /**
+     * Restituisce il pulsante "Nuova Partita".
+     * 
+     * @return il pulsante "Nuova Partita"
+     */
     public JButton getNuovaPartitaButton() {
         return nuovaPartitaButton;
     }
 
+    /**
+     * Restituisce il pulsante "Carica".
+     * 
+     * @return il pulsante "Carica"
+     */
     public JButton getCaricaButton() {
         return caricaButton;
     }
 
+    /**
+     * Restituisce il pulsante "Esci".
+     * 
+     * @return il pulsante "Esci"
+     */
     public JButton getEsciButton() {
         return esciButton;
     }

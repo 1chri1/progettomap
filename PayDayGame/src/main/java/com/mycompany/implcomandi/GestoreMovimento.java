@@ -40,14 +40,12 @@ public class GestoreMovimento implements Modifica, Serializable {
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 1") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
-                    if(!descrizione.isQuadroElettricoDisattivato()||descrizione.isTorciaAccesa())
-                    {
+                    if(!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
                         GameWindow.appendOutput("Sei andato avanti nel corridoio, ora vedi nuove porte");
                     }
                 }
-                if (stanzaCorrente.getNome().equalsIgnoreCase("Hall")){
-                    if(!descrizione.isQuadroElettricoDisattivato()||descrizione.isTorciaAccesa())
-                    {
+                if (stanzaCorrente.getNome().equalsIgnoreCase("Hall")) {
+                    if(!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
                         GameWindow.appendOutput("Sei entrato nel corridoio, ora vedi nuove porte");
                     }
                 }
@@ -61,8 +59,7 @@ public class GestoreMovimento implements Modifica, Serializable {
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 3") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
-                    if(!descrizione.isQuadroElettricoDisattivato()||descrizione.isTorciaAccesa())
-                    {
+                    if(!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
                         GameWindow.appendOutput("Sei andato avanti nel corridoio, ora vedi nuove porte");
                     }
                 }
@@ -99,13 +96,10 @@ public class GestoreMovimento implements Modifica, Serializable {
 
         if (nextRoom != null) {
             if (isStanzaSpeciale(stanzaCorrente, nextRoom)) {
-                if(nextRoom.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1")||nextRoom.getNome().equalsIgnoreCase("Ufficio Vicino Scale"))
-                {
+                if(nextRoom.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1") || nextRoom.getNome().equalsIgnoreCase("Ufficio Vicino Scale")) {
                    return messaggio + "un ufficio" + ". " + MSG_USA_COMANDO_ENTRA;   
  
-                }
-                else
-                {
+                } else {
                   return messaggio + nextRoom.getNome() + ". " + MSG_USA_COMANDO_ENTRA;   
                 }
             } else {

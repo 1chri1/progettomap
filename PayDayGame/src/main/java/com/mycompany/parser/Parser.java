@@ -57,7 +57,7 @@ public class Parser {
         }
 
         int indiceComando = ricercaIndice(tokens.get(0), comandi,
-            (comandoObj, token) -> comandoObj.getNome().equals(token) || comandoObj.getAlias().contains(token));
+            (comandoObj, token) -> comandoObj.getNome().equalsIgnoreCase(token) || comandoObj.getAlias().contains(token.toLowerCase()));
 
         if (indiceComando < 0) {
             return new ParserOutput(null, null);
@@ -80,36 +80,36 @@ public class Parser {
         }
 
         if (tokens.size() <= 1) {
-            return new ParserOutput(comandi.get(indiceComando), null);
+            return new ParserOutput(comandoRiconosciuto, null);
         }
 
         int indiceOggetto = ricercaIndice(tokens.get(1), oggetti,
-            (oggetto, token) -> oggetto.getNome().equals(token) || oggetto.getAlias().contains(token));
+            (oggetto, token) -> oggetto.getNome().equalsIgnoreCase(token) || oggetto.getAlias().contains(token.toLowerCase()));
 
         if (indiceOggetto < 0 && tokens.size() > 2) {
             indiceOggetto = ricercaIndice(tokens.get(2), oggetti,
-                (oggetto, token) -> oggetto.getNome().equals(token) || oggetto.getAlias().contains(token));
+                (oggetto, token) -> oggetto.getNome().equalsIgnoreCase(token) || oggetto.getAlias().contains(token.toLowerCase()));
         }
 
         int indiceOggettoInventario = -1;
         if (indiceOggetto < 0) {
             indiceOggettoInventario = ricercaIndice(tokens.get(1), inventario,
-                (oggetto, token) -> oggetto.getNome().equals(token) || oggetto.getAlias().contains(token));
+                (oggetto, token) -> oggetto.getNome().equalsIgnoreCase(token) || oggetto.getAlias().contains(token.toLowerCase()));
             if (indiceOggettoInventario < 0 && tokens.size() > 2) {
                 indiceOggettoInventario = ricercaIndice(tokens.get(2), inventario,
-                    (oggetto, token) -> oggetto.getNome().equals(token) || oggetto.getAlias().contains(token));
+                    (oggetto, token) -> oggetto.getNome().equalsIgnoreCase(token) || oggetto.getAlias().contains(token.toLowerCase()));
             }
         }
 
         if (indiceOggetto > -1) {
-            return new ParserOutput(comandi.get(indiceComando), oggetti.get(indiceOggetto), null, null);
+            return new ParserOutput(comandoRiconosciuto, oggetti.get(indiceOggetto), null, null);
         }
 
         if (indiceOggettoInventario > -1) {
-            return new ParserOutput(comandi.get(indiceComando), inventario.get(indiceOggettoInventario), inventario.get(indiceOggettoInventario), null);
+            return new ParserOutput(comandoRiconosciuto, inventario.get(indiceOggettoInventario), inventario.get(indiceOggettoInventario), null);
         }
 
-        return new ParserOutput(comandi.get(indiceComando), null, null, null);
+        return new ParserOutput(comandoRiconosciuto, null, null, null);
     }
 
     /**

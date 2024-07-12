@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Enumerazione che rappresenta i vari tipi di comandi che possono essere utilizzati nel gioco.
  * Ogni costante dell'enumerazione rappresenta un comando specifico.
  * 
- * @author Alessandro
+ * @autore Alessandro
  */
 public enum TipoComandi implements Serializable {
     /**
