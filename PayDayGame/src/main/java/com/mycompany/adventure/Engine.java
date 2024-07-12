@@ -260,11 +260,9 @@ public class Engine {
     /**
      * Esegue il ciclo principale del gioco.
      */
-    public void execute() {
-        boolean running = true;
-        
+    public void execute() {    
         gameWindow.showMenuPanel();
-        while (running) {
+        while (true) {
             
             boolean giocoAttivo = true;
             
