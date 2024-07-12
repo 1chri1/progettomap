@@ -54,7 +54,7 @@ public class GestoreMovimento implements Modifica, Serializable {
                 break;
             case SUD:
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Esterno dell'Ingresso Principale")) {
-                    descrizione.setGiocoTerminato(true);
+                    descrizione.setGiocoTerminato(true,5);
                     return "Sei andato in strada e sei stato investito. Il gioco è finito.";
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 3") ||
@@ -107,10 +107,10 @@ public class GestoreMovimento implements Modifica, Serializable {
                 // Verifica se sei entrato nella Hall o Sala Controllo
                 if ("Hall".equalsIgnoreCase(nextRoom.getNome()) && !descrizione.isQuadroElettricoDisattivato()) {
                      GameWindow.appendOutput("Sei stato arrestato perche' le telecamere sono attive. Il gioco e' terminato.");
-                    descrizione.setGiocoTerminato(true);
+                    descrizione.setGiocoTerminato(true,5);
                 }
                 if ("Sala Controllo".equalsIgnoreCase(nextRoom.getNome())) {
-                    descrizione.setGiocoTerminato(true);
+                    descrizione.setGiocoTerminato(true,5);
                 }
                 return "";
             }

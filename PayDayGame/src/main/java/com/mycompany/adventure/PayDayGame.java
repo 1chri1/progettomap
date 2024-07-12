@@ -133,7 +133,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
 
             if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
                 out.println("Sei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
-                setGiocoTerminato(true);
+                setGiocoTerminato(true,5);
                 return;
             }
             if (move) {
@@ -169,7 +169,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                     } else {
                         out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                     }
-                    setGiocoTerminato(true);
+                    setGiocoTerminato(true,10);
                     out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
                 } else {
                     int risposta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
@@ -179,7 +179,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                             bottinoFinale += BOTTINO_EXTRA;
                         }
                         GameWindow.appendOutput("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
-                        setGiocoTerminato(true);
+                        setGiocoTerminato(true,10);
                     } else {
                         outputStream.println("Hai deciso di rimanere e completare la missione.");
                         setStanzaCorrente(cr);
@@ -243,7 +243,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
      * @param giocoTerminato true se il gioco è terminato, altrimenti false
      */
     @Override
-    public void setGiocoTerminato(boolean giocoTerminato) {
+    public void setGiocoTerminato(boolean giocoTerminato, int secondi) {
         if (giocoTerminato) {
             // Disabilita l'input e stampa il messaggio
             engine.getGameWindow().setInputEnabled(false);
@@ -255,7 +255,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                 scheduler.shutdown();
                 // Torna al menu principale
                 SwingUtilities.invokeLater(() -> engine.getGameWindow().showMenuPanel());
-            }, 5, TimeUnit.SECONDS);
+            }, secondi, TimeUnit.SECONDS);
 
         } else {
             this.giocoTerminato = false;
@@ -263,6 +263,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             engine.getGameWindow().setInputEnabled(true); // Assicura che l'input sia abilitato
         }
     }
+
 
     /**
      * Verifica se il giocatore è uscito dal gioco.

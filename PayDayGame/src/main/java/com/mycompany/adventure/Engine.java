@@ -314,7 +314,7 @@ public class Engine {
                                 salvaPartita();
                             } else {
                                 outputStream.println("Stai per uscire dal gioco, attendere...");
-                                game.setGiocoTerminato(true);
+                                game.setGiocoTerminato(true,5);
                             }
                             giocoAttivo = false;
                         } else {

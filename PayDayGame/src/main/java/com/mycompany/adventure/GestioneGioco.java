@@ -136,8 +136,9 @@ public abstract class GestioneGioco implements Serializable {
      * Imposta lo stato di terminazione del gioco.
      *
      * @param giocoTerminato lo stato di terminazione del gioco
+     * @param secondi
      */
-    public abstract void setGiocoTerminato(boolean giocoTerminato);
+    public abstract void setGiocoTerminato(boolean giocoTerminato, int secondi);
 
     /**
      * Verifica se la torcia è accesa.

@@ -55,7 +55,7 @@ public class TimerGuardia implements Runnable, Serializable {
             if (!GIOCO.isGiocoTerminato()) {
                 if (tempoRimasto <= 0) {
                     GameWindow.appendOutput("La guardia ti ha trovato! Hai perso.\n");
-                    GIOCO.setGiocoTerminato(true);
+                    GIOCO.setGiocoTerminato(true,7);
                 } else {
                     GameWindow.appendOutput("Sei riuscito a scappare in tempo!\n");
                 }
