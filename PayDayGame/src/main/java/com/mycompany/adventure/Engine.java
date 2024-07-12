@@ -241,7 +241,7 @@ public class Engine {
 
             engine.execute();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             dbManager.close();
