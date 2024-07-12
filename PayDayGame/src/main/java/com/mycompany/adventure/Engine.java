@@ -3,7 +3,6 @@ package com.mycompany.adventure;
 import com.mycompany.parser.Parser;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.db.DatabaseManager;
-import com.mycompany.meteo.Meteo;
 import com.mycompany.swing.GameWindow;
 import com.mycompany.swing.TextAreaOutputStream;
 
@@ -40,45 +39,6 @@ public class Engine {
         this.game.setEngine(this); // Passa l'istanza di Engine al gioco
     }
 
-    /**
-     * Mostra il messaggio iniziale del gioco.
-     */
-    public void mostraMessaggioIniziale() {
-        // Stampa informazioni meteo
-        Meteo.stampaMeteo("Rome");
-        outputStream.println();
-        outputStream.println(incipit());
-        outputStream.println(game.messaggioIniziale());
-        outputStream.println();
-        outputStream.println("Sei nascosto all'" + game.getStanzaCorrente().getNome());
-        outputStream.println(game.getStanzaCorrente().getDescrizione());
-        outputStream.println();
-        outputStream.print("?> ");
-    }
-
-    /**
-     * Restituisce l'incipit del gioco, inclusi l'obiettivo e il piano della rapina.
-     *
-     * @return l'incipit del gioco
-     */
-    public static String incipit() {
-        return "Benvenuto in PayDay!\n\n"
-               + "In una citta' corrotta, dove la legge e' solo un lontano ricordo, tu e la tua banda di ladri\n"
-               + "avete un obiettivo ambizioso: rapinare la banca piu' sorvegliata della citta'.\n\n"
-               + "L'obiettivo e' semplice, ma pericoloso: infiltrati nella banca, evita le guardie e le telecamere,\n"
-               + "e disattiva il quadro elettrico per oscurare le telecamere di sicurezza.\n\n"
-               + "Ma ricorda, una volta disattivato il quadro, l'oscurità sarà totale. Dovrai trovare una torcia\n"
-               + "per orientarti nel buio.\n\n"
-               + "Inoltre, il caveau non sarà facilmente accessibile. Dovrai cercare le chiavi della stanza del direttore,\n"
-               + "che ti sveleranno il modo di accedere al caveau.\n\n"
-               + "All'interno del caveau, troverai una fortuna in soldi e gioielli. Ma attenzione,\n"
-               + "il direttore della banca nasconde un segreto: delle prove compromettenti che possono\n"
-               + "essere usate per ricattarlo e ottenere un bottino piu' alto.\n\n"
-               + "Il tempo e' contro di te. Le guardie sono sempre all'erta e ogni passo falso puo' costarti caro.\n"
-               + "Pianifica i tuoi movimenti con attenzione, raccogli tutto il bottino possibile e scappa dal garage.\n\n"
-               + "Buona fortuna, e che la tua avventura abbia inizio!";
-    }
-    
     /**
      * Imposta l'output stream per il gioco.
      *
@@ -155,7 +115,7 @@ public class Engine {
      */
     private void inizializzaParser() {
         try {
-            Set<String> stopwords = UtilityEngine.caricaFile(new File("./resources/stopwords"));
+            Set<String> stopwords = UtilityEngine.caricaFileStopWords(new File("./resources/stopwords"));
             parser = new Parser(stopwords);
         } catch (IOException ex) {
             outputStream.println(ex);
@@ -180,7 +140,7 @@ public class Engine {
             GameWindow.clearOutput(); // Pulisce l'output prima di mostrare il messaggio iniziale
             inizializzaGioco(); // Inizializza il gioco
             
-            mostraMessaggioIniziale();
+            UtilityEngine.mostraMessaggioIniziale(outputStream, game);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -189,7 +149,7 @@ public class Engine {
     /**
      * Salva la partita corrente.
      */
-    private void salvaPartita() {
+    private void gestoreSalva() {
         String nomeSalvataggio = null;
         while (true) {
             nomeSalvataggio = JOptionPane.showInputDialog(null, "Inserisci il nome del salvataggio:");
@@ -214,7 +174,7 @@ public class Engine {
     /**
      * Carica una partita salvata.
      */
-    public void caricaPartita() {
+    public void gestoreCarica() {
         List<String> salvataggi = game.elencoSalvataggi(".");
         if (salvataggi.isEmpty()) {
             JOptionPane.showMessageDialog(gameWindow, "Non ci sono salvataggi disponibili.");
@@ -289,14 +249,14 @@ public class Engine {
                         continue;
                     }
                     if (command.equalsIgnoreCase("salva")) {
-                        salvaPartita();
+                        gestoreSalva();
                         break;
                     } else if (command.equalsIgnoreCase("carica")) {
                         int conferma = JOptionPane.showConfirmDialog(null, "Per caricare una partita salvata devi uscire dalla partita in corso e tornare al menu iniziale. \nVuoi procedere?", "Conferma Caricamento", JOptionPane.YES_NO_OPTION);
                         if (conferma == JOptionPane.YES_OPTION) {
                             int risposta = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di tornare al menu?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
                             if (risposta == JOptionPane.YES_OPTION) {
-                                salvaPartita();
+                                gestoreSalva();
                             }
                             giocoAttivo = false;
                             partitaSalvata = false;
@@ -310,7 +270,7 @@ public class Engine {
                         if (confermaEsci == JOptionPane.YES_OPTION) {
                             int rispostaSalva = JOptionPane.showConfirmDialog(null, "Vuoi salvare la partita corrente prima di uscire?", "Conferma Salvataggio", JOptionPane.YES_NO_OPTION);
                             if (rispostaSalva == JOptionPane.YES_OPTION) {
-                                salvaPartita();
+                                gestoreSalva();
                             } else {
                                 outputStream.println("Stai per uscire dal gioco, attendere...");
                                 game.setGiocoTerminato(true,5);
@@ -384,7 +344,7 @@ public class Engine {
 
             engine.execute();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             dbManager.close();

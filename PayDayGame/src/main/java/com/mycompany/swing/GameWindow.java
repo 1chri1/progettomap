@@ -136,7 +136,7 @@ public class GameWindow extends JFrame {
             engine.nuovaPartita();
             showGamePanel();
         } else if (source == menuPanel.getCaricaButton()) {
-            engine.caricaPartita();
+            engine.gestoreCarica();
             showGamePanel();
         } else if (source == menuPanel.getEsciButton()) {
             System.exit(0);
