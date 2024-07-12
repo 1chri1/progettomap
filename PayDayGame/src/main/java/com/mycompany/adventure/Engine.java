@@ -260,7 +260,8 @@ public class Engine {
     /**
      * Esegue il ciclo principale del gioco.
      */
-    public void execute() {    
+    public void execute() {
+        
         gameWindow.showMenuPanel();
         while (true) {
             
@@ -383,7 +384,7 @@ public class Engine {
 
             engine.execute();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             dbManager.close();

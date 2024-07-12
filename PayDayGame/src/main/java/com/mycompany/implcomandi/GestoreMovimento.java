@@ -81,7 +81,9 @@ public class GestoreMovimento implements Modifica, Serializable {
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Scale") || 
                     stanzaCorrente.getNome().equalsIgnoreCase("Magazzino") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1")) {
-                    GameWindow.appendOutput("Sei entrato nel corridoio, ora vedi delle porte");
+                    if(!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
+                        GameWindow.appendOutput("Sei entrato nel corridoio, ora vedi nuove porte");
+                    }
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Lato destro")) {
                     messaggio = "A ovest c'è l'ingresso per le ";

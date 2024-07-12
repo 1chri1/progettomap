@@ -162,24 +162,51 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                 }
             }
             if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
+                int bottinoFinale=0;
                 if (hasSoldi() && hasGioielli()) {
-                    int bottinoFinale = BOTTINO_BASE + (isRicattoDirettore() ? BOTTINO_EXTRA : 0);
+                    bottinoFinale = BOTTINO_BASE + (isRicattoDirettore() ? BOTTINO_EXTRA : 0);
                     if (isRicattoDirettore()) {
                         out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                     } else {
                         out.println("Missione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                     }
-                    setGiocoTerminato(true,10);
+                    setGiocoTerminato(true, 10);
                     out.println("Sei riuscito a scappare in tempo!"); // Messaggio di successo
-                } else {
-                    int risposta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
+                } else if (hasSoldi()) {
+                    int risposta = JOptionPane.showConfirmDialog(null, "Hai preso i soldi ma ti mancano ancora i gioielli. Sei sicuro di voler uscire?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
                     if (risposta == JOptionPane.YES_OPTION) {
-                        int bottinoFinale = 0;
+                        bottinoFinale = BOTTINO_BASE;
                         if (isRicattoDirettore()) {
                             bottinoFinale += BOTTINO_EXTRA;
                         }
-                        GameWindow.appendOutput("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
-                        setGiocoTerminato(true,10);
+                        GameWindow.appendOutput("Hai deciso di uscire senza prendere i gioielli. Il tuo bottino finale ammonta a " + bottinoFinale + " euro.");
+                        setGiocoTerminato(true, 10);
+                    } else {
+                        outputStream.println("Hai deciso di rimanere e completare la missione.");
+                        setStanzaCorrente(cr);
+                    }
+                } else if (hasGioielli()) {
+                    int risposta = JOptionPane.showConfirmDialog(null, "Hai preso i gioielli ma ti mancano ancora i soldi. Sei sicuro di voler uscire?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
+                    if (risposta == JOptionPane.YES_OPTION) {
+                        bottinoFinale = 0;
+                        if (isRicattoDirettore()) {
+                            bottinoFinale += BOTTINO_EXTRA;
+                        }
+                        GameWindow.appendOutput("Hai deciso di uscire senza prendere i soldi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
+                        setGiocoTerminato(true, 10);
+                    } else {
+                        outputStream.println("Hai deciso di rimanere e completare la missione.");
+                        setStanzaCorrente(cr);
+                    }
+                } else {
+                    int risposta = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler uscire anche se ti manca ancora qualcosa di importante?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
+                    if (risposta == JOptionPane.YES_OPTION) {
+                        bottinoFinale = 0;
+                        if (isRicattoDirettore()) {
+                            bottinoFinale += BOTTINO_EXTRA;
+                        }
+                        GameWindow.appendOutput("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro.");
+                        setGiocoTerminato(true, 10);
                     } else {
                         outputStream.println("Hai deciso di rimanere e completare la missione.");
                         setStanzaCorrente(cr);
@@ -420,8 +447,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             // Reimposta il dbManager dopo il caricamento
             giocoCaricato.dbManager = DatabaseManager.getInstance();
             engine.getGameWindow().setInputEnabled(true); // Assicura che l'input sia abilitato
-
-            outputStream.println("Timer attivo: " + giocoCaricato.timerAttivo); // Debug per verificare lo stato del timer
+            
             if (giocoCaricato.timerAttivo) {
                 int minutiRimasti = giocoCaricato.tempoRimastoTimer / 60;
                 outputStream.println("Tempo rimasto per il timer caricato: " + minutiRimasti + " minuti (" + giocoCaricato.tempoRimastoTimer + " secondi).");
