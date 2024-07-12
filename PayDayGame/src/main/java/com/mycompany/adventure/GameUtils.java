@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class GameUtils {
     
-     boolean torciaAccesa = false;
      
     /**
      * Ottiene un oggetto dall'inventario dato il suo ID.
