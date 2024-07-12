@@ -17,17 +17,12 @@ import com.mycompany.implComandi.Modifica;
 import com.mycompany.inizializzazione.InizializzazioneComandi;
 import com.mycompany.inizializzazione.InizializzazioneOggetti;
 import com.mycompany.inizializzazione.InizializzazioneStanze;
-import com.mycompany.meteo.Meteo;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.swing.GameWindow;
 import com.mycompany.thread.TimerGuardia;
-import com.mycompany.type.Comandi;
-import com.mycompany.type.Oggetto;
 import com.mycompany.type.Stanza;
-import com.mycompany.type.TipoComandi;
 
 import java.io.*;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,8 +30,6 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.swing.JOptionPane;
@@ -45,11 +38,11 @@ import javax.swing.SwingUtilities;
 public class PayDayGame extends GestioneGioco implements GestoreComandi, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private final List<Modifica> osservatori = new ArrayList<>();
+    private final List<Modifica> OSSERVATORI = new ArrayList<>();
     private ParserOutput parserOutput;
-    private final List<String> messaggi = new ArrayList<>();
-    private final int bottinoBase = 100000;
-    private final int bottinoExtra = 50000;
+    private final List<String> MESSAGGI = new ArrayList<>();
+    private final int BOTTINO_BASE = 100000;
+    private final int BOTTINO_EXTRA = 50000;
     private boolean quadroElettricoDisattivato;
     private boolean giocoTerminato;
     private boolean torciaAccesa;
@@ -87,7 +80,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
      */
     @Override
     public void inizializzazione() throws Exception {
-        messaggi.clear();
+        MESSAGGI.clear();
 
         InizializzazioneComandi inizializzazioneComandi = new InizializzazioneComandi();
         inizializzazioneComandi.initCommandi(this);
@@ -123,20 +116,20 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
      * Gestisce il prossimo spostamento del giocatore.
      *
      * @param p   L'output del parser contenente il comando e altri dettagli
-     * @param out Il PrintStream per l'output dei messaggi
+     * @param out Il PrintStream per l'output dei MESSAGGI
      */
  @Override
-public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
+public void prossimoSpostamento(ParserOutput p, PrintStream out) {
     parserOutput = p;
-    messaggi.clear();
+    MESSAGGI.clear();
     if (p.getComando() == null) {
         out.println("Non ho capito cosa devo fare! Prova con un altro comando.");
     } else {
         Stanza cr = getStanzaCorrente();
         notificaGestori();
         boolean move = !cr.equals(getStanzaCorrente()) && getStanzaCorrente() != null;
-        if (!messaggi.isEmpty()) {
-            for (String m : messaggi) {
+        if (!MESSAGGI.isEmpty()) {
+            for (String m : MESSAGGI) {
                 if (m.length() > 0) {
                     out.println(m);
                 }
@@ -175,7 +168,7 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
         }
         if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
               if (hasSoldi() && hasGioielli()) {
-                int bottinoFinale = bottinoBase + (isRicattoDirettore() ? bottinoExtra : 0);
+                int bottinoFinale = BOTTINO_BASE + (isRicattoDirettore() ? BOTTINO_EXTRA : 0);
                 if (isRicattoDirettore()) {
                     out.println("Missione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                 } else {
@@ -188,7 +181,7 @@ public void ProssimoSpostamento(ParserOutput p, PrintStream out) {
                 if (risposta == JOptionPane.YES_OPTION) {
                     int bottinoFinale = 0;
                     if (isRicattoDirettore()) {
-                        bottinoFinale += bottinoExtra;
+                        bottinoFinale += BOTTINO_EXTRA;
                     }
                     GameWindow.appendOutput("Hai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
                     setGiocoTerminato(true);
@@ -544,8 +537,8 @@ public void gestisciSalvataggi(String baseFileName, String directory) throws IOE
      */
     @Override
     public void assegna(Modifica o) {
-        if (!osservatori.contains(o)) {
-            osservatori.add(o);
+        if (!OSSERVATORI.contains(o)) {
+            OSSERVATORI.add(o);
         }
     }
 
@@ -556,7 +549,7 @@ public void gestisciSalvataggi(String baseFileName, String directory) throws IOE
      */
     @Override
     public void rimuovi(Modifica o) {
-        osservatori.remove(o);
+        OSSERVATORI.remove(o);
     }
 
     /**
@@ -564,8 +557,8 @@ public void gestisciSalvataggi(String baseFileName, String directory) throws IOE
      */
     @Override
     public void notificaGestori() {
-        for (Modifica o : osservatori) {
-            messaggi.add(o.aggiorna(this, parserOutput));
+        for (Modifica o : OSSERVATORI) {
+            MESSAGGI.add(o.aggiorna(this, parserOutput));
         }
     }
 
@@ -575,7 +568,7 @@ public void gestisciSalvataggi(String baseFileName, String directory) throws IOE
      * @return Il messaggio iniziale
      */
     @Override
-    public String MessaggioIniziale() {
+    public String messaggioIniziale() {
         return "L'avventura ha inizio";
     }
 

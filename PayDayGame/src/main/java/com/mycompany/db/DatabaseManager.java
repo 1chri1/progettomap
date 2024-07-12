@@ -10,7 +10,7 @@ import org.h2.tools.Server;
  */
 public class DatabaseManager {
 
-    private static DatabaseManager instance;
+    private static DatabaseManager INSTANCE;
     private Connection connection;
     private Server h2Server;
     private String dbName;
@@ -23,10 +23,10 @@ public class DatabaseManager {
      * @return L'istanza singleton di DatabaseManager.
      */
     public static synchronized DatabaseManager getInstance() {
-        if (instance == null) {
-            instance = new DatabaseManager();
+        if (INSTANCE == null) {
+            INSTANCE = new DatabaseManager();
         }
-        return instance;
+        return INSTANCE;
     }
 
     /**
@@ -37,9 +37,9 @@ public class DatabaseManager {
      * @param password La password per il database.
      * @throws SQLException Se si verifica un errore di accesso al database.
      */
-    public void initializeAndConnect(String dbUrl, String user, String password) throws SQLException {
+    public void inizializzazioneEConnessione(String dbUrl, String user, String password) throws SQLException {
         try {
-            int port = findFreePort();
+            int port = trovaPortaLibera();
             System.out.println("Utilizzo la porta: " + port);
 
             h2Server = Server.createWebServer("-webPort", String.valueOf(port), "-tcpAllowOthers", "-webAllowOthers").start();
@@ -48,7 +48,7 @@ public class DatabaseManager {
             connection = DriverManager.getConnection(dbUrl, user, password);
             this.dbName = dbUrl; // Memorizza l'URL corrente del database
 
-            initializeDatabase();
+            inizializzaDatabase();
             System.out.println("Database e tabelle create con successo!");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,7 +86,7 @@ public class DatabaseManager {
      *
      * @throws SQLException Se si verifica un errore di accesso al database.
      */
-    private void initializeDatabase() throws SQLException {
+    private void inizializzaDatabase() throws SQLException {
         try (var stmt = connection.createStatement()) {
             stmt.execute("CREATE TABLE IF NOT EXISTS rooms (id INT AUTO_INCREMENT PRIMARY KEY, piano INT, nome VARCHAR(255), descrizione TEXT, guarda TEXT)");
             stmt.execute("CREATE TABLE IF NOT EXISTS objects (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), description TEXT, room_id INT, FOREIGN KEY (room_id) REFERENCES rooms(id))");
@@ -98,7 +98,7 @@ public class DatabaseManager {
      *
      * @return Un numero di porta libero.
      */
-    private static int findFreePort() {
+    private static int trovaPortaLibera() {
         try (var socket = new java.net.ServerSocket(0)) {
             socket.setReuseAddress(true);
             return socket.getLocalPort();

@@ -14,41 +14,41 @@ import java.util.Set;
 public class Comandi implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final TipoComandi tipo;
-    private final String nome;
+    private final TipoComandi TIPO;
+    private final String NOME;
     private Set<String> alias;
 
     /**
-     * Costruttore per creare un comando con il tipo e il nome specificati.
+     * Costruttore per creare un comando con il TIPO e il NOME specificati.
      *
-     * @param tipo il tipo di comando
-     * @param nome il nome del comando
+     * @param tipo il TIPO di comando
+     * @param nome il NOME del comando
      */
     public Comandi(TipoComandi tipo, String nome) {
-        this.tipo = tipo;
-        this.nome = nome;
+        this.TIPO = tipo;
+        this.NOME = nome;
     }
 
     /**
-     * Costruttore per creare un comando con il tipo, nome e alias specificati.
+     * Costruttore per creare un comando con il TIPO, NOME e alias specificati.
      *
-     * @param tipo il tipo di comando
-     * @param nome il nome del comando
+     * @param tipo il TIPO di comando
+     * @param nome il NOME del comando
      * @param alias gli alias del comando
      */
     public Comandi(TipoComandi tipo, String nome, Set<String> alias) {
-        this.tipo = tipo;
-        this.nome = nome;
+        this.TIPO = tipo;
+        this.NOME = nome;
         this.alias = alias;
     }
 
     /**
-     * Restituisce il nome del comando.
+     * Restituisce il NOME del comando.
      *
-     * @return il nome del comando
+     * @return il NOME del comando
      */
     public String getNome() {
-        return nome;
+        return NOME;
     }
 
     /**
@@ -70,12 +70,12 @@ public class Comandi implements Serializable {
     }
 
     /**
-     * Restituisce il tipo del comando.
+     * Restituisce il TIPO del comando.
      *
-     * @return il tipo del comando
+     * @return il TIPO del comando
      */
     public TipoComandi getTipo() {
-        return tipo;
+        return TIPO;
     }
 
     /**
@@ -95,7 +95,7 @@ public class Comandi implements Serializable {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.tipo);
+        hash = 97 * hash + Objects.hashCode(this.TIPO);
         return hash;
     }
 
@@ -117,7 +117,7 @@ public class Comandi implements Serializable {
             return false;
         }
         final Comandi other = (Comandi) obj;
-        if (this.tipo != other.tipo) {
+        if (this.TIPO != other.TIPO) {
             return false;
         }
         return true;

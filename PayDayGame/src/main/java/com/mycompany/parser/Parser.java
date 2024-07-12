@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 public class Parser {
 
-    private final Set<String> stopwords;
+    private final Set<String> STOPWORDS;
 
     /**
      * Costruttore per la classe Parser.
@@ -20,7 +20,7 @@ public class Parser {
      * @param stopwords insieme delle parole da ignorare durante il parsing
      */
     public Parser(Set<String> stopwords) {
-        this.stopwords = stopwords;
+        this.STOPWORDS = stopwords;
     }
 
     /**
@@ -50,7 +50,7 @@ public class Parser {
      * @return un oggetto ParserOutput contenente i risultati del parsing
      */
     public ParserOutput parse(String comando, List<Comandi> comandi, List<Oggetto> oggetti, List<Oggetto> inventario, List<Stanza> stanze) {
-        List<String> tokens = UtilityParser.parseString(comando, stopwords);
+        List<String> tokens = UtilityParser.parseString(comando, STOPWORDS);
 
         if (tokens.isEmpty()) {
             return null;

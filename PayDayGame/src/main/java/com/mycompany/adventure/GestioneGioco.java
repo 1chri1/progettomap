@@ -18,20 +18,20 @@ import java.util.List;
 public abstract class GestioneGioco implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final List<Stanza> stanze = new ArrayList<>();
-    private final List<Comandi> comandi = new ArrayList<>();
-    private final List<Oggetto> inventario = new ArrayList<>();
+    private final List<Stanza> STANZE = new ArrayList<>();
+    private final List<Comandi> COMANDI = new ArrayList<>();
+    private final List<Oggetto> INVENTARIO = new ArrayList<>();
     private Stanza stanzaCorrente; // visibile solo nel package a cui appartiene
     transient Engine engine;
 
 
     /**
-     * Restituisce la lista delle stanze del gioco.
+     * Restituisce la lista delle STANZE del gioco.
      *
-     * @return lista delle stanze
+     * @return lista delle STANZE
      */
     public List<Stanza> getStanze() {
-        return stanze;
+        return STANZE;
     }
 
     
@@ -43,12 +43,12 @@ public abstract class GestioneGioco implements Serializable {
         this.engine = engine;
     }
     /**
-     * Restituisce la lista dei comandi del gioco.
+     * Restituisce la lista dei COMANDI del gioco.
      *
-     * @return lista dei comandi
+     * @return lista dei COMANDI
      */
     public List<Comandi> getComandi() {
-        return comandi;
+        return COMANDI;
     }
 
     /**
@@ -70,12 +70,12 @@ public abstract class GestioneGioco implements Serializable {
     }
 
     /**
-     * Restituisce l'inventario del giocatore.
+     * Restituisce l'INVENTARIO del giocatore.
      *
-     * @return inventario del giocatore
+     * @return INVENTARIO del giocatore
      */
     public List<Oggetto> getInventario() {
-        return inventario;
+        return INVENTARIO;
     }
 
     /**
@@ -91,14 +91,14 @@ public abstract class GestioneGioco implements Serializable {
      * @param p   output del parser
      * @param out stream di output
      */
-    public abstract void ProssimoSpostamento(ParserOutput p, PrintStream out);
+    public abstract void prossimoSpostamento(ParserOutput p, PrintStream out);
 
     /**
      * Restituisce il messaggio iniziale del gioco.
      *
      * @return messaggio iniziale
      */
-    public abstract String MessaggioIniziale();
+    public abstract String messaggioIniziale();
 
     // Metodi di gestione dello stato del gioco
 

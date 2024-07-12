@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameWindow extends JFrame {
-    private static JTextArea outputArea;
+    private static JTextArea OUTPUT_AREA;
     private JTextField inputField;
     private JButton sendButton;
     private Engine engine;
@@ -23,9 +23,9 @@ public class GameWindow extends JFrame {
         setLayout(new CardLayout());
 
         mainPanel = new JPanel(new BorderLayout());
-        outputArea = new JTextArea();
-        outputArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(outputArea);
+        OUTPUT_AREA = new JTextArea();
+        OUTPUT_AREA.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(OUTPUT_AREA);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         JPanel inputPanel = new JPanel(new BorderLayout());
@@ -64,24 +64,24 @@ public class GameWindow extends JFrame {
         inputField.setText("");
         if (input != null && !input.trim().isEmpty()) {
             engine.processCommand(input);
-            outputArea.append(input + "\n");
+            OUTPUT_AREA.append(input + "\n");
         }
     }
 
     public JTextArea getOutputArea() {
-        return outputArea;
+        return OUTPUT_AREA;
     }
 
    public static void appendOutput(String text) {
     SwingUtilities.invokeLater(() -> {
-        outputArea.append(text + "\n");
-        outputArea.setCaretPosition(outputArea.getDocument().getLength());
+        OUTPUT_AREA.append(text + "\n");
+        OUTPUT_AREA.setCaretPosition(OUTPUT_AREA.getDocument().getLength());
     });
 }
 
 
     public static void clearOutput() {
-        outputArea.setText("");
+        OUTPUT_AREA.setText("");
     }
 
     public void showMenuPanel() {

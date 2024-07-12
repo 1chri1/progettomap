@@ -8,15 +8,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class BackgroundPanel extends JPanel {
-    Image backgroundImage;
+    private final Image SFONDO;
 
     public BackgroundPanel(String fileName) {
-        backgroundImage = new ImageIcon(fileName).getImage();
+        SFONDO = new ImageIcon(fileName).getImage();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        g.drawImage(SFONDO, 0, 0, getWidth(), getHeight(), this);
     }
 }

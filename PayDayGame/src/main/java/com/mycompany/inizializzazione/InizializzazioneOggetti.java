@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class InizializzazioneOggetti {
 
-    private final DatabaseManager dbManager;
+    private final DatabaseManager DB_MANAGER;
 
     /**
      * Costruttore per InizializzazioneOggetti.
@@ -22,7 +22,7 @@ public class InizializzazioneOggetti {
      * @param dbManager il gestore del database
      */
     public InizializzazioneOggetti(DatabaseManager dbManager) {
-        this.dbManager = dbManager;
+        this.DB_MANAGER = dbManager;
     }
 
     /**
@@ -150,7 +150,7 @@ public class InizializzazioneOggetti {
      */
     private void insertOggetto(Oggetto oggetto, Stanza stanza) {
         String insertOggettoSQL = "INSERT INTO objects (name, description, room_id) VALUES (?, ?, (SELECT id FROM rooms WHERE nome = ?))";
-        try (PreparedStatement pstmt = dbManager.getConnection().prepareStatement(insertOggettoSQL)) {
+        try (PreparedStatement pstmt = DB_MANAGER.getConnection().prepareStatement(insertOggettoSQL)) {
             pstmt.setString(1, oggetto.getNome());
             pstmt.setString(2, oggetto.getDescrizione());
             pstmt.setString(3, stanza.getNome());

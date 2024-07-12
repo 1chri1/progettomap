@@ -10,8 +10,8 @@ import java.io.Serializable;
 public class TimerGuardia implements Runnable, Serializable {
     private static final long serialVersionUID = 1L;
     private int tempoRimasto; // in secondi
-    private static boolean running;
-    private transient final GestioneGioco gioco;
+    private static boolean RUNNING;
+    private transient final GestioneGioco GIOCO;
 
     /**
      * Costruttore della classe TimerGuardia.
@@ -21,8 +21,8 @@ public class TimerGuardia implements Runnable, Serializable {
      */
     public TimerGuardia(int minuti, GestioneGioco gioco) {
         this.tempoRimasto = minuti * 60; // Converti minuti in secondi
-        this.gioco = gioco;
-        this.running = true;
+        this.GIOCO = gioco;
+        TimerGuardia.RUNNING = true;
     }
 
     /**
@@ -30,7 +30,7 @@ public class TimerGuardia implements Runnable, Serializable {
      */
     @Override
     public void run() {
-        while (tempoRimasto > 0 && running) {
+        while (tempoRimasto > 0 && RUNNING) {
             try {
                 Thread.sleep(1000); // Attende per un secondo (1.000 millisecondi)
                 tempoRimasto -= 1; // Decrementa il tempo rimanente di un secondo
@@ -41,21 +41,21 @@ public class TimerGuardia implements Runnable, Serializable {
                 Thread.currentThread().interrupt();
                 return;
             }
-            if (gioco.isGiocoTerminato()) {
-                stop(); // Ferma il timer se il gioco è terminato
+            if (GIOCO.isGiocoTerminato()) {
+                stop(); // Ferma il timer se il GIOCO è terminato
                 return;
             }
         }
 
-        synchronized (gioco) {
-            if (!running) {
+        synchronized (GIOCO) {
+            if (!RUNNING) {
                 return; // Esci immediatamente se il timer è stato fermato
             }
 
-            if (!gioco.isGiocoTerminato()) {
+            if (!GIOCO.isGiocoTerminato()) {
                 if (tempoRimasto <= 0) {
                     GameWindow.appendOutput("La guardia ti ha trovato! Hai perso.\n");
-                    gioco.setGiocoTerminato(true);
+                    GIOCO.setGiocoTerminato(true);
                 } else {
                     GameWindow.appendOutput("Sei riuscito a scappare in tempo!\n");
                 }
@@ -67,7 +67,7 @@ public class TimerGuardia implements Runnable, Serializable {
      * Metodo per fermare il timer.
      */
     public static void stop() {
-        running = false;
+        RUNNING = false;
         Thread.currentThread().interrupt(); // Interrompe il thread per fermare immediatamente l'esecuzione
     }
 
