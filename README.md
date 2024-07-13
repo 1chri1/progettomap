@@ -1,241 +1,195 @@
-# PAYDAY HOMEMADE
+# Avventura testuale - "PayDayGame"
 
-### Introduzione
-*La banca è un fortino ben protetto. Ci sono due guardie all'ingresso principale, telecamere ovunque e una sala controllo sorvegliata da un agente di sicurezza. La missione è chiara: entrare, disattivare il sistema di sorveglianza, prendere le chiavi, trovare il codice della cassetta di sicurezza, rubare soldi e gioielli, e ricattare il direttore con documenti compromettenti per uscire senza essere arrestati.*
+## Gruppo: Mangione Alessandro Aldo, Palumbo Tommaso, Vurchio Christian
 
-Si può entrare dall'ingresso 1 presente nella stanza dove ci sono le scale o dall'ingresso 2, 
-tramite la finestra, presente nel bagno. 
-Per non essere catturati bisogna disattivare il quadro elettrico presente in fondo al corridoio 3. 
-Se non lo si fa c’è la possibilità di essere arrestato… nell’entrata principale ci sono le telecamere attive e al di fuori 
-ci sono 2 guardie, mentre c’è una sala controllo con una guardia dentro.
-Bisogna spegnere il quadro anche perché bisogna prendere dalla portineria le chiavi della stanza del direttore e per andare 
- portineria bisogna passare dall’entrata principale…
-Per uscire dal gioco vincitori, dopo aver rubato gioielli e soldi, bisogna trovare i documenti per ricattare
-il direttore, ricattarlo, in maniera da uscire senza essere arrestati. 
+## 1. INTRODUZIONE
 
-### Descrizione stanze:
-- Esterno (davanti all'ingresso principale)
-    - Descrizione: Ci sono le guardie davanti all'ingresso, trova un'altra soluzione.
-    - NORD: CI sono le guardie davanti all'ingresso, trova un'altra soluzione
-    - SUD: Qui è da dove arrivi, non ti puoi tirare indietro
-    - EST: Ti stai spostando sul lato destro della parte frontale della banca
-    - OVEST: Ti stai spostando sul lato sinistro della parte frontale della banca
-- Esterno (ANGOLO a destra)
-    - Descrizione:
-    - NORD: Puoi andare avanti, il palazzo continua
-    - SUD: Non ti puoi tirare indietro
-    - EST: Non ti puoi tirare indietro
-    - OVEST: Sei tornato all'ingresso principale
-- Esterno (ANGOLO a sinistra)
-    - Descrizione: 
-    - NORD: Puoi andare avanti, il palazzo continua
-    - SUD: Non ti puoi tirare indietro
-    - EST: Sei tornato all'ingresso principale
-    - OVEST: Non ti puoi tirare indietro
-- Esterno (LATO DESTRA BANCA)
-    - Descrizione: C'è la finestra delle scale, potresti provare ad entrare.
-    - NORD: Non puoi andare, c'è una recinzione
-    - SUD: Sei tornato all'angolo destro della banca
-    - EST: Non puoi andare, c'è una recinzione
-    - OVEST: C'è la finestra delle scale, potresti provare ad entrare
-- Esterno (LATO SINISTRA BANCA)
-    - Descrizione: C'è la finestra del bagno, potresti provare ad entrare.
-    - NORD: Non puoi andare, c'è una recinzione
-    - SUD: Sei tornato all'angolo sinistro della banca
-    - EST: C'è la finestra del bagno, potresti provare ad entrare
-    - OVEST: Non puoi andare, c'è una recinzione
-- Hall
-    - Descrizione: Punto di ingresso principale.
-    - Oggetti:
-       - Nessun oggetto chiave.
-    - NORD: Sei entrato nel corridoio 1
-    - SUD: Non puoi uscire dall'entrata principale
-    - EST: Non puoi oltrepassare il muro
-    - OVEST: Sei entrato nella portineria
-- Portineria
-    - Descrizione:
-    - Oggetti:
-       - Chiavi della stanza del direttore
-       - Chiavi dei due uffici. 
-    - NORD: Non puoi oltrepassare il muro
-    - SUD: Non puoi oltrepassare il muro
-    - EST: Sei entrato nella hall
-    - OVEST: Non puoi oltrepassare il muro
-- Bagno
-    - Descrizione: Entrata alternativa tramite la finestra
-    - Oggetti:
-       - Nessun oggetto chiave
-    - NORD: Non puoi oltrepassare il muro
-    - SUD: Non puoi oltrepassare il muro
-    - EST: Sei entrato nel corridoio 2
-    - OVEST: Sei uscito dalla finestra, sei di nuovo fuori
-- Sala controllo (NON è INTERAGIBILE)
-    - Descrizione:
-    - NORD: NO
-    - SUD: NO
-    - EST: NO 
-    - OVEST: NO
-- Ufficio vicino scale
-    - Descrizione: Ufficio di passaggio.
-    - Oggetti:
-       - Nessun oggetto chiave
-    - NORD: Non puoi oltrepassare il muro
-    - SUD: Sei entrato nelle scale
-    - EST: Non puoi oltrepassare il muro
-    - OVEST: Non puoi oltrepassare il muro
-- Ufficio vicino corridoio 1
-    - Descrizione:
-    - Oggetti:
-       - Registratore con conversazione (per scoprire il codice della cassetta nel caveau).
-    - NORD: Non puoi oltrepassare il muro
-    - SUD: Non puoi oltrepassare il muro
-    - EST: Non puoi oltrepassare il muro
-    - OVEST: Sei entrato nel corridoio 1
-- Magazzino
-    - Descrizione:
-    - Oggetti:
-       - Torcia.
-    - NORD: Non puoi oltrepassare il muro
-    - SUD: Non puoi oltrepassare il muro
-    - EST: Non puoi oltrepassare il muro
-    - OVEST: Sei entrato nel corridoio 2
-- Scale piano di sopra
-    - Descrizione:
-    - NORD: Ufficio (non c'è nulla di interessante)
-    - SUD: Non puoi oltrepassare un muro
-    - EST: Sei uscito dalla finestra, sei di nuovo fuori
-    - OVEST: Sei entrato nel corridoio 3
-- Corridoio 1
-    - Descrizione:
-    - Oggetti:
-       - Nessun oggetto chiave.
-    - NORD: Sei entrato nel corridoio 2
-    - SUD: Sei entrato nella hall
-    - EST: Sei entrato nell'ufficio
-    - OVEST: Non puo oltrepassare i muri
-- Corridoio 2
-    - Descrizione:
-    - Oggetti:
-       - Nessun oggetto chiave.
-    - NORD: Sei entrato nel corridoio 3
-    - SUD: Sei entrato nel corridoio 1
-    - EST: Sei entrato nel magazzino
-    - OVEST: Sei entrato nel bagno
-- Corridoio 3
-    - Descrizione: Cruciale per proseguire senza essere arrestati
-    - Oggetti:
-       - Quadro elettrico (per disattivare le telecamere e la sala controllo).
-    - NORD: Non puoi oltrepassare un muro (c'è il quadro elettrico)
-    - SUD: Sei entrato in corridoio 2
-    - EST: Sei tornato nelle scale
-    - OVEST: Sala controllo (se entri vieni sgamato e il gioco finisce)
-- Caveau
-    - Descrizione: Obiettivo principale del furto.
-    - Oggetti:
-       - Cassetta con documenti per ricattare il direttore.
-       - Soldi e gioielli (al centro della stanza). 
-    - NORD: Non puo oltrepassare i muri
-    - SUD: Non puo oltrepassare i muri
-    - EST: Sei tornato nelle scale
-    - OVEST: Non puo oltrepassare i muri
-- UfficioDirettore
-    - Descrizione: Accessibile con le chiavi prese dalla portineria
-    - Oggetti:
-       - Tesserino per entrare nel caveau (nell’armadio).  
-    - NORD: Sei tornato nelle scale
-    - SUD: Non puo oltrepassare i muri
-    - EST: Non puo oltrepassare i muri
-    - OVEST: Non puo oltrepassare i muri
-- Scala piano sotto
-    - Descrizione:
-    - NORD: Sei entrato nel garage (per uscire)
-    - SUD: Sei entrato nell'ufficio del direttore
-    - EST: Non puoi oltrepassare un muro
-    - OVEST: Sei entrato nel caveau
+### 1.1 Introduzione al gioco
+
+Lo sviluppo del progetto è improntato, come richiesto, alla realizzazione di un'avventura testuale, che si basa cioè sulla narrativa testuale per guidare il giocatore attraverso una serie di sfide e scelte. Nel caso specifico, il gioco è un'avventura testuale con alcuni elementi grafici a solo scopo visivo, in quanto i comandi vengono inseriti attraverso una box di testo per cui per giocare è sufficiente l'utilizzo di una tastiera, mentre il puntatore è richiesto solo per la prima scelta all'avvio del software.
 
 
-### Oggetti contenitore:
+### 1.2 Trama
 
-### Oggetti:
--	Quadro elettrico (in fondo al corridoio 3) / Telecamere (2 nell’entrata principale)
--	Chiavi stanza direttore (nella portineria)
--	Chiavi dei due uffici (nella portineria)
--	Per ogni ufficio, anche per la portineria, sala controllo (+sbirro): Scrivania, Computer, Armadio, Sedia, 
-            registratore(in un solo ufficio, dove c’è la conversazione nella quale si scopre il codice per la cassetta con i 
-            documenti del direttore che è nel caveau)
--	Nel magazzino: torcia, scatole, armadi.
--	Nel cesso: 3 cessi
--	Nella stanza del direttore: scrivania, computer, armadio, sedia, tesserino per entrare nel caveau (nell’armadio)
--	Caveau: cassetta con i documenti per ricattare il direttore e riuscire ad evadere (in una cassetta…quella del registratore), 
-            tutte le cassaforti (anche dentro soldi), gioielli (al centro).
- 	
-### Sequenza di Azioni Suggerita
-- Entrata: Scegliere se entrare dall’ingresso principale (Hall) o dalla finestra del bagno.
-- Disattivazione delle Telecamere: Andare nel corridoio 3 e disattivare il quadro elettrico.
-- Raccolta delle Chiavi: Tornare alla portineria dalla Hall per prendere le chiavi della stanza del direttore e degli uffici.
-- Scoperta del Codice: Andare nell’ufficio vicino al corridoio 1 per trovare il registratore con la conversazione.
-- Accesso al Direttore: Usare le chiavi per entrare nell’ufficio del direttore e prendere il tesserino.
-- Accesso al Caveau: Usare il tesserino per entrare nel caveau e prendere i documenti, soldi e gioielli.
-- Uscita: Tornare alla scala piano sotto e uscire dal garage.
+"PayDayGame" è una reinterpretazione del più famoso videogioco "PAYDAY", e tratta di una banda di ladri che cercano di rapinare una banca nel modo migliore possibile. Nella nostra versione il rapinatore è soltanto uno ed ha un piano ben preciso: entrare, disattivare il sistema di sorveglianza, prendere le chiavi dell'ufficio del direttore e da qui la sua tessera personale per poter aprire il caveau e rubare il più possibile, senza ovviamente essere scoperto e/o catturato.
 
-#### Note Aggiuntive
-- Assicurarsi di evitare la sala controllo per non essere scoperti.
-- La torcia nel magazzino può essere utile per eventuali zone buie o per ulteriori esplorazioni.
 
-![Piano_terra](PayDayGame/img/Piano_terra.png) 
-![caveau](PayDayGame/img/caveau.png)
+### 1.3 Breve descrizione
 
-# NARRAZIONE
-## PAYDAY HOMEMADE: LA RAPINA DEL SECOLO
+Il gioco è un'avventura testuale in cui i giocatori assumono il ruolo di un rapinatore che tenta di svaligiare una banca ben protetta. La missione è complessa e richiede abilità, strategia e sangue freddo.
+I giocatori interagiscono con il gioco tramite comandi testuali, muovendosi nelle varie stanze della banca e interagendo con gli oggetti presenti nelle varie stanze. I comandi di movimento includono "nord", "sud", "est", "ovest", "sali", "scendi", ed "entra". Comandi come ad esempio "prendi", "attiva" o "ascolta" seguiti dal nome dell'oggetto permettono di aggiungere oggetti all'inventario, mentre "guarda" offre una descrizione dettagliata della stanza in cui si è in quel momento.
 
-#### Introduzione
-La notte è oscura, e il silenzio avvolge la banca come una coperta. Le luci delle telecamere di sorveglianza lampeggiano ritmicamente, ricordandoti che ogni passo falso potrebbe essere l'ultimo. Il tuo obiettivo è chiaro: entrare, prendere tutto ciò che puoi e uscire senza lasciare traccia. La missione inizia ora.
 
-#### Fase 1: L'Ingresso
-Davanti all'Ingresso Principale
-Le guardie pattugliano diligentemente l'ingresso principale. Non puoi permetterti di farti notare. Devi trovare un'altra strada. Respiri profondamente e ti muovi lateralmente, evitando le guardie.
+### 1.4 Azioni consigliate per il completamento
 
-###### All'Angolo Destro
-Cammini con cautela lungo il lato destro dell'edificio. Il palazzo continua, e il lato orientale è una possibilità, ma non ti puoi permettere di farti vedere.
+Partendo da fuori l'ingresso principale, che sarà controllato da guardie, dovrai spostarti su un lato dell'edificio ed entrare da uno degli ingressi alternativi.
 
-###### All'Angolo Sinistro
-Ti sposti verso il lato sinistro della banca. Qui c'è una finestra del bagno. È il tuo biglietto d'entrata. Con agilità, forzi la finestra e ti intrufoli dentro.
+Una volta all'interno dovrai procurarti la torcia per poter vedere anche  con le luci spente, la puoi trovare nel magazzino che si trova di fronte il bagno e subito dopo le scale.
 
-#### Fase 2: Disattivare le Sicurezze
-###### Nel Bagno
-Ti trovi nel bagno della banca. L'odore di disinfettante è pungente. Ti prendi un momento per ascoltare. Tutto sembra tranquillo. Decidi di avanzare.
+Uscendo dal magazzino e andando a nord fino alla fine del corridoio troverai il quadro elettrico per poter disattivare le telecamere di sicurezza e di conseguenza tutte le luci dell'edificio.
 
-###### Corridoio 2
-Attraversi il corridoio 2, le tue scarpe non fanno alcun rumore sul pavimento lucido. Il cuore ti batte forte. Arrivi al corridoio 3, il luogo cruciale per disattivare il sistema di sicurezza.
+Spostandoti completamente a sud ripercorrendo il corridoio ti ritroverai nella hall principale, dove ad ovest troverai la porta d'ingresso della portineria da cui potrai prendere le chiavi dei diversi uffici e di quello del direttore, nei quali non potresti entrare senza.
 
-###### Corridoio 3
-Il quadro elettrico è in fondo al corridoio. Un passo alla volta, ti avvicini e, con mani esperte, inizi a lavorare sui cavi. Un ultimo clic e le telecamere si spengono. Ora sei invisibile.
+Ritornando all'inizio del corridoio, con le chiavi potrai entrare nell'ufficio che si trova ad est, dove troverai un registratore vocale in cui è rivelato il codice di sicurezza della cassetta dei documenti del direttore. (questo passaggio è opzionale. serve per poter conoscere il codice della cassetta dei documenti per ricattare il direttore e ottenere del bottino extra)
 
-#### Fase 3: Recuperare le Chiavi
-###### Ritorno alla Hall
-Tornare indietro è meno stressante ora che le telecamere sono fuori uso. Raggiungi la hall, sapendo che il prossimo passo è la portineria.
+Adesso potrai recarti nell'ufficio del direttore nel cui armadio è presente il tesserino che ti da accesso al caveau.
 
-###### Portineria
-La stanza delle chiavi è davanti a te. La tua torcia illumina il buio. Frughi tra i cassetti finché non trovi le chiavi della stanza del direttore e degli uffici. Un sorriso soddisfatto appare sul tuo volto.
+Una volta aperto puoi decidere di prendere solo soldi, solo gioielli o entrambi; nel caso conoscessi il codice della cassetta dei documenti puoi decidere di prenderli e con il comando "ricatta direttore" ricattare il direttore per ricevere una somma extra di denaro.
 
-#### Fase 4: Scoprire il Codice
-###### Ufficio Vicino al Corridoio 1
-Ti dirigi verso l'ufficio vicino al corridoio 1. Sulla scrivania c'è un registratore. Premi play e ascolti attentamente. La conversazione rivela il codice della cassetta di sicurezza nel caveau. Ora hai tutto ciò che ti serve.
+Puoi adesso uscire dal caveau e dirigerti verso il garage per poter fuggire.
 
-#### Fase 5: Accesso al Direttore
-###### Ufficio del Direttore
-Le chiavi aprono la porta dell'ufficio del direttore. Entrando, vedi l'armadio. Dentro c'è il tesserino per entrare nel caveau. Lo prendi e ti prepari per l'ultimo passo.
 
-#### Fase 6: Il Colpo Grosso
-###### Caveau
-Usi il tesserino per accedere al caveau. Le luci si accendono, rivelando soldi e gioielli. Al centro, una cassetta di sicurezza. Inserisci il codice e la apri. Dentro ci sono i documenti compromettenti. Li prendi, insieme ai soldi e ai gioielli. È il momento di uscire.
+## 2 STRUTTURA DEL SOFTWARE
 
-#### Fase 7: La Fuga
-###### Scala Piano Sotto
-Raggiungi le scale che portano al piano inferiore. Il garage è la tua via di fuga. Corri senza fare rumore, il bottino stretto al petto.
+### 2.1 Diagramma delle classi
 
-###### Garage
-Il garage è vuoto. Le chiavi di una macchina abbandonata sono ancora nel cruscotto. Accendi il motore e sgommi via, lontano dalla banca. La missione è compiuta.
+Diagramma delle classi relativo a ad una parte significativa del codice, nel nostro caso **prossimospostamento**
 
-#### Conclusione
-Il direttore sarà ricattato e tu avrai i tuoi soldi. Nessuno saprà mai chi è stato, ma la leggenda di questa rapina riecheggerà per sempre nelle strade della città. La notte è tua, e così è il bottino.
+![diagramma_classi](PayDayGame/img/diagramma_classi.png)
+
+### 2.2 Specifica algebrica
+
+Specifica algebrica della struttura dati **Lista**.
+
+Abbiamo deciso di fare una specifica algebrica  per la struttura dati lista, che abbiamo utilizzato nella classe `OggettoContenitore` che eredita dalla classe `Oggetto`, per poter creare un oggetto di tipo lista, al cui interno ci siano tutti gli oggetti che esso contiente.
+Per questa struttura dati abbiamo utilizzato metodi da noi implementati, ma anche metodi derivati dall’interfaccia List e implementati dalla classe `ArrayList`.
+
+**Specifica sintattica**
+
+**Sorts:**
+-	Oggetto    
+-	boolean
+-	int
+-	List \<Oggetto>
+-	String    
+-	Set \<String>  
+
+**Operations:**
+-	OggettoContenitore (String nome, String descrizione, Set \<String> alias) -> List \<Oggetto>
+ (Lista di Oggetti vuota)
+-	aggiungi(Oggetto) -> List \<Oggetto>
+-	rimuovi(Oggetto) -> List \<Oggetto>
+-	getContenutoOggettoContenitore() -> List\<Oggetto>
+-	isEmpty() -> boolean
+-	size() -> int
+-	contains(Oggetto) -> boolean
+
+**Specifica semantica**
+
+**decleare:** n,d: String, a: Set\<String>, o,og: Oggetto, [ ] : List \<Oggetto>   
+	
+![specifica_semantica](PayDayGame/img/specifica_semantica.png)
+
+Bisogna precisare che nelle osservazioni non abbiamo passato come parametro la lista o’ ottenuta dai costruttori, perché tali metodi agiscono direttamente su tale lista quando quest’ ultima va ad invocarli. Se avessimo voluto usare come parametro la lista ottenuta dai costruttori, allora nei parametri delle osservazioni, avremmo utilizzato o’. 
+
+
+**Specifica di restrizione:**
+
+rimuovi(OggettoContenitore(n,d,a)) = error
+dove `error` è un elemento speciale indefinito 
+
+
+### 2.3 Requisiti richiesti
+
+Elenco degli argomenti richiesti utilizzati all'interno del nostro progetto e descrizione dell'utilizzo.
+
+#### 2.3.1 Lambda expression
+
+Le lambda expression sono utilizzate per semplificare il codice, soprattutto nelle operazioni che richiedono l'uso di funzioni anonime e sono utili per definire listener per eventi. 
+
+Nel contesto del progetto, le lambda expression vengono utilizzate principalmente per gestire gli eventi dei pulsanti nel pannello del menu. Questo rende il codice più facile da mantenere e capire, poiché il comportamento dell'evento è definito in linea con la creazione del pulsante.
+
+#### 2.3.2 REST/Socket
+
+Le API REST sono utilizzate per la comunicazione tra il client del gioco e il server. Le API REST permettono di inviare richieste al server e di ricevere risposte in formato JSON, facilitando l'integrazione e la scalabilità del sistema.
+
+Nel progetto, l'API di OpenWeatherMap viene utilizzata per ottenere informazioni meteorologiche in tempo reale per una specifica città (Roma). Queste informazioni vengono poi presentate al giocatore all'interno del gioco. In particolare, la classe Meteo è responsabile della connessione all'API, del recupero dei dati e della visuallizzazione nel gioco.
+
+Più nel dettaglio:
+
+Classe **Meteo** contiene il metodo `stampaMeteo(String city)` che:
+* Costruisce l'URL per l'API di OpenWeatherMap usando il nome della città e la chiave API.
+* Effettua una richiesta HTTP GET all'API.
+* Legge la risposta JSON dall'API e la converte in un oggetto `JsonObject` usando la libreria Gson.
+* Estrae informazioni chiave come il nome della città, la temperatura e le condizioni meteorologiche dal JSON.
+* Crea un messaggio con queste informazioni, descrivendo la situazione meteorologica in modo dettagliato.
+* Usa il metodo `appendOutput(String text)` della classe `GameWindow` per visualizzare il messaggio nel gioco.
+
+#### 2.3.3 Thread
+
+L'uso dei thread è fondamentale per gestire operazioni simultanee senza bloccare il flusso principale del gioco. 
+
+In questo progetto sono implementati per attivare e far funzionare il conto alla rovescia (della guardia che cerca di fermarti) che interrompe il gioco se non si è conclusa l'avventura prima dello scadere del tempo
+
+Nel progetto:
+
+1. **Gestione del Timer della Guardia:**
+
+La classe `TimerGuardia` implementa `Runnable` e viene eseguita in un thread separato. Questo permette al timer di decrementare il tempo rimanente in background, senza interrompere altre operazioni del gioco.
+
+2. **Gestione del Tempo in Modo Asincrono:**
+
+* Il metodo `run()` nella classe `TimerGuardia` utilizza un ciclo `while` che continua a eseguire finché il tempo rimanente è maggiore di zero e la variabile `RUNNING` è vera. All'interno del ciclo, il thread dorme per un secondo (`Thread.sleep(1000)`) e poi decrementa il tempo rimanente di un secondo.
+* Questo approccio garantisce che il conto alla rovescia proceda indipendentemente dalle altre operazioni del gioco, aggiornando il tempo rimanente e notificando l'utente tramite il metodo `GameWindow.appendOutput()`.
+
+3. **Interazione con l'Interfaccia Utente:**
+
+Poiché i thread eseguono operazioni in background, è possibile aggiornare l'interfaccia utente in modo reattivo. Ad esempio, il metodo `appendOutput` di `GameWindow` viene chiamato per aggiornare l'output dell'interfaccia utente con messaggi sullo stato del timer.
+
+#### 2.3.4 Database
+
+Durante l'inizializzazione del gioco, i dati relativi alle stanze e agli oggetti vengono caricati dal database. Questo permette di avere una configurazione iniziale del gioco basata sui dati persistenti, garantendo che ogni volta che il gioco viene avviato, le stanze e gli oggetti siano impostati correttamente secondo la definizione memorizzata nel database.
+
+Nello specifico:
+
+1. **Memorizzazione delle Stanze:** Le informazioni riguardanti le stanze del gioco, inclusi dettagli come nome, descrizione, piano, e connessioni con altre stanze, vengono memorizzate nel database. Questo permette di mantenere una rappresentazione persistente e strutturata del layout del gioco.
+
+2. **Gestione degli Oggetti:** Gli oggetti presenti nelle stanze sono anch'essi salvati nel database. Ogni oggetto ha un set di attributi (nome, descrizione, alias, ecc.) che vengono archiviati per essere facilmente recuperati e manipolati durante il gioco.
+
+3. **Relazioni tra Stanze e Oggetti:** Il database tiene traccia delle relazioni tra le stanze e gli oggetti contenuti in esse. Questo facilita l'aggiornamento e il recupero delle informazioni in modo efficiente, permettendo di sapere in quale stanza si trova ogni oggetto e quali oggetti sono presenti in una determinata stanza.
+
+4. **Inizializzazione del Gioco:** Durante l'inizializzazione del gioco, i dati relativi alle stanze e agli oggetti vengono caricati dal database. Questo permette di avere una configurazione iniziale del gioco basata sui dati persistenti, garantendo che ogni volta che il gioco viene avviato, le stanze e gli oggetti siano impostati correttamente secondo la definizione memorizzata nel database.
+
+#### 2.3.5 File
+
+Nel progetto descritto, i file vengono utilizzati per la serializzazione e il salvataggio delle partite, consentendo così di memorizzare e ripristinare lo stato del gioco.
+
+* La **serializzazione** è il processo di conversione di un oggetto Java in una rappresentazione di byte, che può essere facilmente scritta su un file. In questo progetto, la serializzazione viene utilizzata per memorizzare lo stato corrente del gioco, inclusi tutti gli oggetti, le stanze e le variabili pertinenti, su disco.
+
+
+* Quando il giocatore decide di **salvare** il progresso, il programma esegue la serializzazione dello stato corrente del gioco:
+
+    1. **Stato del Gioco:** Tutte le informazioni rilevanti sullo stato del gioco vengono raccolte. Questo include lo stato corrente delle stanze, gli oggetti contenuti in esse, l'inventario del giocatore, lo stato delle variabili di gioco (ad esempio, se il quadro elettrico è disattivato, se la torcia è accesa, ecc.).
+
+    2. **Serializzazione:** L'oggetto che rappresenta lo stato del gioco viene serializzato utilizzando `ObjectOutputStream`. Questo converte l'oggetto in un flusso di byte.
+
+    3. **Scrittura su File:** Il flusso di byte viene scritto su un file specificato, creando un file di salvataggio. Questo file può essere letto successivamente per ripristinare lo stato del gioco.
+
+* Il **caricamento** di una partita salvata consiste nel leggere il file di salvataggio, deserializzare il flusso di byte e ricostruire lo stato del gioco. Questo permette al giocatore di riprendere esattamente da dove aveva lasciato.
+
+    1. **Lettura del File:** Il file di salvataggio viene aperto e letto utilizzando `ObjectInputStream`.
+
+    2. **Deserializzazione:** Il flusso di byte viene deserializzato per ricreare l'oggetto che rappresenta lo stato del gioco.
+
+    3. **Ripristino dello Stato del Gioco:** L'oggetto deserializzato viene utilizzato per ripristinare tutte le variabili di stato, gli oggetti, le stanze e altre informazioni pertinenti, permettendo al gioco di continuare dal punto in cui era stato salvato.
+
+In conclusione, l'uso dei file per la serializzazione e il salvataggio delle partite è una tecnica efficace per garantire la persistenza dei dati di gioco, offrendo una migliore esperienza utente e maggiore flessibilità.
+
+#### 2.3.6 Swing
+
+Swing è utilizzato per creare l'interfaccia grafica del gioco. Questo toolkit Java fornisce un insieme di componenti GUI che permettono di costruire interfacce utente interattive e personalizzate. In questo progetto, Swing viene utilizzato per progettare le finestre di gioco, i menu, i dialoghi e altre interazioni visive con il giocatore.
+
+
+**Classi e Componenti Principali di Swing Utilizzati:**
+
+1. GameWindow:
+Questa classe rappresenta la finestra principale del gioco, utilizza `JFrame` come finestra principale in cui vengono aggiunti vari pannelli e componenti, contiene un'area di output `JTextArea` per visualizzare il testo del gioco e un campo di input `JTextField` per inserire i comandi ed un pulsante `JButton` per inviare i comandi.
+
+2. MenuPanel:
+Questo pannello rappresenta il menu principale del gioco, utilizza `JButton` per consentire al giocatore di avviare una nuova partita, caricare una partita esistente o uscire dal gioco. `GridBagLayout` è utilizzato per posizionare i pulsanti all'interno del pannello.
+
+3. BackgroundPanel:
+Un pannello personalizzato che mostra un'immagine di sfondo, utilizza `JPanel` e sovrascrive il metodo paintComponent per disegnare un'immagine di sfondo.
+
+4. TextAreaOutputStream:
+Una classe che estende `OutputStream` e reindirizza l'output di un flusso di byte verso una `JTextArea` ed è utilizzata per mostrare l'output della console.
