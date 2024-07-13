@@ -36,15 +36,6 @@ public class OggettoContenitore extends Oggetto {
     }
 
     /**
-     * Imposta la lista degli oggetti contenuti.
-     * 
-     * @param contenutoOggettoContenitore la nuova lista degli oggetti contenuti
-     */
-    public void setContenutoOggettoContenitore(List<Oggetto> contenutoOggettoContenitore) {
-        this.contenutoOggettoContenitore = contenutoOggettoContenitore;
-    }
-
-    /**
      * Aggiunge un oggetto al contenitore.
      * 
      * @param o l'oggetto da aggiungere
