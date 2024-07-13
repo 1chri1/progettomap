@@ -4,6 +4,7 @@ import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.swing.GameWindow;
 import com.mycompany.type.TipoComandi;
+
 import java.io.Serializable;
 
 /**
@@ -36,14 +37,14 @@ public class GestorePrendi implements Modifica, Serializable {
                     // aggiunge l'oggetto all'inventario e lo rimuove dalla stanza corrente
                     descrizione.getInventario().add(parserOutput.getOggetto());
                     descrizione.getStanzaCorrente().getOggetti().remove(parserOutput.getOggetto());
-                    msg.append("\nHai appena raccolto: \n").append(parserOutput.getOggetto().getDescrizione() + "\n");
+                    msg.append("\nHai appena raccolto: \n").append(parserOutput.getOggetto().getDescrizione()).append("\n");
                     
                     if (haDocumentiRicatto(descrizione) && parserOutput.getOggetto().getNome().equalsIgnoreCase("documenti ricatto")) {
                         mostraDialogoDirettore();
                     }
                 } else {
                     msg.append("\nNon puoi prendere questo oggetto\n");
-                }           
+                }
             } else {
                 msg.append("\nNon capisco cosa vuoi prendere\n");
             }

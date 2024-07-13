@@ -4,6 +4,7 @@ import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.type.TipoComandi;
 import com.mycompany.type.Oggetto;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class GestoreGuarda implements Modifica, Serializable {
     private String messaggioGuarda(GestioneGioco descrizione) {
         StringBuilder msg = new StringBuilder();
         List<Oggetto> inventario = descrizione.getInventario();
-        
+
         boolean haTorcia = inventario.stream().anyMatch(o -> "torcia".equalsIgnoreCase(o.getNome()));
         boolean haChiaviDirettore = inventario.stream().anyMatch(o -> "chiavi direttore".equalsIgnoreCase(o.getNome()));
         boolean haChiaviUffici = inventario.stream().anyMatch(o -> "chiavi uffici".equalsIgnoreCase(o.getNome()));

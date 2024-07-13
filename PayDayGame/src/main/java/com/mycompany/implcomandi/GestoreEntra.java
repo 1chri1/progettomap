@@ -6,6 +6,7 @@ import com.mycompany.swing.GameWindow;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.Stanza;
 import com.mycompany.type.TipoComandi;
+
 import java.io.Serializable;
 
 /**

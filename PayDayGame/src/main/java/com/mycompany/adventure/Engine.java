@@ -154,20 +154,20 @@ public class Engine {
         while (true) {
             nomeSalvataggio = JOptionPane.showInputDialog(null, "Inserisci il nome del salvataggio:");
             if (nomeSalvataggio == null) { // Se l'utente ha cliccato "Cancel"
-                outputStream.println("Operazione di salvataggio annullata.");
+                GameWindow.appendOutput("Operazione di salvataggio annullata.");
                 return; // Esce dal metodo senza salvare
             }
             if (!nomeSalvataggio.trim().isEmpty()) {
                 break; // Esce dal ciclo se l'input non è vuoto
             }
-            outputStream.println("Il nome del salvataggio non può essere vuoto. Riprova.");
+            GameWindow.appendOutput("Il nome del salvataggio non può essere vuoto. Riprova.");
         }
 
         try {
             game.salvaPartita(nomeSalvataggio);
             partitaSalvata = true; // Indica che la partita è stata salvata
         } catch (IOException e) {
-            outputStream.println("Errore durante il salvataggio della partita: " + e.getMessage());
+            GameWindow.appendOutput("Errore durante il salvataggio della partita: " + e.getMessage());
         }
     }
 
@@ -196,22 +196,22 @@ public class Engine {
                 try {
                     scelta = Integer.parseInt(sceltaInput);
                     if (scelta < 1 || scelta > salvataggi.size()) {
-                        outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
+                        GameWindow.appendOutput("Scelta non valida. Inserisci un numero dall'elenco.");
                     } else {
                         String fileDaCaricare = salvataggi.get(scelta - 1);
                         try {
                             game = (GestioneGioco) game.caricaPartita(fileDaCaricare);
                             game.setOutputStream(outputStream); // Imposta l'output stream nel gioco caricato
                             game.setEngine(this); // Imposta l'istanza di Engine nel gioco caricato
-                            outputStream.println("Partita caricata con successo.");
+                            GameWindow.appendOutput("Partita caricata con successo.");
                             sceltaValida = true;
                             partitaSalvata = false; // Resetta il flag per evitare il messaggio ripetuto
                         } catch (IOException | ClassNotFoundException e) {
-                            outputStream.println("Errore durante il caricamento della partita: " + e.getMessage());
+                            GameWindow.appendOutput("Errore durante il caricamento della partita: " + e.getMessage());
                         }
                     }
                 } catch (NumberFormatException e) {
-                    outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
+                    GameWindow.appendOutput("Scelta non valida. Inserisci un numero dall'elenco.");
                 }
             }
         }
@@ -221,12 +221,9 @@ public class Engine {
      * Esegue il ciclo principale del gioco.
      */
     public void execute() {
-        
         gameWindow.showMenuPanel();
         while (true) {
-            
             boolean giocoAttivo = true;
-            
             while (giocoAttivo && !game.isUscitoDalGioco()) {
                 if (partitaSalvata) {
                     int scelta = JOptionPane.showOptionDialog(null, "Vuoi rimanere nella partita corrente o vuoi tornare al menu principale?", "Scelta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Rimani", "Menu"}, "Rimani");
@@ -236,7 +233,7 @@ public class Engine {
                         gameWindow.showMenuPanel();
                         break;
                     } else if (scelta == JOptionPane.YES_OPTION) {
-                        outputStream.println("Sei rimasto nella partita");
+                        GameWindow.appendOutput("Sei rimasto nella partita");
                         partitaSalvata = false;
                     } else {
                         continue;
@@ -262,7 +259,7 @@ public class Engine {
                             partitaSalvata = false;
                             gameWindow.showMenuPanel();
                         } else {
-                            outputStream.println("Operazione di caricamento annullata. Puoi continuare a giocare.");
+                            GameWindow.appendOutput("\nOperazione di caricamento annullata. Puoi continuare a giocare.\n");
                         }
                         break;
                     } else if (command.equalsIgnoreCase("esci")) {
@@ -272,18 +269,18 @@ public class Engine {
                             if (rispostaSalva == JOptionPane.YES_OPTION) {
                                 gestoreSalva();
                             } else {
-                                outputStream.println("Stai per uscire dal gioco, attendere...");
-                                game.setGiocoTerminato(true,5);
+                                GameWindow.appendOutput("\nStai per uscire dal gioco, attendere...");
+                                game.setGiocoTerminato(true, 5);
                             }
                             giocoAttivo = false;
                         } else {
-                            outputStream.println("Operazione di uscita annullata. Puoi continuare a giocare.");
+                            GameWindow.appendOutput("\nOperazione di uscita annullata. Puoi continuare a giocare.\n");
                         }
                         break;
                     }
                     ParserOutput p = parser.parse(command, game.getComandi(), game.getStanzaCorrente().getOggetti(), game.getInventario(), game.getStanze());
                     if (p == null || p.getComando() == null) {
-                        outputStream.println("\nNon capisco quello che mi vuoi dire.\n");
+                        GameWindow.appendOutput("\nNon capisco quello che mi vuoi dire.\n");
                     } else {
                         game.prossimoSpostamento(p, outputStream);
                         if (game.isGiocoTerminato()) {
@@ -295,7 +292,6 @@ public class Engine {
                             System.exit(0);
                         }
                     }
-                    outputStream.print("?> ");
                 }
 
                 if (game.isGiocoTerminato()) {

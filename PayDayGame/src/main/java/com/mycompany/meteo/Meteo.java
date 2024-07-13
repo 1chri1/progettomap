@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mycompany.swing.GameWindow;
 
+/**
+ * Classe per ottenere e stampare informazioni meteo.
+ */
 public class Meteo {
 
     private static final String API_KEY = "6311b8668feec546fd040a35118d1c11";

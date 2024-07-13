@@ -4,6 +4,7 @@ import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.swing.GameWindow;
 import com.mycompany.type.Stanza;
+
 import java.io.Serializable;
 
 /**
@@ -40,12 +41,12 @@ public class GestoreMovimento implements Modifica, Serializable {
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 1") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
-                    if(!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
+                    if (!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
                         GameWindow.appendOutput("\nSei andato avanti nel corridoio, ora vedi nuove porte\n");
                     }
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Hall")) {
-                    if(!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
+                    if (!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
                         GameWindow.appendOutput("\nSei entrato nel corridoio, ora vedi nuove porte\n");
                     }
                 }
@@ -54,12 +55,12 @@ public class GestoreMovimento implements Modifica, Serializable {
                 break;
             case SUD:
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Esterno dell'Ingresso Principale")) {
-                    descrizione.setGiocoTerminato(true,5);
+                    descrizione.setGiocoTerminato(true, 5);
                     return "\nSei andato in strada e sei stato investito. Il gioco è finito.";
                 }
                 if (stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 3") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Corridoio 2")) {
-                    if(!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
+                    if (!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
                         GameWindow.appendOutput("\nSei andato avanti nel corridoio, ora vedi nuove porte\n");
                     }
                 }
@@ -78,10 +79,10 @@ public class GestoreMovimento implements Modifica, Serializable {
                 nextRoom = stanzaCorrente.getEst();
                 break;
             case OVEST:
-                if (stanzaCorrente.getNome().equalsIgnoreCase("Scale") || 
+                if (stanzaCorrente.getNome().equalsIgnoreCase("Scale") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Magazzino") ||
                     stanzaCorrente.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1")) {
-                    if(!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
+                    if (!descrizione.isQuadroElettricoDisattivato() || descrizione.isTorciaAccesa()) {
                         GameWindow.appendOutput("\nSei entrato nel corridoio, ora vedi nuove porte\n");
                     }
                 }
@@ -98,21 +99,20 @@ public class GestoreMovimento implements Modifica, Serializable {
 
         if (nextRoom != null) {
             if (isStanzaSpeciale(stanzaCorrente, nextRoom)) {
-                if(nextRoom.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1") || nextRoom.getNome().equalsIgnoreCase("Ufficio Vicino Scale")) {
-                   return messaggio + "un ufficio" + ". " + MSG_USA_COMANDO_ENTRA;   
- 
+                if (nextRoom.getNome().equalsIgnoreCase("Ufficio Vicino Corridoio 1") || nextRoom.getNome().equalsIgnoreCase("Ufficio Vicino Scale")) {
+                    return messaggio + "un ufficio" + ". " + MSG_USA_COMANDO_ENTRA;
                 } else {
-                  return messaggio + nextRoom.getNome() + ". " + MSG_USA_COMANDO_ENTRA;   
+                    return messaggio + nextRoom.getNome() + ". " + MSG_USA_COMANDO_ENTRA;
                 }
             } else {
                 descrizione.setStanzaCorrente(nextRoom);
                 // Verifica se sei entrato nella Hall o Sala Controllo
                 if ("Hall".equalsIgnoreCase(nextRoom.getNome()) && !descrizione.isQuadroElettricoDisattivato()) {
-                     GameWindow.appendOutput("\nSei stato arrestato perche' le telecamere sono attive. Il gioco e' terminato.");
-                    descrizione.setGiocoTerminato(true,5);
+                    GameWindow.appendOutput("\nSei stato arrestato perché le telecamere sono attive. Il gioco è terminato.");
+                    descrizione.setGiocoTerminato(true, 5);
                 }
                 if ("Sala Controllo".equalsIgnoreCase(nextRoom.getNome())) {
-                    descrizione.setGiocoTerminato(true,5);
+                    descrizione.setGiocoTerminato(true, 5);
                 }
                 return "";
             }
@@ -138,7 +138,7 @@ public class GestoreMovimento implements Modifica, Serializable {
 
         return (nomeStanzaCorrente.equalsIgnoreCase("Lato Destro") && nomeStanzaDestinazione.equalsIgnoreCase("Scale")) ||
                (nomeStanzaCorrente.equalsIgnoreCase("Lato Sinistro") && nomeStanzaDestinazione.equalsIgnoreCase("Bagno")) ||
-               (nomeStanzaCorrente.equalsIgnoreCase("Scale Piano di Sotto") && 
+               (nomeStanzaCorrente.equalsIgnoreCase("Scale Piano di Sotto") &&
                 ((nomeStanzaDestinazione.equalsIgnoreCase("Ufficio Direttore")) || nomeStanzaDestinazione.equalsIgnoreCase("Caveau"))) ||
                (nomeStanzaCorrente.equalsIgnoreCase("Corridoio 1") && nomeStanzaDestinazione.equalsIgnoreCase("Ufficio Vicino Corridoio 1")) ||
                (nomeStanzaCorrente.equalsIgnoreCase("Scale") && nomeStanzaDestinazione.equalsIgnoreCase("Ufficio Vicino Scale"));

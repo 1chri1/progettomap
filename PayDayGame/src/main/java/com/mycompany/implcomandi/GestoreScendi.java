@@ -4,6 +4,7 @@ import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.type.Stanza;
 import com.mycompany.type.TipoComandi;
+
 import java.io.Serializable;
 
 /**

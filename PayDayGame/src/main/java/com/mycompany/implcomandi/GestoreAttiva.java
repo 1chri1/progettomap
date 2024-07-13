@@ -4,6 +4,7 @@ import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.TipoComandi;
+
 import java.io.Serializable;
 
 /**
@@ -46,11 +47,11 @@ public class GestoreAttiva implements Modifica, Serializable {
                     } else {
                         if (oggettoDaAttivare.getNome().equalsIgnoreCase("quadro elettrico")) {
                             descrizione.setQuadroElettricoDisattivato(false);
-                            msg.append("\nHai attivato: ").append(oggettoDaAttivare.getDescrizione() + "\n");
+                            msg.append("\nHai attivato: ").append(oggettoDaAttivare.getDescrizione()).append("\n");
                         } else if (oggettoDaAttivare.getNome().equalsIgnoreCase("torcia")) {
                             if (descrizione.getInventario().contains(oggettoDaAttivare)) {
                                 descrizione.setTorciaAccesa(true);
-                                msg.append("\nHai attivato: ").append(oggettoDaAttivare.getDescrizione() + "\n");
+                                msg.append("\nHai attivato: ").append(oggettoDaAttivare.getDescrizione()).append("\n");
                             } else {
                                 msg.append("\nDevi prima prendere la torcia per poterla attivare.\n");
                             }

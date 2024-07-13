@@ -4,6 +4,7 @@ import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.TipoComandi;
+
 import java.io.Serializable;
 
 /**
@@ -50,11 +51,11 @@ public class GestoreDisattiva implements Modifica, Serializable {
                             msg.append("\nAttenzione: è scattato l'allarme.\nHai 5 minuti per completare la rapina.\n");
                             // Avvia il timer della guardia solo se non è già attivo
                             if (!descrizione.isTimerAttivo()) {
-                                descrizione.startTimer(55); // Timer di 5 minuti
+                                descrizione.startTimer(5); // Timer di 5 minuti
                             }
                         } else if (oggettoDaDisattivare.getNome().equalsIgnoreCase("torcia")) {
                             descrizione.setTorciaAccesa(false);
-                            msg.append("\nHai disattivato: ").append(oggettoDaDisattivare.getDescrizione() + "\n");
+                            msg.append("\nHai disattivato: ").append(oggettoDaDisattivare.getDescrizione()).append("\n");
                         }
                     }
                 } else {

@@ -129,7 +129,7 @@ public abstract class GestioneGioco implements Serializable {
      * Imposta lo stato di terminazione del gioco.
      *
      * @param giocoTerminato lo stato di terminazione del gioco
-     * @param secondi
+     * @param secondi        i secondi per la terminazione
      */
     public abstract void setGiocoTerminato(boolean giocoTerminato, int secondi);
 
@@ -241,7 +241,7 @@ public abstract class GestioneGioco implements Serializable {
      *
      * @param filePath il percorso del file da cui caricare la partita
      * @return la partita caricata
-     * @throws IOException in caso di errore durante il caricamento
+     * @throws IOException            in caso di errore durante il caricamento
      * @throws ClassNotFoundException in caso di classe non trovata durante il caricamento
      */
     public abstract GestioneGioco caricaPartita(String filePath) throws IOException, ClassNotFoundException;
@@ -258,7 +258,7 @@ public abstract class GestioneGioco implements Serializable {
      * Gestisce i salvataggi del gioco.
      *
      * @param baseFileName il nome base dei file di salvataggio
-     * @param directory la directory in cui salvare i file
+     * @param directory    la directory in cui salvare i file
      * @throws IOException in caso di errore durante la gestione dei salvataggi
      */
     public abstract void gestisciSalvataggi(String baseFileName, String directory) throws IOException;

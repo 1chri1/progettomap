@@ -4,6 +4,7 @@ import com.mycompany.adventure.GestioneGioco;
 import com.mycompany.parser.ParserOutput;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.TipoComandi;
+
 import java.io.Serializable;
 
 /**
@@ -23,8 +24,8 @@ public class GestoreInventario implements Modifica, Serializable {
     public String aggiorna(GestioneGioco descrizione, ParserOutput parserOutput) {
         if (parserOutput.getComando().getTipo() == TipoComandi.INVENTARIO) {
             return descrizione.getInventario().isEmpty() 
-            ? "\nIl tuo inventario è vuoto!\n" 
-            : messaggioInventario(descrizione);
+                ? "\nIl tuo inventario è vuoto!\n" 
+                : messaggioInventario(descrizione);
         } else {
             return "";
         }

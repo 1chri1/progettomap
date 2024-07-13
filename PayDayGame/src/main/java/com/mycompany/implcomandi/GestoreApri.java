@@ -5,6 +5,7 @@ import com.mycompany.parser.ParserOutput;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.OggettoContenitore;
 import com.mycompany.type.TipoComandi;
+
 import java.io.Serializable;
 import javax.swing.JOptionPane;
 
@@ -45,11 +46,11 @@ public class GestoreApri implements Modifica, Serializable {
 
             if (oggettoInventario != null) {
                 messaggio.append(gestisciAperturaOggettoInventario(descrizione, oggettoInventario));
-            }    
+            }
         } else {
             return "";
         }
-        
+
         return messaggio.toString();
     }
 
@@ -72,7 +73,7 @@ public class GestoreApri implements Modifica, Serializable {
         if (oggetto instanceof OggettoContenitore && "cassetta".equalsIgnoreCase(oggetto.getNome())) {
             // Chiedi il codice all'utente tramite JOptionPane
             String codiceInserito = JOptionPane.showInputDialog(null, "Inserisci il codice di 4 cifre:");
-            
+
             if (codiceInserito != null && codiceInserito.length() == 4 && codiceInserito.equals(CODICE_CORRETTO)) {
                 oggetto.setAperto(true);
                 return "\nCodice corretto! " + apriContenitore(gioco, (OggettoContenitore) oggetto) + "\n";

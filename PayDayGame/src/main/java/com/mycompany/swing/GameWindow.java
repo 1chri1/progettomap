@@ -45,19 +45,9 @@ public class GameWindow extends JFrame {
 
         mainPanel.add(inputPanel, BorderLayout.SOUTH);
 
-        sendButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                processInput();
-            }
-        });
-
-        inputField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                processInput();
-            }
-        });
+        // Uso delle lambda expressions per la gestione degli eventi
+        sendButton.addActionListener(e -> processInput());
+        inputField.addActionListener(e -> processInput());
 
         menuPanel = new MenuPanel(e -> handleMenuAction(e), "./resources/background.jpg");
         
@@ -75,7 +65,7 @@ public class GameWindow extends JFrame {
         inputField.setText("");
         if (input != null && !input.trim().isEmpty()) {
             engine.processCommand(input);
-            OUTPUT_AREA.append(input + "\n");
+            OUTPUT_AREA.append("?> " + input + "\n");
         }
     }
 

@@ -10,6 +10,9 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.IntStream;
 
+/**
+ * Classe per il parsing dei comandi dell'utente nel gioco.
+ */
 public class Parser {
 
     private final Set<String> STOPWORDS;

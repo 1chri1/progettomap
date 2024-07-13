@@ -278,6 +278,11 @@ public class Oggetto implements Serializable {
         this.disattivo = disattivo;
     }
 
+    /**
+     * Calcola il codice hash per l'oggetto Oggetto.
+     *
+     * @return il codice hash
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -285,6 +290,12 @@ public class Oggetto implements Serializable {
         return hash;
     }
 
+    /**
+     * Verifica l'uguaglianza tra questo oggetto e un altro oggetto.
+     *
+     * @param obj l'oggetto da confrontare
+     * @return true se gli oggetti sono uguali, false altrimenti
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

@@ -5,6 +5,7 @@ import com.mycompany.db.DatabaseManager;
 import com.mycompany.type.Oggetto;
 import com.mycompany.type.OggettoContenitore;
 import com.mycompany.type.Stanza;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Set;

@@ -20,6 +20,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -63,6 +64,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
      *
      * @param engine l'engine da impostare
      */
+    @Override
     public void setEngine(Engine engine) {
         this.engine = engine;
     }
@@ -120,7 +122,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         String MSG_NOUSCITA="\nHai deciso di rimanere e completare la missione.\n";
         
         if (p.getComando() == null) {
-            out.println("Non ho capito cosa devo fare! Prova con un altro comando.");
+            GameWindow.appendOutput("Non ho capito cosa devo fare! Prova con un altro comando.");
         } else {
             Stanza cr = getStanzaCorrente();
             notificaGestori();
@@ -128,55 +130,54 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             if (!MESSAGGI.isEmpty()) {
                 for (String m : MESSAGGI) {
                     if (m.length() > 0) {
-                        out.println(m);
+                        GameWindow.appendOutput(m);
                     }
                 }
             }
 
             if ("Sala Controllo".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-                out.println("\nSei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
-                setGiocoTerminato(true,5);
+                GameWindow.appendOutput("\nSei stato catturato dalla guardia nella Sala Controllo. Il gioco e' terminato.");
+                setGiocoTerminato(true, 5);
                 return;
             }
             if (move) {
-            if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
-                if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
-                    ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-                    out.println("\nTi trovi all'" + getStanzaCorrente().getNome());
-                    out.println(getStanzaCorrente().getDescrizione() + "\n");
-                } else {
-                    if (("Lato destro".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
-                        ("Lato sinistro".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-                        out.println("\nTi trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
-                        out.println(getStanzaCorrente().getDescrizione() + "\n");
+                if (!isQuadroElettricoDisattivato() || isTorciaAccesa()) {
+                    if (("Angolo destro della banca".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
+                        ("Angolo sinistro della banca".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                        GameWindow.appendOutput("\nTi trovi all'" + getStanzaCorrente().getNome());
+                        GameWindow.appendOutput(getStanzaCorrente().getDescrizione() + "\n");
                     } else {
-                        if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
-                            "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
-                            "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
-
-                            if (!("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato())) {
-                                out.println("\nTi trovi qui: " + getStanzaCorrente().getNome());
-                                out.println("================================================");
-                                out.println(getStanzaCorrente().getDescrizione() + "\n");
+                        if (("Lato destro".equalsIgnoreCase(getStanzaCorrente().getNome())) ||
+                            ("Lato sinistro".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                            GameWindow.appendOutput("\nTi trovi sul " + getStanzaCorrente().getNome() + " dell'edificio");
+                            GameWindow.appendOutput(getStanzaCorrente().getDescrizione() + "\n");
+                        } else {
+                            if (!("Corridoio 1".equalsIgnoreCase(getStanzaCorrente().getNome()) ||
+                                "Corridoio 2".equalsIgnoreCase(getStanzaCorrente().getNome()) || 
+                                "Corridoio 3".equalsIgnoreCase(getStanzaCorrente().getNome()))) {
+                                if (!("Hall".equalsIgnoreCase(getStanzaCorrente().getNome()) && !isQuadroElettricoDisattivato())) {
+                                    GameWindow.appendOutput("\nTi trovi qui: " + getStanzaCorrente().getNome());
+                                    GameWindow.appendOutput("================================================");
+                                    GameWindow.appendOutput(getStanzaCorrente().getDescrizione() + "\n");
+                                }
                             }
                         }
                     }
+                } else {
+                    GameWindow.appendOutput("\nNon sai dove sei entrato perche' e' tutto buio.\n");
                 }
-            } else {
-                out.println("\nNon sai dove sei entrato perche' e' tutto buio.\n");
             }
-        }
             if ("Garage/Uscita".equalsIgnoreCase(getStanzaCorrente().getNome())) {
-                int bottinoFinale=0;
+                int bottinoFinale = 0;
                 if (hasSoldi() && hasGioielli()) {
                     bottinoFinale = BOTTINO_BASE + (isRicattoDirettore() ? BOTTINO_EXTRA : 0);
                     if (isRicattoDirettore()) {
-                        out.println("\nMissione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                        GameWindow.appendOutput("\nMissione compiuta con successo! Hai usato le prove contro il direttore a tuo vantaggio, ottenendo una via di fuga sicura e ulteriori risorse.\nIl tuo futuro sembra luminoso. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                     } else {
-                        out.println("\nMissione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
+                        GameWindow.appendOutput("\nMissione compiuta con successo! Hai completato la missione con successo, ma sai che qualcuno potrebbe scoprire le prove incriminanti contro il direttore che hai lasciato nel caveau.\nIl tuo futuro e' incerto. Il tuo bottino finale ammonta a " + bottinoFinale + " soldi e gioielli.");
                     }
                     setGiocoTerminato(true, 10);
-                    out.println("\nSei riuscito a scappare in tempo!"); // Messaggio di successo
+                    GameWindow.appendOutput("\nSei riuscito a scappare in tempo!"); // Messaggio di successo
                 } else if (hasSoldi()) {
                     int risposta = JOptionPane.showConfirmDialog(null, "Hai preso i soldi ma ti mancano ancora i gioielli. Sei sicuro di voler uscire?", "Conferma Uscita", JOptionPane.YES_NO_OPTION);
                     if (risposta == JOptionPane.YES_OPTION) {
@@ -187,7 +188,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                         GameWindow.appendOutput("\nHai deciso di uscire senza prendere i gioielli. Il tuo bottino finale ammonta a " + bottinoFinale + " euro.");
                         setGiocoTerminato(true, 10);
                     } else {
-                        outputStream.println(MSG_NOUSCITA);
+                        GameWindow.appendOutput(MSG_NOUSCITA);
                         setStanzaCorrente(cr);
                     }
                 } else if (hasGioielli()) {
@@ -200,7 +201,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                         GameWindow.appendOutput("\nHai deciso di uscire senza prendere i soldi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro oltre ai gioielli.");
                         setGiocoTerminato(true, 10);
                     } else {
-                        outputStream.println(MSG_NOUSCITA);
+                        GameWindow.appendOutput(MSG_NOUSCITA);
                         setStanzaCorrente(cr);
                     }
                 } else {
@@ -213,7 +214,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
                         GameWindow.appendOutput("\nHai deciso di uscire senza completare tutti gli obiettivi. Il tuo bottino finale ammonta a " + bottinoFinale + " euro.");
                         setGiocoTerminato(true, 10);
                     } else {
-                        outputStream.println(MSG_NOUSCITA);
+                        GameWindow.appendOutput(MSG_NOUSCITA);
                         setStanzaCorrente(cr);
                     }
                 }
@@ -273,6 +274,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
      * Imposta lo stato di terminazione del gioco.
      *
      * @param giocoTerminato true se il gioco è terminato, altrimenti false
+     * @param secondi        i secondi per la terminazione
      */
     @Override
     public void setGiocoTerminato(boolean giocoTerminato, int secondi) {
@@ -295,7 +297,6 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             engine.getGameWindow().setInputEnabled(true); // Assicura che l'input sia abilitato
         }
     }
-
 
     /**
      * Verifica se il giocatore è uscito dal gioco.
@@ -436,6 +437,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         }
         gestisciSalvataggi(baseFileName, ".");
     }
+
     /**
      * Carica lo stato del gioco da un file di salvataggio.
      *
@@ -454,13 +456,13 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             
             if (giocoCaricato.timerAttivo) {
                 int minutiRimasti = giocoCaricato.tempoRimastoTimer / 60;
-                outputStream.println("Tempo rimasto per il timer caricato: " + minutiRimasti + " minuti (" + giocoCaricato.tempoRimastoTimer + " secondi).");
+                GameWindow.appendOutput("Tempo rimasto per il timer caricato: " + minutiRimasti + " minuti (" + giocoCaricato.tempoRimastoTimer + " secondi).");
                 giocoCaricato.startTimer(minutiRimasti); // Riavvia il timer con il tempo rimanente in minuti
-                outputStream.println("Timer riavviato con successo.");
+                GameWindow.appendOutput("Timer riavviato con successo.");
             }
             return giocoCaricato;
         } catch (IOException | ClassNotFoundException e) {
-            outputStream.println("Errore durante il caricamento della partita: " + e.getMessage());
+            GameWindow.appendOutput("Errore durante il caricamento della partita: " + e.getMessage());
             throw e;
         }
     }
@@ -513,17 +515,17 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             while (scelta < 1 || scelta > salvataggi.size()) {
                 String sceltaInput = JOptionPane.showInputDialog(null, elencoSalvataggi.toString());
                 if (sceltaInput == null) { // Se l'utente ha cliccato "Cancel"
-                    outputStream.println("Operazione di sovrascrittura annullata.");
+                    GameWindow.appendOutput("Operazione di sovrascrittura annullata.");
                     return;
                 }
                 try {
                     scelta = Integer.parseInt(sceltaInput);
                     if (scelta < 1 || scelta > salvataggi.size()) {
-                        outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
+                        GameWindow.appendOutput("Scelta non valida. Inserisci un numero dall'elenco.");
                         scelta = -1; // Indica una scelta non valida
                     }
                 } catch (NumberFormatException e) {
-                    outputStream.println("Scelta non valida. Inserisci un numero dall'elenco.");
+                    GameWindow.appendOutput("Scelta non valida. Inserisci un numero dall'elenco.");
                     scelta = -1; // Indica una scelta non valida
                 }
             }
@@ -531,7 +533,7 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
             String fileDaSovrascrivere = salvataggi.get(scelta - 1);
             File file = new File(directory, fileDaSovrascrivere);
             if (!file.delete()) {
-                outputStream.println("Errore nella sovrascrittura del file. Operazione annullata.");
+                GameWindow.appendOutput("Errore nella sovrascrittura del file. Operazione annullata.");
                 return;
             }
         }
@@ -540,10 +542,10 @@ public class PayDayGame extends GestioneGioco implements GestoreComandi, Seriali
         String fileName = "save_" + baseFileName + "_" + timeStamp + ".dat";
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(directory, fileName)))) {
             out.writeObject(this);
-            outputStream.println("Partita salvata con successo come " + fileName);
+            GameWindow.appendOutput("Partita salvata con successo come " + fileName);
             salvataggioCompleto = true;
         } catch (IOException e) {
-            outputStream.println("Errore durante il salvataggio della partita: " + e.getMessage());
+            GameWindow.appendOutput("Errore durante il salvataggio della partita: " + e.getMessage());
             throw e;
         }
     }
