@@ -340,8 +340,7 @@ public class Engine {
 
             engine.execute();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
         } finally {
             dbManager.close();
         }
