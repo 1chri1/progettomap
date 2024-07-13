@@ -182,8 +182,8 @@ il direttore, ricattarlo, in maniera da uscire senza essere arrestati.
 - Assicurarsi di evitare la sala controllo per non essere scoperti.
 - La torcia nel magazzino può essere utile per eventuali zone buie o per ulteriori esplorazioni.
 
-![Piano_terra](PayDayGame/img/Piano_terra.png) 
-![caveau](PayDayGame/img/caveau.png)
+![Piano_terra](./img/Piano_terra.png) 
+![caveau](./img/caveau.png)
 
 # NARRAZIONE
 ## PAYDAY HOMEMADE: LA RAPINA DEL SECOLO
