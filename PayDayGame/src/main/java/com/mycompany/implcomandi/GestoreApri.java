@@ -128,18 +128,18 @@ public class GestoreApri implements Modifica, Serializable {
      */
     private String apriContenitore(GestioneGioco gioco, OggettoContenitore contenitore) {
         StringBuilder messaggio = new StringBuilder();
-        if (contenitore.getList().isEmpty()) {
+        if (contenitore.getContenutoOggettoContenitore().isEmpty()) {
             return messaggio.toString();
         }
         messaggio.append("\n");
         messaggio.append(contenitore.getNome()).append(" contiene:");
-        for (Oggetto oggetto : contenitore.getList()) {
+        for (Oggetto oggetto : contenitore.getContenutoOggettoContenitore()) {
             gioco.getStanzaCorrente().getOggetti().add(oggetto);
             messaggio.append(" ").append(oggetto.getNome());
         }
         messaggio.append("\n");
 
-        contenitore.getList().clear();
+        contenitore.getContenutoOggettoContenitore().clear();
 
         return messaggio.toString();
     }
