@@ -95,9 +95,15 @@ Elenco degli argomenti richiesti utilizzati all'interno del nostro progetto e de
 
 #### 2.3.1 Lambda expression
 
-Le lambda expression sono utilizzate per semplificare il codice, soprattutto nelle operazioni che richiedono l'uso di funzioni anonime e sono utili per definire listener per eventi. 
+Le lambda expression sono utilizzate per semplificare il codice, permettono di creare facilmente istanze di interfacce funzionali (interfacce con un solo metodo astratto) e sono utili per definire listener per eventi. 
 
-Nel contesto del progetto, le lambda expression vengono utilizzate principalmente per gestire gli eventi dei pulsanti nel pannello del menu. Questo rende il codice più facile da mantenere e capire, poiché il comportamento dell'evento è definito in linea con la creazione del pulsante.
+Nel contesto del progetto, le lambda expression vengono utilizzate per gestire gli eventi dei pulsanti nel pannello del menu. Questo rende il codice più facile da mantenere e capire, poiché il comportamento dell'evento è definito in linea con la creazione del pulsante.
+Inoltre, le lambda expressions sono utilizzate nella classe Parser per semplificare e rendere più conciso il processo di ricerca all'interno delle liste. In particolare, nel metodo ricercaIndice, le lambda expressions sono utilizzate per implementare il BiPredicate che confronta elementi della lista con un token specificato.
+
+Nel metodo parse, le lambda expressions sono impiegate per:
+
+* Ricercare un comando nella lista dei comandi disponibili, confrontando il nome o gli alias del comando con il token fornito.
+* Ricercare un oggetto nella lista degli oggetti presenti nella stanza o nell'inventario, confrontando il nome o gli alias dell'oggetto con il token fornit
 
 #### 2.3.2 REST/Socket
 
