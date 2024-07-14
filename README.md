@@ -98,6 +98,7 @@ Elenco degli argomenti richiesti utilizzati all'interno del nostro progetto e de
 Le lambda expression sono utilizzate per semplificare il codice, permettono di creare facilmente istanze di interfacce funzionali (interfacce con un solo metodo astratto) e sono utili per definire listener per eventi. 
 
 Nel contesto del progetto, le lambda expression vengono utilizzate per gestire gli eventi dei pulsanti nel pannello del menu. Questo rende il codice più facile da mantenere e capire, poiché il comportamento dell'evento è definito in linea con la creazione del pulsante.
+
 Inoltre, le lambda expressions sono utilizzate nella classe Parser per semplificare e rendere più conciso il processo di ricerca all'interno delle liste. In particolare, nel metodo ricercaIndice, le lambda expressions sono utilizzate per implementare il BiPredicate che confronta elementi della lista con un token specificato.
 
 Nel metodo parse, le lambda expressions sono impiegate per:
@@ -153,8 +154,6 @@ Nello specifico:
 2. **Gestione degli Oggetti:** Gli oggetti presenti nelle stanze sono anch'essi salvati nel database. Ogni oggetto ha un set di attributi (nome, descrizione, alias, ecc.) che vengono archiviati per essere facilmente recuperati e manipolati durante il gioco.
 
 3. **Relazioni tra Stanze e Oggetti:** Il database tiene traccia delle relazioni tra le stanze e gli oggetti contenuti in esse. Questo facilita l'aggiornamento e il recupero delle informazioni in modo efficiente, permettendo di sapere in quale stanza si trova ogni oggetto e quali oggetti sono presenti in una determinata stanza.
-
-4. **Inizializzazione del Gioco:** Durante l'inizializzazione del gioco, i dati relativi alle stanze e agli oggetti vengono caricati dal database. Questo permette di avere una configurazione iniziale del gioco basata sui dati persistenti, garantendo che ogni volta che il gioco viene avviato, le stanze e gli oggetti siano impostati correttamente secondo la definizione memorizzata nel database.
 
 #### 2.3.5 File
 
