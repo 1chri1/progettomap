@@ -164,7 +164,7 @@ il direttore, ricattarlo, in maniera da uscire senza essere arrestati.
             registratore(in un solo ufficio, dove c’è la conversazione nella quale si scopre il codice per la cassetta con i 
             documenti del direttore che è nel caveau)
 -	Nel magazzino: torcia, scatole, armadi.
--	Nel cesso: 3 cessi
+-	Nel bagno: 3 bagni
 -	Nella stanza del direttore: scrivania, computer, armadio, sedia, tesserino per entrare nel caveau (nell’armadio)
 -	Caveau: cassetta con i documenti per ricattare il direttore e riuscire ad evadere (in una cassetta…quella del registratore), 
             tutte le cassaforti (anche dentro soldi), gioielli (al centro).
