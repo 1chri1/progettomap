@@ -136,7 +136,7 @@ La classe `TimerGuardia` implementa `Runnable` e viene eseguita in un thread sep
 
 2. **Gestione del Tempo in Modo Asincrono:**
 
-* Il metodo `run()` nella classe `TimerGuardia` utilizza un ciclo `while` che continua a eseguire finché il tempo rimanente è maggiore di zero e la variabile `RUNNING` è vera. All'interno del ciclo, il thread dorme per un secondo (`Thread.sleep(1000)`) e poi decrementa il tempo rimanente di un secondo.
+* Il metodo `run()` nella classe `TimerGuardia` utilizza un ciclo `while` che continua a eseguire finché il tempo rimanente è maggiore di zero e la variabile `RUNNING` è vera. All'interno del ciclo, il thread attende per un secondo (`Thread.sleep(1000)`) e poi decrementa il tempo rimanente di un secondo.
 * Questo approccio garantisce che il conto alla rovescia proceda indipendentemente dalle altre operazioni del gioco, aggiornando il tempo rimanente e notificando l'utente tramite il metodo `GameWindow.appendOutput()`.
 
 3. **Interazione con l'Interfaccia Utente:**
